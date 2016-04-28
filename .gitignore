@@ -76,3 +76,6 @@ venv/
 
 # SQLite db
 db.sqlite3
+
+#Webstorm
+.idea/
