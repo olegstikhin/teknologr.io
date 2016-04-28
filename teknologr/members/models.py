@@ -2,6 +2,9 @@ from django.db import models
 from django_countries.fields import CountryField
 import datetime
 
+def getEpoch():
+	return datetime.date(1872, 1, 1)
+
 class SuperClass(models.Model):
     # This class is the base of everything
     created = models.DateTimeField(auto_now_add=True)
@@ -10,16 +13,7 @@ class SuperClass(models.Model):
     class Meta:
         abstract = True
 
-class MembershipCommon(models.Model):
-    # This is for all things that have a membership, for relations.
-
-    begin_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-
-    class Meta:
-        abstract = True
-
-class Members(SuperClass):
+class Member(SuperClass):
     GENDER_CHOICES = (("MA", "Man"),("WO", "Woman"), ("UN","Unknown"))
 
     given_names = models.CharField(max_length=64, blank=False, null=False, default="UNKNOWN")
@@ -60,69 +54,36 @@ class Members(SuperClass):
     def __str__(self):
         return self.full_name
 
+class DecorationOwnership(SuperClass):
+	member = models.ForeignKey("Member")
+	decoration = models.ForeignKey("Decoration")
+	acquired = models.DateField(default=getEpoch())
 
-class CommitteeTypes(models.Model):
-    # Committees are like groups, but they exist multiple years.
-    name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
-    abbrevation = models.CharField(max_length=32, blank=True, null=False, default="")
-    description = models.TextField(blank=True, null=False, default="")
+class Decoration(SuperClass):
+	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
-class Committees(SuperClass):
-    name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
-    abbrevation = models.CharField(max_length=32, blank=True, null=False, default="")
-    begin_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
+class GroupMembership(SuperClass):
+	member = models.ForeignKey("Member")
+	group = models.ForeignKey("Group")
+	begin_date = models.DateField(default=getEpoch())
+	end_date = models.DateField(default=getEpoch())
 
-    committee_type = models.ForeignKey("CommitteeTypes")
-    members = models.ManyToManyField("Members", through="MembersCommitteesRelation")
+class Group(SuperClass):
+	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+	grouptype = models.ForeignKey("GroupType")
+	begin_date = models.DateField(default=getEpoch())
+	end_date = models.DateField(default=getEpoch())	
 
-class MembersCommitteesRelation(MembershipCommon):
-    post_type = models.ForeignKey("PostTypes")
-    member = models.ForeignKey("Members")
-    committee = models.ForeignKey("Committees")
+class GroupType(SuperClass):
+	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
+class Functionary(SuperClass):
+	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+	member = ForeignKey("Member")
+	functionarytype = ForeignKey("FunctionaryType")
+	begin_date = models.DateField(default=getEpoch())
+	end_date = models.DateField(default=getEpoch())
 
-class DepartmentTypes(models.Model):
-    name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
-    abbrevation = models.CharField(max_length=32, blank=True, null=False, default="")
-    description = models.TextField(blank=True, null=False, default="")
+class FunctionaryType(SuperClass):
+	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
-class Departments(SuperClass):
-    name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
-    abbrevation = models.CharField(max_length=32, blank=True, null=False, default="")
-
-    members = models.ManyToManyField("Members", through="MembersDepartmentsRelation")
-
-class MembersDepartmentsRelation(MembershipCommon):
-    member = models.ForeignKey("Members")
-    department = models.ForeignKey("Departments")
-
-
-class PostTypes(models.Model):
-    name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
-    description = models.TextField(blank=True, null=False, default="")
-
-class Posts(SuperClass):
-    name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
-    post_type = models.ForeignKey("PostTypes")
-    members = models.ManyToManyField("Members", through="MembersPostsRelation")
-
-class MembersPostsRelation(MembershipCommon):
-    member = models.ForeignKey("Members")
-    post = models.ForeignKey("Posts")
-
-
-class Groups(SuperClass):
-    # A group is a one time thing.
-    name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
-    year = models.IntegerField(max_length=4, blank=True, null=True)
-    description = models.TextField(blank=True, null=False, default="")
-
-    begin_date = models.DateField(blank=True, null=True)
-    end_date = models.DateField(blank=True, null=True)
-
-    members = models.ManyToManyField(Members, through="MembersGroupsRelation")
-
-class MembersGroupsRelation(MembershipCommon):
-    member = models.ForeignKey("Members")
-    group = models.ForeignKey("Groups")
