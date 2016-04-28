@@ -25,7 +25,7 @@ class Member(SuperClass):
     student_id = models.CharField(max_length=10, blank=True, null=False, default="")
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default="UN")
     graduated = models.BooleanField(default=False)
-    graduated_year = models.IntegerField(max_length=4, blank=True, null=True)
+    graduated_year = models.IntegerField(blank=True, null=True)
     dead = models.BooleanField(default=False)
     mobile_phone = models.CharField(max_length=20, blank=True, null=False, default="")
     phone = models.CharField(max_length=20, blank=True, null=False, default="")
@@ -79,8 +79,8 @@ class GroupType(SuperClass):
 
 class Functionary(SuperClass):
 	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
-	member = ForeignKey("Member")
-	functionarytype = ForeignKey("FunctionaryType")
+	member = models.ForeignKey("Member")
+	functionarytype = models.ForeignKey("FunctionaryType")
 	begin_date = models.DateField(default=getEpoch())
 	end_date = models.DateField(default=getEpoch())
 
