@@ -1,10 +1,19 @@
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
+from django_countries import Countries
 from members.models import Member, Group, GroupType, GroupMembership, Functionary, FunctionaryType
 from rest_framework import routers, serializers, viewsets
 
+
+class SerializableCountryField(serializers.ChoiceField):
+    def to_representation(self, value):
+        if value in ('', None):
+            return ''  # instead of `value` as Country(u'') is not serializable
+        return super(SerializableCountryField, self).to_representation(value)
+
 # Serializers define the API representation.
 class MemberSerializer(serializers.HyperlinkedModelSerializer):
+    country = SerializableCountryField(allow_blank=True, choices=Countries())
     class Meta:
         model = Member
         fields = ('full_name', 'full_preferred_name', 'given_names', 'preferred_name', 'surname', 'maiden_name',\
@@ -31,6 +40,7 @@ class FunctionarySerializer(serializers.HyperlinkedModelSerializer):
 class FunctionaryTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = FunctionaryType
+
 
 
 # ViewSets define the view behavior.
