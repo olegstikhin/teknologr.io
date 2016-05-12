@@ -72,10 +72,16 @@ class Group(SuperClass):
 	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 	grouptype = models.ForeignKey("GroupType")
 	begin_date = models.DateField(default=getEpoch())
-	end_date = models.DateField(default=getEpoch())	
+	end_date = models.DateField(default=getEpoch())
+
+	def __str__(self):
+		return self.name
 
 class GroupType(SuperClass):
 	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+
+	def __str__(self):
+		return self.name
 
 class Functionary(SuperClass):
 	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
@@ -87,3 +93,5 @@ class Functionary(SuperClass):
 class FunctionaryType(SuperClass):
 	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
+	def __str__(self):
+		return self.name
