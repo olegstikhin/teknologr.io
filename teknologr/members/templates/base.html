@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="{% static "favicon.ico" %}">
 
-    <title>Dashboard Template for Bootstrap</title>
+    <title>teknologr.io</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{% static "dist/css/bootstrap.min.css" %}" rel="stylesheet">
@@ -54,17 +54,21 @@
 
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-3 col-md-3 sidebar">
+        <div id='side' class="col-sm-3 col-md-3 sidebar">
+          {% block side %}
           <form class="navbar-form">
             <input type="text" class="form-control" placeholder="Search...">
           </form>
           <h3> Tree here </h3>
+          {% endblock %}
         </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main">
+        <div id='main' class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main">
+          {% block main %}
           <h1 class="page-header">Medlem eller grupp</h1>
           <div class="table-responsive">
             <h3> Main view here </h3>
           </div>
+          {% endblock %}
         </div>
       </div>
     </div>
@@ -72,10 +76,12 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="{% static "/assets/js/vendor/jquery.min.js" %}"><\/script>')</script>
+    <script src="{% static "assets/js/vendor/jquery.min.js" %}"></script>
     <script src="{% static "dist/js/bootstrap.min.js" %}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{% static "assets/js/ie10-viewport-bug-workaround.js" %}"></script>
+    <!-- teknologr js files -->
+    <script src="{% static "js/ajax.js" %}"></script>
+    <script> $(document).ready(loadSideMembers()); </script>
   </body>
 </html>
