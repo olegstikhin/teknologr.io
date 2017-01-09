@@ -1,18 +1,5 @@
-{% load staticfiles %}
-<span>
-	<input type='radio' name='side' value='members' checked>Medlemmar
-	<input type='radio' name='side' value='groups'>Grupper
-	<input type='radio' name='side' value='functionaries'>Poster
-	<input type='radio' name='side' value='decorations'>Betygelser
-</span>
-
-<form class="navbar-form">
-	<input type="text" class="form-control" placeholder="Sök...">
-</form>
 <ul>
-	{% for member in members %}
-	<li><a class="side-member" data-id="{{ member.student_id }}" href="#">{{ member.name }}</a></li>
+	{% for obj in objects %}
+	<li><a class="side-object" href="#" onclick='loadMain( "{{category}}", "{{obj.id}}" )'>{{obj.name}}</a></li>
 	{% endfor %}
 </ul>
-<!-- TODO loading scripts here causes "Synchronous XMLHttpRequest on the main thread is deprecated" warning -->
-<script src="{% static "js/side.js" %}"></script>

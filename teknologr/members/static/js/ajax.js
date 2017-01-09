@@ -18,18 +18,11 @@ function loadDecoration(id) {
 	$("#main").load("TODO");
 };
 
-function loadSideMembers() {
-	$("#side").load("side_members");
-};
+function loadMain(category, id) {
+	$("#main").load(category + '/' + id)
+}
 
-function loadSideGroups() {
-	$("#side").load("TODO");
-};
-
-function loadSideFunctionaries() {
-	$("#side").load("TODO");
-};
-
-function loadSideDecorations() {
-	$("#side").load("TODO");
+function loadSide() {
+	var category = $('input[type=radio][name=side]:checked').val();
+	$("#side").load("side/" + category);
 };
