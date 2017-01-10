@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 
 from members.models import Member, GroupType, FunctionaryType, Decoration
+from members.forms import MemberForm
 
 # Create your views here.
 
@@ -34,8 +35,8 @@ def side(request, category):
 def member(request, student_id):
 	context = {}
 	member = get_object_or_404(Member, student_id=student_id)
-	# TODO: finish this
-	context['member'] = member
+	context['full_name'] = member.full_name
+	context['form'] = MemberForm(instance=member)
 	return render(request, 'member.html', context)
 
 def group(request, group_id):

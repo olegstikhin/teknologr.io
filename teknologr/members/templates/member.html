@@ -1,28 +1,111 @@
-<h1 class="page-header">{{member.full_name}}</h1><br>
-<p><br>
-given_names: {{member.given_names}}<br>
-preferred_name: {{member.preferred_name}}<br>
-surname: {{member.surname}}<br>
-maiden_name: {{member.maiden_name}}<br>
-nickname: {{member.nickname}}<br>
-birth_date: {{member.birth_date}}<br>
-student_id: {{member.student_id}}<br>
-gender: {{member.gender}}<br>
-graduated: {{member.graduated}}<br>
-graduated_year: {{member.graduated_year}}<br>
-dead: {{member.dead}}<br>
-mobile_phone: {{member.mobile_phone}}<br>
-phone: {{member.phone}}<br>
-street_address: {{member.street_address}}<br>
-postal_code: {{member.postal_code}}<br>
-city: {{member.city}}<br>
-country: {{member.country}}<br>
-url: {{member.url}}<br>
-email: {{member.email}}<br>
-<br>
-subscribed_to_modulen: {{member.subscribed_to_modulen}}<br>
-allow_publish_info: {{member.allow_publish_info}}<br>
-<br>
-username: {{member.username}}<br>
-crm_id: {{member.crm_id}}<br>
-</p>
+<h1 class="page-header">{{full_name}}</h1><br>
+<div class="container">
+  <div class="row form-group">
+    <div class="col-sm-6">
+      <form>
+        <div class="row form-group">
+          <div class="col-sm-4">
+            <label for="{{form.surname.id_for_label}}">Efternamn</label>
+            {{form.surname}}
+          </div>
+          <div class="col-sm-5">
+            <label for="{{form.given_names.id_for_label}}">Förnamn</label>
+            {{form.given_names}}
+          </div>
+          <div class="col-sm-3">
+            <label for="{{form.preferred_name.id_for_label}}">Tilltalsnamn</label>
+            {{form.preferred_name}}
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-sm-4">
+            <label for="{{form.nickname.id_for_label}}">Smeknamn</label>
+            {{form.nickname}}
+          </div>
+          <div class="col-sm-5">
+            <label for="{{form.maiden_name.id_for_label}}">Flicknamn</label>
+            {{form.maiden_name}}
+          </div>
+          <div class="col-sm-3">
+            <label for="{{form.gender.id_for_label}}">Kön</label>
+            {{form.gender}}
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-sm-7">
+            <label for="{{form.street_address.id_for_label}}">Gatuadress</label>
+            {{form.street_address}}
+          </div>
+          <div class="col-sm-2">
+            <label for="{{form.postal_code.id_for_label}}">Postnummer</label>
+            {{form.postal_code}}
+          </div>
+          <div class="col-sm-3">
+            <label for="form.city.id_for_label">Postanstalt</label>
+            {{form.city}}
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-sm-12">
+            <label for="form.country.id_for_label">Land</label>
+            {{form.country}}
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-sm-5">
+            <label for="form.mobile_phone.id_for_label">Telefonnummer</label>
+            {{form.mobile_phone}}
+          </div>
+          <div class="col-sm-7">
+            <label for="{{form.email.id_for_label}}">E-postadress</label>
+            {{form.email}}
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-sm-3">
+            <label for="{{form.student_id.id_for_label}}">Studienummer</label>
+            {{form.student_id}}
+          </div>
+          <div class="col-sm-4">
+            <label for="{{form.birth_date.id_for_label}}">Födelsedatum</label>
+            {{form.birth_date}}
+          </div>
+          <div class="col-sm-5">
+            <label for="form.enrolment_year.id_for_label">Inskrivningsår vid Aalto</label>
+            {{form.enrolment_year}}
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-sm-12">
+            <label for="form.degree_programme.id_for_label">Studieinriktning</label>
+            {{form.degree_programme}}
+          </div>
+        </div>
+        <div class="row form-group">
+          <div class="col-sm-3">
+            <label class="form-check-label" for="form.graduated.id_for_label">
+              {{form.graduated}} Utexaminerad
+            </label>
+          </div>
+          <div class="col-sm-3">
+            <label for="form.graduated_year.id_for_label">År Utexaminerad</label>
+            {{form.graduated_year}}
+          </div>
+          <div class="col-sm-3">
+            <label class="form-check-label" for="form.subscribed_to_modulen.id_for_label">
+              {{form.subscribed_to_modulen}} Vill ha modulen hemskickad
+            </label>
+          </div>
+          <div class="col-sm-3 form-check">
+            <label class="form-check-label" for="{{form.dead.id_for_label}}">
+              {{form.dead}} Avliden
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-6">
+      
+    </div>
+  </div>
+</div>

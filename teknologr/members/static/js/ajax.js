@@ -1,7 +1,7 @@
 function loadMain(category, id) {
 	$("#main").load(category + '/' + id, function(response, status, xhr){
 		if (status == "error") {
-			$("#main").html('<h1 class="page-header">404 - Hittades inte</h1><h3>Det begärda objektet hittades inte</h3>');
+			$("#main").html('<h1 class="page-header">Ett fel uppstod</h1>');
 		}
 	});
 };

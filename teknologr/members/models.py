@@ -14,7 +14,51 @@ class SuperClass(models.Model):
         abstract = True
 
 class Member(SuperClass):
-    GENDER_CHOICES = (("MA", "Man"),("WO", "Woman"), ("UN","Unknown"))
+    GENDER_CHOICES = (("M", "Man"),("F", "Kvinna"), ("UN","Okänd"))
+    DEGREE_PROGRAMME_CHOICES = (
+        ('UN', 'Okänd'),
+        ('ARTS - Högskolan för konst, design och arkitektur', (
+            ('ARK', 'Arkitektur'),
+            ('BP', 'Bildkonstpedagogik'),
+            ('DS', 'Design'),
+            ('DK', 'Dokumentärfilm'),
+            ('FM', 'Film- och tv-manuskript'),
+            ('FP', 'Film- och tv-produktion'),
+            ('FS', 'Film- och tv-scenografi'),
+            ('FK', 'Filmklippning'),
+            ('FL', 'Filmljudinspelning och -ljudplanering'),
+            ('FI', 'Filmning'),
+            ('FR', 'Filmregi'),
+            ('GD', 'Grafisk design'),
+            ('IA', 'Inredningsarkitektur'),
+            ('KD', 'Kostymdesign'),
+            ('LA', 'Landskapsarkitektur'),
+            ('MD', 'Mode'),
+            ('TS', 'Teaterscenografi'),
+        )),
+        ('BIZ - Handelshögskolan', (
+            ('KT', 'Kauppatieteet'),
+        )),
+        ('CHEM - Högskolan för kemiteknik', (
+            ('KB', 'Kemi-, bio- och materialteknik'),
+        )),
+        ('ELEC - Högskolan för elektroteknik', (
+            ('AI', 'Automations- och informationsteknologi'),
+            ('BI', 'Bioinformationsteknologi'),
+            ('EL', 'Elektronik och elektroteknik'),
+        )),
+        ('ENG - Högskolan för ingenjörsvetenskaper', (
+            ('BM', 'Den byggda miljön'),
+            ('EM', 'Energi- och miljöteknik'),
+            ('MB', 'Maskin- och byggnadsteknik'),
+        )),
+        ('SCI - Högskolan för teknikvetenskaper', (
+            ('DT', 'Datateknik'),
+            ('IN', 'Informationsnätverk'),
+            ('PE', 'Produktionsekonomi'),
+            ('TF', 'Teknisk fysik och matematik'),
+        ))
+    )
 
     given_names = models.CharField(max_length=64, blank=False, null=False, default="UNKNOWN")
     preferred_name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
@@ -24,8 +68,10 @@ class Member(SuperClass):
     birth_date = models.DateField(blank=True, null=True)
     student_id = models.CharField(max_length=10, blank=True, null=False, default="")
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default="UN")
+    enrolment_year = models.IntegerField(blank=True, null=True)
     graduated = models.BooleanField(default=False)
     graduated_year = models.IntegerField(blank=True, null=True)
+    degree_programme = models.CharField(max_length=256, choices=DEGREE_PROGRAMME_CHOICES, default="UN")
     dead = models.BooleanField(default=False)
     mobile_phone = models.CharField(max_length=20, blank=True, null=False, default="")
     phone = models.CharField(max_length=20, blank=True, null=False, default="")
