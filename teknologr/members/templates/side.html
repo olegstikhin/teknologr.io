@@ -1,5 +1,14 @@
+<span>
+    <input id="radio-members" type='radio' name='side' onchange="">Medlemmar
+    <input id="radio-groups" type='radio' name='side' onchange="loadSide('groups')">Grupper
+    <input id="radio-functionaries" type='radio' name='side' onchange="loadSide('functionaries')">Poster
+    <input id="radio-decorations" type='radio' name='side' onchange="loadSide('decorations')">Betygelser
+</span>
+<form class="navbar-form">
+    <input type="text" class="form-control" placeholder="Sök...">
+</form>
 <ul>
-	{% for obj in objects %}
-	<li><a class="side-object" href="#" onclick='loadMain( "{{category}}", "{{obj.id}}" )'>{{obj.name}}</a></li>
+	{% for obj in side %}
+	<li><a class="side-object" href="/{{category}}/{{obj.id}}">{{obj.name}}</a></li>
 	{% endfor %}
 </ul>

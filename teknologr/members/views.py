@@ -4,15 +4,14 @@ from django.shortcuts import render, get_object_or_404
 from members.models import Member, GroupType, FunctionaryType, Decoration
 from members.forms import MemberForm
 
-# Create your views here.
+# Create your views here.s
 
 def home_view(request):
 
 	context = {}
 	return render(request, 'base.html', context)
 
-def side(request, category):
-	context = {'category': category}
+def side(category):
 	summary = []
 	if category == 'members':
 		for obj in Member.objects.all():
@@ -26,14 +25,13 @@ def side(request, category):
 	elif category == 'decorations':
 		for obj in Decoration.objects.all():
 			summary.append({'name': obj.name, 'id': obj.name})
-	else:
-		raise Http404
-
-	context['objects'] = summary
-	return render(request, 'side.html', context)
+	return summary
 
 def member(request, student_id):
 	context = {}
+	# load side list items
+	context['side'] = side('members')
+
 	member = get_object_or_404(Member, student_id=student_id)
 	context['full_name'] = member.full_name
 	context['form'] = MemberForm(instance=member)
