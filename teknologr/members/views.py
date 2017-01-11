@@ -11,7 +11,9 @@ def home_view(request):
 	context = {}
 	return render(request, 'base.html', context)
 
-def side(category):
+def side(context, category):
+	side = {}
+	side['active'] = category
 	summary = []
 	if category == 'members':
 		for obj in Member.objects.all():
@@ -25,12 +27,19 @@ def side(category):
 	elif category == 'decorations':
 		for obj in Decoration.objects.all():
 			summary.append({'name': obj.name, 'id': obj.name})
-	return summary
+	side['objects'] = summary
+	context['side'] = side
+
+def empty(request, category):
+	context = {}
+	side(context, category)
+	return render(request, 'base.html', context)
 
 def member(request, student_id):
 	context = {}
+
 	# load side list items
-	context['side'] = side('members')
+	side(context, 'members')
 
 	member = get_object_or_404(Member, student_id=student_id)
 	context['full_name'] = member.full_name
