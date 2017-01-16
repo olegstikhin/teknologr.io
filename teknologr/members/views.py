@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from members.models import Member, GroupType, FunctionaryType, Decoration
 from members.forms import MemberForm
@@ -62,6 +62,11 @@ def member(request, id):
 	# load side list items
 	set_side_context(context, 'members')
 	return render(request, 'member.html', context)
+
+def delete_member(request, id):
+	member = get_object_or_404(Member, id=id)
+	member.delete()
+	return redirect('/members/')
 
 
 def group(request, group_id):
