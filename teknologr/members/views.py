@@ -11,13 +11,14 @@ def home_view(request):
 	context = {}
 	return render(request, 'base.html', context)
 
-def side(context, category):
+
+def set_side_context(context, category):
 	side = {}
 	side['active'] = category
 	summary = []
 	if category == 'members':
 		for obj in Member.objects.all():
-			summary.append({'name': obj.full_name, 'id': obj.student_id})
+			summary.append({'name': obj.full_name, 'id': obj.id})
 	elif category == 'groups':
 		for obj in GroupType.objects.all():
 			summary.append({'name': obj.name, 'id': obj.name})
@@ -30,27 +31,46 @@ def side(context, category):
 	side['objects'] = summary
 	context['side'] = side
 
+
 def empty(request, category):
 	context = {}
-	side(context, category)
+	set_side_context(context, category)
 	return render(request, 'base.html', context)
 
-def member(request, student_id):
+
+def member(request, id):
 	context = {}
 
-	# load side list items
-	side(context, 'members')
+	if id == 'new':
+		member = Member()
+	else:
+		member = get_object_or_404(Member, id=id)
 
-	member = get_object_or_404(Member, student_id=student_id)
+	if request.method == 'POST':
+		form = MemberForm(request.POST, instance=member)
+		if form.is_valid():
+			form.save()
+			context['result'] = 'success'
+		else:
+			context['result'] = 'failure'
+	else: 
+		form = MemberForm(instance=member)
+
+	context['form'] = form
 	context['full_name'] = member.full_name
-	context['form'] = MemberForm(instance=member)
+
+	# load side list items
+	set_side_context(context, 'members')
 	return render(request, 'member.html', context)
+
 
 def group(request, group_id):
 	return 'TODO: implement'
 
+
 def functionary(request, functionary_id):
 	return 'TODO: implement'
+
 
 def decoration(request, decoration_id):
 	return 'TODO: implement'

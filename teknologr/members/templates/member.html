@@ -1,132 +1,168 @@
 {% extends "base.html" %}
 {% block main %}
+<div class="container-fluid">
 <h1 class="page-header">{{full_name}}</h1><br>
 <div class="row form-group">
-  <div class="col-sm-6">
-    <form>
+  <div class="col-md-6">
+    <form role ="form" action="" method="post">
+      {% csrf_token %}
       <div class="row form-group">
-        <div class="col-sm-4">
+        <div class="col-md-4">
           <label for="{{form.surname.id_for_label}}">Efternamn</label>
+          {{form.surname.errors}}
           {{form.surname}}
         </div>
-        <div class="col-sm-5">
+        <div class="col-md-5">
           <label for="{{form.given_names.id_for_label}}">Förnamn</label>
+          {{form.given_names.errors}}
           {{form.given_names}}
         </div>
-        <div class="col-sm-3">
+        <div class="col-md-3">
           <label for="{{form.preferred_name.id_for_label}}">Tilltalsnamn</label>
+          {{form.preferred_name.errors}}
           {{form.preferred_name}}
         </div>
       </div>
       <div class="row form-group">
-        <div class="col-sm-4">
+        <div class="col-md-4">
           <label for="{{form.nickname.id_for_label}}">Smeknamn</label>
+          {{form.nickname.errors}}
           {{form.nickname}}
         </div>
-        <div class="col-sm-5">
+        <div class="col-md-5">
           <label for="{{form.maiden_name.id_for_label}}">Flicknamn</label>
+          {{form.maiden_name.errors}}
           {{form.maiden_name}}
         </div>
-        <div class="col-sm-3">
+        <div class="col-md-3">
           <label for="{{form.gender.id_for_label}}">Kön</label>
+          {{form.gender.errors}}
           {{form.gender}}
         </div>
       </div>
       <div class="row form-group">
-        <div class="col-sm-7">
+        <div class="col-md-7">
           <label for="{{form.street_address.id_for_label}}">Gatuadress</label>
+          {{form.street_address.errors}}
           {{form.street_address}}
         </div>
-        <div class="col-sm-2">
+        <div class="col-md-2">
           <label for="{{form.postal_code.id_for_label}}">Postnummer</label>
+          {{form.postal_code.errors}}
           {{form.postal_code}}
         </div>
-        <div class="col-sm-3">
+        <div class="col-md-3">
           <label for="form.city.id_for_label">Postanstalt</label>
+          {{form.city.errors}}
           {{form.city}}
         </div>
       </div>
       <div class="row form-group">
-        <div class="col-sm-12">
+        <div class="col-md-12">
           <label for="form.country.id_for_label">Land</label>
+          {{form.country.errors}}
           {{form.country}}
         </div>
       </div>
       <div class="row form-group">
-        <div class="col-sm-5">
+        <div class="col-md-5">
           <label for="form.mobile_phone.id_for_label">Telefonnummer</label>
+          {{form.mobile_phone.errors}}
           {{form.mobile_phone}}
         </div>
-        <div class="col-sm-7">
+        <div class="col-md-7">
           <label for="{{form.email.id_for_label}}">E-postadress</label>
+          {{form.email.errors}}
           {{form.email}}
         </div>
       </div>
       <div class="row form-group">
-        <div class="col-sm-3">
+        <div class="col-md-3">
           <label for="{{form.student_id.id_for_label}}">Studienummer</label>
+          {{form.student_id.errors}}
           {{form.student_id}}
         </div>
-        <div class="col-sm-4">
+        <div class="col-md-4">
           <label for="{{form.birth_date.id_for_label}}">Födelsedatum</label>
+          {{form.birth_date.errors}}
           {{form.birth_date}}
         </div>
-        <div class="col-sm-5">
+        <div class="col-md-5">
           <label for="form.enrolment_year.id_for_label">Inskrivningsår vid Aalto</label>
+          {{form.enrolment_year.errors}}
           {{form.enrolment_year}}
         </div>
       </div>
       <div class="row form-group">
-        <div class="col-sm-6">
+        <div class="col-md-6">
           <label for="form.degree_programme.id_for_label">Studieinriktning</label>
+          {{form.degree_programme.errors}}
           {{form.degree_programme}}
         </div>
-        <div class="col-sm-3">
+        <div class="col-md-3">
           <label class="form-check-label" for="form.graduated.id_for_label">
+            {{form.graduated.errors}}
             {{form.graduated}} Utexaminerad
           </label>
         </div>
-        <div class="col-sm-3">
+        <div class="col-md-3">
           <label for="form.graduated_year.id_for_label">År Utexaminerad</label>
+          {{form.graduated_year.errors}}
           {{form.graduated_year}}
         </div>
       </div>
       <div class="row form-group">
-        <div class="col-sm-4">
+        <div class="col-md-4">
           <label class="form-check-label" for="form.subscribed_to_modulen.id_for_label">
+            {{form.subscribed_to_modulen.errors}}
             {{form.subscribed_to_modulen}} Vill ha modulen hemskickad
           </label>
         </div>
-        <div class="col-sm-4 form-check">
+        <div class="col-md-4 form-check">
           <label class="form-check-label" for="{{form.allow_publish_info.id_for_label}}">
+            {{form.allow_publish_info.errors}}
             {{form.allow_publish_info}} Tillåter utlämning av uppgifter
           </label>
         </div>
-        <div class="col-sm-4 form-check">
+        <div class="col-md-4 form-check">
           <label class="form-check-label" for="{{form.dead.id_for_label}}">
+            {{form.dead.errors}}
             {{form.dead}} Avliden
           </label>
         </div>
       </div>
       <div class="row form-group">
-        <div class ="col-sm-6">
+        <div class ="col-md-6">
           <label for="{{form.url.id_for_label}}">Hemsida</label>
+          {{form.url.errors}}
           {{form.url}}
         </div>
-        <div class ="col-sm-3">
+        <div class ="col-md-3">
           <label for="{{form.username.id_for_label}}">Användarnamn</label>
+          {{form.username.errors}}
           {{form.username}}
         </div>
-        <div class ="col-sm-3">
+        <div class ="col-md-3">
           <label for="{{form.crm_id.id_for_label}}">CRM id</label>
+          {{form.crm_id.errors}}
           {{form.crm_id}}
         </div>
       </div>
-
+      <div class = "row">
+	      <div class = "col-md-2"><button type="submit" class="btn btn-primary">Spara</button></div>
+	      {% if result %}
+		      {% if result == 'success' %}
+		      <div class="col-md-10 alert alert-success" role="alert"> <strong>Ändringarna sparade</strong> </div>
+		      {% else %}
+		      <div class="col-md-9 alert alert-danger" role="alert"> <strong>Ett fel uppstod, kontrollera fälten</strong> </div>
+		      {% endif %}
+	      {% endif %}
+      </div>
     </form>
   </div>
-  <div class="col-sm-6">
+  <div class="col-md-6">
     
   </div>
+</div>
 </div>
 {% endblock %}

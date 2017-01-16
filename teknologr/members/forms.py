@@ -1,6 +1,6 @@
 from members.models import Member
 from django.forms import ModelForm
-from django.forms.widgets import CheckboxInput
+from django.forms.widgets import CheckboxInput, DateInput
 
 class MemberForm(ModelForm):
     class Meta:
