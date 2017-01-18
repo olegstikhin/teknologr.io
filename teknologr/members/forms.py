@@ -1,4 +1,4 @@
-from members.models import Member
+from members.models import Member, GroupType
 from django.forms import ModelForm
 from django.forms.widgets import CheckboxInput, DateInput
 
@@ -14,3 +14,13 @@ class MemberForm(ModelForm):
               field.widget.attrs['class'] = 'form-check-input'
             else:
               field.widget.attrs['class'] = 'form-control'
+
+class GroupTypeForm(ModelForm):
+    class Meta:
+        model = GroupType
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(GroupTypeForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'

@@ -2,7 +2,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 
 from members.models import Member, GroupType, FunctionaryType, Decoration
-from members.forms import MemberForm
+from members.forms import *
 
 # Create your views here.s
 
@@ -21,13 +21,13 @@ def set_side_context(context, category):
 			summary.append({'name': obj.full_name, 'id': obj.id})
 	elif category == 'groups':
 		for obj in GroupType.objects.all():
-			summary.append({'name': obj.name, 'id': obj.name})
+			summary.append({'name': obj.name, 'id': obj.id})
 	elif category == 'functionaries':
 		for obj in FunctionaryType.objects.all():
-			summary.append({'name': obj.name, 'id': obj.name})
+			summary.append({'name': obj.name, 'id': obj.id})
 	elif category == 'decorations':
 		for obj in Decoration.objects.all():
-			summary.append({'name': obj.name, 'id': obj.name})
+			summary.append({'name': obj.name, 'id': obj.id})
 	side['objects'] = summary
 	context['side'] = side
 
@@ -38,13 +38,13 @@ def empty(request, category):
 	return render(request, 'base.html', context)
 
 
-def member(request, id):
+def member(request, member_id):
 	context = {}
 
 	if id == 'new':
 		member = Member()
 	else:
-		member = get_object_or_404(Member, id=id)
+		member = get_object_or_404(Member, id=member_id)
 
 	if request.method == 'POST':
 		form = MemberForm(request.POST, instance=member)
@@ -63,19 +63,43 @@ def member(request, id):
 	set_side_context(context, 'members')
 	return render(request, 'member.html', context)
 
-def delete_member(request, id):
-	member = get_object_or_404(Member, id=id)
+def delete_member(request, member_id):
+	member = get_object_or_404(Member, id=member_id)
 	member.delete()
 	return redirect('/members/')
 
 
 def group(request, group_id):
-	return 'TODO: implement'
+	context = {}
 
+	if group_id == 'new':
+		grouptype = GroupType()
+	else:
+		grouptype = get_object_or_404(GroupType, id=group_id)
+
+	if request.method == 'POST':
+		form = GroupTypeForm(request.POST, instance=grouptype)
+		if form.is_valid():
+			form.save()
+			context['result'] = 'success'
+		else:
+			context['result'] = 'failure'
+	else: 
+		form = GroupTypeForm(instance=grouptype)
+
+	context['form'] = form
+
+	set_side_context(context, 'groups')
+	return render(request, 'group.html', context)
+
+def delete_grouptype(request, group_id):
+	# TODO: also delete all groups with this grouptype
+	grouptype = get_object_or_404(GroupType, id=group_id)
+	grouptype.delete()
+	return redirect('/groups/')
 
 def functionary(request, functionary_id):
 	return 'TODO: implement'
-
 
 def decoration(request, decoration_id):
 	return 'TODO: implement'

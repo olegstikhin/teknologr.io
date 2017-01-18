@@ -7,8 +7,9 @@ urlpatterns = [
     url(r'^(members|groups|functionaries|decorations)/$', views.empty),
     url(r'^members/(\d+|new)/$', views.member),
     url(r'^members/(\d+)/del', views.delete_member),
-    url(r'^groups/(\w+)/$', views.group),
-    url(r'^functionaries/(\w+)/$', views.functionary),
-    url(r'^decorations/(\w+)/$', views.decoration),
+    url(r'^groups/(\d+|new)/$', views.group),
+    url(r'^groups/(\d+)/del', views.delete_grouptype),
+    url(r'^functionaries/(\d+)/$', views.functionary),
+    url(r'^decorations/(\d+)/$', views.decoration),
 
 ]
