@@ -113,10 +113,38 @@ def delete_grouptype(request, grouptype_id):
 	grouptype.delete()
 	return redirect('/groups/')
 
+def new_functionary(request):
+	functionary = FunctionaryType()
+	functionary.save()
+	return redirect('/functionaries/{0}/'.format(functionary.id))
 
-def functionary(request, functionary_id):
-	return 'TODO: implement'
+def functionary(request, functionarytype_id):
+	context = {}
 
+	context['functionarytype_id'] = functionarytype_id
+	functionarytype = get_object_or_404(FunctionaryType, id=functionarytype_id)
+	if request.method == 'POST':
+		form = FunctionaryTypeForm(request.POST, instance=functionarytype)
+		if form.is_valid():
+			form.save()
+			context['result'] = 'success'
+		else:
+			context['result'] = 'failure'
+	else: 
+		form = FunctionaryTypeForm(instance=functionarytype)
+
+	# Get groups of group type
+	context['functionaries'] = Functionary.objects.filter(functionarytype__id=functionarytype_id)
+	context['form'] = form
+
+	set_side_context(context, 'functionaries')
+	return render(request, 'functionary.html', context)
+
+def delete_functionary(request, functionarytype_id):
+	functionarytype = get_object_or_404(FunctionaryType, id=functionarytype_id)
+	# By default, django deletes all referenced foreign keys as well (on_delete=CASCADE)
+	functionarytype.delete()
+	return redirect('/functionaries/')
 
 def decoration(request, decoration_id):
 	return 'TODO: implement'

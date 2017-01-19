@@ -1,4 +1,4 @@
-from members.models import Member, GroupType
+from members.models import *
 from django.forms import ModelForm
 from django.forms.widgets import CheckboxInput, DateInput
 
@@ -22,5 +22,15 @@ class GroupTypeForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(GroupTypeForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+class FunctionaryTypeForm(ModelForm):
+    class Meta:
+        model = FunctionaryType
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(FunctionaryTypeForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'

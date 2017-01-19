@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="container-fluid">
+<h1 class="page-header">{{form.name.value}}</h1><br>
+<ul class="list-inline">
+  <li>
+  <form class="form-inline" role="form" action="/functionaries/{{functionarytype_id}}/" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="{{form.name.id_for_label}}">Namn:</label>
+      {{form.name}}
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-success">Spara</button>
+    </div>
+  </form>
+  </li>
+  <li>
+  <form class="form-inline" role="form" action="del" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <button type="submit" class="btn btn-danger" onclick="return confirm('Vill du radera denna funktionär?')">Radera</button>
+    </div>
+  </form>
+  </li>
+</ul>
+</div>
+<hr>
+<div class="container-fluid">
+  <h3>Innehavare av posten</h3>
+  <ul>
+    {% for functionary in functionaries %}
+    <li><a href="#">{{functionary.member.full_name}}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+</div>
+{% endblock %}
