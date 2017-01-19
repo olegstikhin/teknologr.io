@@ -20,7 +20,7 @@
 <br>
 <ul>
   {% for obj in side.objects %}
-  <li><a class="side-object" href="/{{side.active}}/{{obj.id}}/">{{obj.name}}</a></li>
+  <li><a class="side-object" href="/{{side.active}}/{{obj.id}}/">{{obj.name|default:"Namnlös"}}</a></li>
   {% endfor %}
 </ul>
 </div>

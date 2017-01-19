@@ -3,7 +3,7 @@ from django_countries.fields import CountryField
 import datetime
 
 def getEpoch():
-	return datetime.date(1872, 1, 1)
+    return datetime.date(1872, 1, 1)
 
 class SuperClass(models.Model):
     # This class is the base of everything
@@ -101,43 +101,43 @@ class Member(SuperClass):
         return self.full_name
 
 class DecorationOwnership(SuperClass):
-	member = models.ForeignKey("Member")
-	decoration = models.ForeignKey("Decoration")
-	acquired = models.DateField(default=getEpoch())
+    member = models.ForeignKey("Member")
+    decoration = models.ForeignKey("Decoration")
+    acquired = models.DateField(default=getEpoch())
 
 class Decoration(SuperClass):
-	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
 class GroupMembership(SuperClass):
-	member = models.ForeignKey("Member")
-	group = models.ForeignKey("Group")
-	begin_date = models.DateField(default=getEpoch())
-	end_date = models.DateField(default=getEpoch())
+    member = models.ForeignKey("Member")
+    group = models.ForeignKey("Group")
+    begin_date = models.DateField(default=getEpoch())
+    end_date = models.DateField(default=getEpoch())
 
 class Group(SuperClass):
-	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
-	grouptype = models.ForeignKey("GroupType")
-	begin_date = models.DateField(default=getEpoch())
-	end_date = models.DateField(default=getEpoch())
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    grouptype = models.ForeignKey("GroupType")
+    begin_date = models.DateField(default=getEpoch())
+    end_date = models.DateField(default=getEpoch())
 
-	def __str__(self):
-		return self.name
+    def __str__(self):
+        return self.name
 
 class GroupType(SuperClass):
-	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
-	def __str__(self):
-		return self.name
+    def __str__(self):
+        return self.name
 
 class Functionary(SuperClass):
-	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
-	member = models.ForeignKey("Member")
-	functionarytype = models.ForeignKey("FunctionaryType")
-	begin_date = models.DateField(default=getEpoch())
-	end_date = models.DateField(default=getEpoch())
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    member = models.ForeignKey("Member")
+    functionarytype = models.ForeignKey("FunctionaryType")
+    begin_date = models.DateField(default=getEpoch())
+    end_date = models.DateField(default=getEpoch())
 
 class FunctionaryType(SuperClass):
-	name = models.CharField(max_length=64, blank=False, null=False, unique=True)
+    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
-	def __str__(self):
-		return self.name
+    def __str__(self):
+        return self.name

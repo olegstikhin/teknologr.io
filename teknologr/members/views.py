@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 
-from members.models import Member, GroupType, FunctionaryType, Decoration
+from members.models import *
 from members.forms import *
 
 # Create your views here.s
@@ -38,13 +38,17 @@ def empty(request, category):
 	return render(request, 'base.html', context)
 
 
+def new_member(request):
+	member = Member(given_names='Ny', surname='Medlem')
+	member.save()
+	return redirect('/members/{0}/'.format(member.id))
+
+
 def member(request, member_id):
 	context = {}
 
-	if id == 'new':
-		member = Member()
-	else:
-		member = get_object_or_404(Member, id=member_id)
+	member = get_object_or_404(Member, id=member_id)
+	context['member_id'] = member_id
 
 	if request.method == 'POST':
 		form = MemberForm(request.POST, instance=member)
@@ -63,19 +67,24 @@ def member(request, member_id):
 	set_side_context(context, 'members')
 	return render(request, 'member.html', context)
 
+
 def delete_member(request, member_id):
 	member = get_object_or_404(Member, id=member_id)
 	member.delete()
 	return redirect('/members/')
 
 
+def new_group(request):
+	group = GroupType()
+	group.save()
+	return redirect('/groups/{0}/'.format(group.id))
+
+
 def group(request, group_id):
 	context = {}
 
-	if group_id == 'new':
-		grouptype = GroupType()
-	else:
-		grouptype = get_object_or_404(GroupType, id=group_id)
+	context['grouptype_id'] = group_id
+	grouptype = get_object_or_404(GroupType, id=group_id)
 
 	if request.method == 'POST':
 		form = GroupTypeForm(request.POST, instance=grouptype)
@@ -87,19 +96,24 @@ def group(request, group_id):
 	else: 
 		form = GroupTypeForm(instance=grouptype)
 
+	# Get groups of group type
+	context['groups'] = Group.objects.filter(grouptype__id=group_id)
 	context['form'] = form
 
 	set_side_context(context, 'groups')
 	return render(request, 'group.html', context)
 
+
 def delete_grouptype(request, group_id):
-	# TODO: also delete all groups with this grouptype
 	grouptype = get_object_or_404(GroupType, id=group_id)
+	# By default, django deletes all referenced foreign keys as well (on_delete=CASCADE)
 	grouptype.delete()
 	return redirect('/groups/')
 
+
 def functionary(request, functionary_id):
 	return 'TODO: implement'
+
 
 def decoration(request, decoration_id):
 	return 'TODO: implement'
