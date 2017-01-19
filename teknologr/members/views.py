@@ -146,5 +146,41 @@ def delete_functionary(request, functionarytype_id):
 	functionarytype.delete()
 	return redirect('/functionaries/')
 
+def delete_decoration(request, decoration_id):
+	decoration = get_object_or_404(decoration, id=decoration_id)
+	# By default, django deletes all referenced foreign keys as well (on_delete=CASCADE)
+	decoration.delete()
+	return redirect('/groups/')
+
+def new_decoration(request):
+	decoration = Decoration()
+	decoration.save()
+	return redirect('/decorations/{0}/'.format(decoration.id))
+
 def decoration(request, decoration_id):
-	return 'TODO: implement'
+	context = {}
+
+	context['decoration_id'] = decoration_id
+	decoration = get_object_or_404(Decoration, id=decoration_id)
+	if request.method == 'POST':
+		form = DecorationForm(request.POST, instance=decoration)
+		if form.is_valid():
+			form.save()
+			context['result'] = 'success'
+		else:
+			context['result'] = 'failure'
+	else: 
+		form = DecorationForm(instance=decoration)
+
+	# Get groups of group type
+	context['decorations'] = DecorationOwnership.objects.filter(decoration__id=decoration_id)
+	context['form'] = form
+
+	set_side_context(context, 'decorations')
+	return render(request, 'decoration.html', context)
+
+def delete_decoration(request, decoration_id):
+	decoration = get_object_or_404(Decoration, id=decoration_id)
+	# By default, django deletes all referenced foreign keys as well (on_delete=CASCADE)
+	decoration.delete()
+	return redirect('/decorations/')

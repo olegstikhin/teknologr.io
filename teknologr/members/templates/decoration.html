@@ -4,7 +4,7 @@
 <h1 class="page-header">{{form.name.value}}</h1><br>
 <ul class="list-inline">
   <li>
-  <form class="form-inline" role="form" action="/functionaries/{{functionarytype_id}}/" method="post">
+  <form class="form-inline" role="form" action="/decorations/{{decoration_id}}/" method="post">
     {% csrf_token %}
     <div class="form-group">
       <label for="{{form.name.id_for_label}}">Namn:</label>
@@ -19,7 +19,7 @@
   <form class="form-inline" role="form" action="del" method="post">
     {% csrf_token %}
     <div class="form-group">
-      <button type="submit" class="btn btn-danger" onclick="return confirm('Vill du radera denna funktionär?')">Radera</button>
+      <button type="submit" class="btn btn-danger" onclick="return confirm('Vill du radera denna betygelse?')">Radera</button>
     </div>
   </form>
   </li>
@@ -27,10 +27,10 @@
 </div>
 <hr>
 <div class="container-fluid">
-  <h3>Innehavare av posten</h3>
+  <h3>Innehavare av betygelsen</h3>
   <ul>
-    {% for functionary in functionaries %}
-    <li><a href="/members/{{functionary.member.id}}/">{{functionary.member.full_name}}</a></li>
+    {% for decoration in decorations %}
+    <li><a href="/members/{{decoration.member.id}}/">{{decoration.member.full_name}}</a></li>
     {% endfor %}
   </ul>
 </div>

@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'^functionaries/new/$', views.new_functionary),
     url(r'^functionaries/(\d+)/del$', views.delete_functionary),
     url(r'^decorations/(\d+)/$', views.decoration),
-
+    url(r'^decorations/new/$', views.new_decoration),
+    url(r'^decorations/(\d+)/del$', views.delete_decoration),
 ]

@@ -108,6 +108,9 @@ class DecorationOwnership(SuperClass):
 class Decoration(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
+    def __str__(self):
+        return self.name
+
 class GroupMembership(SuperClass):
     member = models.ForeignKey("Member")
     group = models.ForeignKey("Group")

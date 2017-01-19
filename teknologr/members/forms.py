@@ -34,3 +34,13 @@ class FunctionaryTypeForm(ModelForm):
         super(FunctionaryTypeForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
+class DecorationForm(ModelForm):
+    class Meta:
+        model = Decoration
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(DecorationForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
