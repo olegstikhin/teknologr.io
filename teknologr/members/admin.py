@@ -5,4 +5,4 @@ admin.site.register(Member)
 admin.site.register(Group)
 admin.site.register(GroupType)
 admin.site.register(Functionary)
-
+admin.site.register(GroupMembership)

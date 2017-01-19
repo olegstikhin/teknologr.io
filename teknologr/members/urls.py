@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^members/new/$', views.new_member),
     url(r'^members/(\d+)/del', views.delete_member),
     url(r'^groups/(\d+)/$', views.group),
+    url(r'^groups/(\d+)/(\d+)/$', views.group),
     url(r'^groups/new/$', views.new_group),
     url(r'^groups/(\d+)/del', views.delete_grouptype),
     url(r'^functionaries/(\d+)/$', views.functionary),

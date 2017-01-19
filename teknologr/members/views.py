@@ -80,11 +80,11 @@ def new_group(request):
 	return redirect('/groups/{0}/'.format(group.id))
 
 
-def group(request, group_id):
+def group(request, grouptype_id, group_id=None):
 	context = {}
 
-	context['grouptype_id'] = group_id
-	grouptype = get_object_or_404(GroupType, id=group_id)
+	context['grouptype_id'] = grouptype_id
+	grouptype = get_object_or_404(GroupType, id=grouptype_id)
 
 	if request.method == 'POST':
 		form = GroupTypeForm(request.POST, instance=grouptype)
@@ -97,15 +97,18 @@ def group(request, group_id):
 		form = GroupTypeForm(instance=grouptype)
 
 	# Get groups of group type
-	context['groups'] = Group.objects.filter(grouptype__id=group_id)
+	context['groups'] = Group.objects.filter(grouptype__id=grouptype_id)
 	context['form'] = form
+
+	if group_id is not None:
+		context['groupmembers'] = GroupMembership.objects.filter(group__id=group_id)
 
 	set_side_context(context, 'groups')
 	return render(request, 'group.html', context)
 
 
-def delete_grouptype(request, group_id):
-	grouptype = get_object_or_404(GroupType, id=group_id)
+def delete_grouptype(request, grouptype_id):
+	grouptype = get_object_or_404(GroupType, id=grouptype_id)
 	# By default, django deletes all referenced foreign keys as well (on_delete=CASCADE)
 	grouptype.delete()
 	return redirect('/groups/')
