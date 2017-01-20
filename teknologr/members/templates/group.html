@@ -38,6 +38,7 @@
         <button class="btn btn-success" data-toggle="modal" data-target="#addGroup">Lägg till ny</button>
       </li>
     </ul>
+
     <div class="modal fade" id="addGroup" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -45,13 +46,29 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Lägg till grupp</h4>
           </div>
-          <div class="modal-body">
+          <div class="modal-body container-fluid">
             <form action="#" method="post">
-	            {% csrf_token %}
+            {% csrf_token %}
+            <div class="row form-group">
+            <div class="col-md-12">
+              <label for="{{addgroupform.name.id_for_label}}">Namn</label>
             	{{ addgroupform.name }}
+            </div>
+            </div>
+            <div class="row form-group">
+            <div class="col-md-5">
+              <label for="{{addgroupform.begin_date.id_for_label}}">Från</label>
             	{{ addgroupform.begin_date }}
+            </div>
+            <div class="col-md-5">
+              <label for="{{addgroupform.end_date.id_for_label}}">Till</label>
             	{{ addgroupform.end_date }}
+            </div>
+            <div class="col-md-2">
+              <br>
             	<button type="submit" class="btn btn-success">Spara</button>
+            </div>
+            </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -68,17 +85,7 @@
   </div>
 
   <div class="col-md-6">
-    <ul class="list-inline">
-      <li><h3>Medlemmar i gruppen</h3></li>
-      <li>
-        <button class="btn btn-success" data-toggle="modal" data-target="#addToGroup">Lägg till ny</button>
-      </li>
-    </ul>
-    <div class="modal fade" id="addToGroup" role="dialog">
-      <div id="addtogroup-modal-content" class="modal-dialog">
-        <!-- Load moal with ajax -->
-      </div>
-    </div>
+    <h3>Medlemmar i gruppen</h3>
     <ul>
       {% for member in groupmembers %}
       <li><a href="#">{{member.member.full_name}}</a></li>

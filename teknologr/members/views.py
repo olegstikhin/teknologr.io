@@ -63,6 +63,12 @@ def member(request, member_id):
 	context['form'] = form
 	context['full_name'] = member.full_name
 
+	# Get functionary positions
+	context['functionaries'] = Functionary.objects.filter(member__id=member_id)
+
+	# Get groups
+	context['groups'] = GroupMembership.objects.filter(member__id=member_id)
+
 	# load side list items
 	set_side_context(context, 'members')
 	return render(request, 'member.html', context)
