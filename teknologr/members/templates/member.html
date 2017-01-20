@@ -168,13 +168,23 @@
   </div>
 
   <div class="col-md-5">
-    <h3>Poster</h3>
+    <ul class="list-inline">
+      <li><h3>Poster</h3></li>
+      <li>
+        <button class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
+      </li>
+    </ul>
     <ul>
     {% for functionary in functionaries %}
     <li><a href="/functionaries/{{functionary.id}}/">{{functionary.name}}</a></li>
     {% endfor %}
     </ul>
-    <h3>Grupper</h3>
+    <ul class="list-inline">
+      <li><h3>Grupper</h3></li>
+      <li>
+        <button class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
+      </li>
+    </ul>
     <ul>
     {% for group in groups %}
     <li><a href="/groups/{{group.id}}/">{{group.group.name}}</a></li>
