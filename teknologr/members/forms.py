@@ -44,3 +44,13 @@ class DecorationForm(ModelForm):
         super(DecorationForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
+class GroupForm(ModelForm):
+    class Meta:
+        model = Group
+        fields = ['name', 'begin_date', 'end_date']
+
+    def __init__(self, *args, **kwargs):
+        super(GroupForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'    

@@ -100,6 +100,8 @@ def group(request, grouptype_id, group_id=None):
 	context['groups'] = Group.objects.filter(grouptype__id=grouptype_id)
 	context['form'] = form
 
+	context['addgroupform'] = GroupForm()
+
 	if group_id is not None:
 		context['groupmembers'] = GroupMembership.objects.filter(group__id=group_id)
 
@@ -112,6 +114,13 @@ def delete_grouptype(request, grouptype_id):
 	# By default, django deletes all referenced foreign keys as well (on_delete=CASCADE)
 	grouptype.delete()
 	return redirect('/groups/')
+
+
+def addtogroup_modal(request, grouptype_id):
+	context = {}
+
+	return render(request, 'addtogroup_modal.html', context)
+
 
 def new_functionary(request):
 	functionary = FunctionaryType()

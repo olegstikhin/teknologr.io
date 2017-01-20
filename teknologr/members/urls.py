@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^groups/(\d+)/(\d+)/$', views.group),
     url(r'^groups/new/$', views.new_group),
     url(r'^groups/(\d+)/del', views.delete_grouptype),
+    url(r'^groups/(\d+)/add', views.addtogroup_modal),
     url(r'^functionaries/(\d+)/$', views.functionary),
     url(r'^functionaries/new/$', views.new_functionary),
     url(r'^functionaries/(\d+)/del$', views.delete_functionary),
