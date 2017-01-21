@@ -122,6 +122,17 @@ def delete_grouptype(request, grouptype_id):
 	return redirect('/groups/')
 
 
+def addgroup(request, grouptype_id):
+	grouptype = get_object_or_404(GroupType, id=grouptype_id)
+	group = Group(grouptype=grouptype)
+	if request.method == 'POST':
+		form = GroupForm(request.POST, instance=group)
+		if form.is_valid():
+			form.save()
+
+	return redirect('/groups/{0}/'.format(grouptype_id))
+
+
 def addtogroup_modal(request, grouptype_id):
 	context = {}
 
