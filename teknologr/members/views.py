@@ -109,7 +109,10 @@ def group(request, grouptype_id, group_id=None):
 	context['addgroupform'] = GroupForm()
 
 	if group_id is not None:
-		context['groupmembers'] = GroupMembership.objects.filter(group__id=group_id)
+		context['group_id'] = group_id
+		group = get_object_or_404(Group, id=group_id)
+		context['groupmembershipform'] = GroupMembershipForm()
+		context['groupmembers'] = GroupMembership.objects.filter(group=group)
 
 	set_side_context(context, 'groups')
 	return render(request, 'group.html', context)
@@ -117,12 +120,12 @@ def group(request, grouptype_id, group_id=None):
 
 def delete_grouptype(request, grouptype_id):
 	grouptype = get_object_or_404(GroupType, id=grouptype_id)
-	# By default, django deletes all referenced foreign keys as well (on_delete=CASCADE)
+	# By default, django deletes all objects with foreign keys to this object as well (on_delete=CASCADE)
 	grouptype.delete()
 	return redirect('/groups/')
 
 
-def addgroup(request, grouptype_id):
+def add_group(request, grouptype_id):
 	grouptype = get_object_or_404(GroupType, id=grouptype_id)
 	group = Group(grouptype=grouptype)
 	if request.method == 'POST':
@@ -132,11 +135,15 @@ def addgroup(request, grouptype_id):
 
 	return redirect('/groups/{0}/'.format(grouptype_id))
 
+def add_group_membership(request, grouptype_id, group_id):
+	group = get_object_or_404(Group, id=group_id)
+	membership = GroupMembership(group=group)
+	if request.method == 'POST':
+		form = GroupMembershipForm(request.POST, instance=membership)
+		if form.is_valid():
+			form.save()
 
-def addtogroup_modal(request, grouptype_id):
-	context = {}
-
-	return render(request, 'addtogroup_modal.html', context)
+	return redirect('/groups/{0}/{1}/'.format(grouptype_id, group_id))
 
 
 def new_functionary(request):
@@ -168,13 +175,13 @@ def functionary(request, functionarytype_id):
 
 def delete_functionary(request, functionarytype_id):
 	functionarytype = get_object_or_404(FunctionaryType, id=functionarytype_id)
-	# By default, django deletes all referenced foreign keys as well (on_delete=CASCADE)
+	# By default, django deletes all objects with foreign keys to this object as well (on_delete=CASCADE)
 	functionarytype.delete()
 	return redirect('/functionaries/')
 
 def delete_decoration(request, decoration_id):
 	decoration = get_object_or_404(decoration, id=decoration_id)
-	# By default, django deletes all referenced foreign keys as well (on_delete=CASCADE)
+	# By default, django deletes all objects with foreign keys to this object as well (on_delete=CASCADE)
 	decoration.delete()
 	return redirect('/groups/')
 

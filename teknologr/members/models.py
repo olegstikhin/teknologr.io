@@ -114,8 +114,6 @@ class Decoration(SuperClass):
 class GroupMembership(SuperClass):
     member = models.ForeignKey("Member")
     group = models.ForeignKey("Group")
-    begin_date = models.DateField(default=getEpoch())
-    end_date = models.DateField(default=getEpoch())
 
 class Group(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)

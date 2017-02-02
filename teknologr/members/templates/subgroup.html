@@ -1,0 +1,36 @@
+<ul class="list-inline">
+  <li><h3>Medlemmar i gruppen</h3></li>
+  <li>
+    <button class="btn btn-success" data-toggle="modal" data-target="#addToGroup">Lägg till ny</button>
+  </li>
+</ul>
+
+<div class="modal fade" id="addToGroup" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Lägg till i grupp</h4>
+      </div>
+      <div class="modal-body container-fluid">
+        <form action="/groups/{{grouptype_id}}/{{group_id}}/add" method="post">
+        {% csrf_token %}
+        <ul class="list-inline">
+          <li><label for="{{groupmembershipform.member.id_for_label}}">Medlem</label></li>
+          <li>{{groupmembershipform.member}}</li>
+          <li><button type="submit" class="btn btn-success">Spara</button></li>
+        </ul>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ul>
+  {% for member in groupmembers %}
+  <li><a href="/members/{{member.member.id}}">{{member.member.full_name}}</a></li>
+  {% endfor %}
+</ul>

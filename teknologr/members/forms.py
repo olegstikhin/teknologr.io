@@ -1,6 +1,12 @@
 from members.models import *
 from django.forms import ModelForm
-from django.forms.widgets import CheckboxInput, DateInput
+from django.forms.widgets import CheckboxInput, DateInput, HiddenInput
+
+class BSModelForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(BSModelForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 class MemberForm(ModelForm):
     class Meta:
@@ -15,42 +21,28 @@ class MemberForm(ModelForm):
             else:
               field.widget.attrs['class'] = 'form-control'
 
-class GroupTypeForm(ModelForm):
+class GroupTypeForm(BSModelForm):
     class Meta:
         model = GroupType
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        super(GroupTypeForm, self).__init__(*args, **kwargs)
-        for name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
-
-class FunctionaryTypeForm(ModelForm):
+class FunctionaryTypeForm(BSModelForm):
     class Meta:
         model = FunctionaryType
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        super(FunctionaryTypeForm, self).__init__(*args, **kwargs)
-        for name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
-
-class DecorationForm(ModelForm):
+class DecorationForm(BSModelForm):
     class Meta:
         model = Decoration
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        super(DecorationForm, self).__init__(*args, **kwargs)
-        for name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
-
-class GroupForm(ModelForm):
+class GroupForm(BSModelForm):
     class Meta:
         model = Group
         fields = ['name', 'begin_date', 'end_date']
 
-    def __init__(self, *args, **kwargs):
-        super(GroupForm, self).__init__(*args, **kwargs)
-        for name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'    
+class GroupMembershipForm(BSModelForm):
+    class Meta:
+        model = GroupMembership
+        fields = ['member']
+    # TODO: some ajax search field would be necessary
