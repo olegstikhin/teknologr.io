@@ -185,8 +185,10 @@
       </li>
     </ul>
     <ul>
-    {% for group in groups %}
-    <li><a href="/groups/{{group.id}}/">{{group.group.name}}</a></li>
+    {% for membership in groups %}
+    <li>
+      <a href="/groups/{{membership.group.grouptype.id}}/{{membership.group.id}}/">{{membership.group.name}}</a>
+    </li>
     {% endfor %}
     </ul>
     </div>

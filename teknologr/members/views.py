@@ -159,10 +159,17 @@ def delete_group_membership(request, grouptype_id, group_id, membership_id):
 	return redirect('/groups/{0}/{1}'.format(grouptype_id, group_id))
 
 
-def new_functionary(request):
+def new_functionarytype(request):
 	functionary = FunctionaryType()
 	functionary.save()
 	return redirect('/functionaries/{0}/'.format(functionary.id))
+
+
+def delete_functionarytype(request, functionarytype_id):
+	functionarytype = get_object_or_404(FunctionaryType, id=functionarytype_id)
+	# By default, django deletes all objects with foreign keys to this object as well (on_delete=CASCADE)
+	functionarytype.delete()
+	return redirect('/functionaries/')
 
 
 def functionary(request, functionarytype_id):
@@ -180,19 +187,13 @@ def functionary(request, functionarytype_id):
 	else: 
 		form = FunctionaryTypeForm(instance=functionarytype)
 
-	# Get groups of group type
+	# Get functionaries of functionary type
 	context['functionaries'] = Functionary.objects.filter(functionarytype__id=functionarytype_id)
 	context['form'] = form
+	context['addfunctionaryform'] = FunctionaryForm()
 
 	set_side_context(context, 'functionaries')
 	return render(request, 'functionary.html', context)
-
-
-def delete_functionary(request, functionarytype_id):
-	functionarytype = get_object_or_404(FunctionaryType, id=functionarytype_id)
-	# By default, django deletes all objects with foreign keys to this object as well (on_delete=CASCADE)
-	functionarytype.delete()
-	return redirect('/functionaries/')
 
 
 def delete_decoration(request, decoration_id):
@@ -226,6 +227,7 @@ def decoration(request, decoration_id):
 	# Get groups of group type
 	context['decorations'] = DecorationOwnership.objects.filter(decoration__id=decoration_id)
 	context['form'] = form
+	context['adddecorationform'] = DecorationOwnershipForm()
 
 	set_side_context(context, 'decorations')
 	return render(request, 'decoration.html', context)

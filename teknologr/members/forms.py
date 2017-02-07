@@ -31,9 +31,19 @@ class FunctionaryTypeForm(BSModelForm):
         model = FunctionaryType
         fields = '__all__'
 
+class FunctionaryForm(BSModelForm):
+    class Meta:
+        model = Functionary
+        fields = '__all__'
+
 class DecorationForm(BSModelForm):
     class Meta:
         model = Decoration
+        fields = '__all__'
+
+class DecorationOwnershipForm(BSModelForm):
+    class Meta:
+        model = DecorationOwnership
         fields = '__all__'
 
 class GroupForm(BSModelForm):
@@ -46,3 +56,4 @@ class GroupMembershipForm(BSModelForm):
         model = GroupMembership
         fields = ['member']
     # TODO: some ajax search field would be necessary
+
