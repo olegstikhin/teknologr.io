@@ -72,6 +72,7 @@ class Member(SuperClass):
     graduated = models.BooleanField(default=False)
     graduated_year = models.IntegerField(blank=True, null=True)
     degree_programme = models.CharField(max_length=256, choices=DEGREE_PROGRAMME_CHOICES, default="UN")
+    stalm = models.BooleanField(default=False)
     dead = models.BooleanField(default=False)
     mobile_phone = models.CharField(max_length=20, blank=True, null=False, default="")
     phone = models.CharField(max_length=20, blank=True, null=False, default="")
@@ -87,6 +88,7 @@ class Member(SuperClass):
 
     username = models.CharField(max_length=32, blank=True, null=False, default="")
     crm_id = models.CharField(max_length=32, blank=True, null=False, default="")
+    comment = models.TextField(blank=True, null=True)
 
     def _get_full_name(self):
         return "%s %s" % (self.given_names, self.surname)
@@ -122,7 +124,7 @@ class Group(SuperClass):
     end_date = models.DateField(default=getEpoch())
 
     def __str__(self):
-        return self.name
+        return "{0} - {1}".format(self.grouptype.name, self.name)
 
 class GroupType(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
@@ -136,6 +138,9 @@ class Functionary(SuperClass):
     functionarytype = models.ForeignKey("FunctionaryType")
     begin_date = models.DateField(default=getEpoch())
     end_date = models.DateField(default=getEpoch())
+
+    def __str__(self):
+    	return "{0} - {1}".format(self.name, self.member)
 
 class FunctionaryType(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)

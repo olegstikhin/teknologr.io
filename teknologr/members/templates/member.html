@@ -112,19 +112,25 @@
       </div>
     </div>
     <div class="row form-group">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <label class="form-check-label" for="form.subscribed_to_modulen.id_for_label">
           {{form.subscribed_to_modulen.errors}}
           {{form.subscribed_to_modulen}} Vill ha modulen hemskickad
         </label>
       </div>
-      <div class="col-md-4 form-check">
+      <div class="col-md-3 form-check">
         <label class="form-check-label" for="{{form.allow_publish_info.id_for_label}}">
           {{form.allow_publish_info.errors}}
           {{form.allow_publish_info}} Tillåter utlämning av uppgifter
         </label>
       </div>
-      <div class="col-md-4 form-check">
+      <div class="col-md-3 form-check">
+        <label class="form-check-label" for="{{form.stalm.id_for_label}}">
+          {{form.stalm.errors}}
+          {{form.stalm}} StÄlM
+        </label>
+      </div>
+      <div class="col-md-3 form-check">
         <label class="form-check-label" for="{{form.dead.id_for_label}}">
           {{form.dead.errors}}
           {{form.dead}} Avliden
@@ -149,6 +155,13 @@
       </div>
     </div>
     <div class = "row">
+      <div class ="col-md-12">
+      <label for="{{form.comment.id_for_label}}">Kommentar</label>
+      {{form.comment.errors}}
+      {{form.comment}}
+      </div>
+    </div>
+    <div class = "row">
       <div class = "col-md-2"><button type="submit" class="btn btn-success">Spara</button></div>
       {% if result %}
         {% if result == 'success' %}
@@ -158,6 +171,7 @@
         {% endif %}
       {% endif %}
     </div>
+
   </form>
   <br>
   <form role ="form" action="del" method="post">
@@ -187,7 +201,7 @@
     <ul>
     {% for membership in groups %}
     <li>
-      <a href="/groups/{{membership.group.grouptype.id}}/{{membership.group.id}}/">{{membership.group.name}}</a>
+      <a href="/groups/{{membership.group.grouptype.id}}/{{membership.group.id}}/">{{membership.group}}</a>
     </li>
     {% endfor %}
     </ul>
