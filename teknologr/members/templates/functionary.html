@@ -4,7 +4,7 @@
 <h1 class="page-header">{{form.name.value}}</h1><br>
 <ul class="list-inline">
   <li>
-  <form class="form-inline" role="form" action="/functionaries/{{functionarytype_id}}/" method="post">
+  <form autocomplete="off" class="form-inline" role="form" action="/functionaries/{{functionarytype_id}}/" method="post">
     {% csrf_token %}
     <div class="form-group">
       <label for="{{form.name.id_for_label}}">Namn:</label>
@@ -42,7 +42,7 @@
           <h4 class="modal-title">Lägg till post</h4>
         </div>
         <div class="modal-body container-fluid">
-          <form action="/functionaries/{{functionarytype_id}}/add" method="post">
+          <form autocomplete="off" action="/functionaries/{{functionarytype_id}}/add" method="post">
           {% csrf_token %}
           {{addfunctionaryform}}
           </form>

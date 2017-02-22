@@ -4,7 +4,7 @@
 <h1 class="page-header">{{full_name}}</h1><br>
 <div class="row form-group">
   <div class="col-md-7">
-    <form role ="form" action="/members/{{member_id}}/" method="post">
+    <form autocomplete="off" role ="form" action="/members/{{member_id}}/" method="post">
     {% csrf_token %}
     <div class="row form-group">
       <div class="col-md-4">

@@ -14,7 +14,7 @@ class SuperClass(models.Model):
         abstract = True
 
 class Member(SuperClass):
-    GENDER_CHOICES = (("M", "Man"),("F", "Kvinna"), ("UN","Okänd"))
+    GENDER_CHOICES = (("UN","Okänd"), ("M", "Man"),("F", "Kvinna"))
     DEGREE_PROGRAMME_CHOICES = (
         ('UN', 'Okänd'),
         ('ARTS - Högskolan för konst, design och arkitektur', (

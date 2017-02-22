@@ -4,7 +4,7 @@
 <h1 class="page-header">{{form.name.value}}</h1><br>
 <ul class="list-inline">
   <li>
-  <form class="form-inline" role="form" action="/decorations/{{decoration_id}}/" method="post">
+  <form autocomplete="off" class="form-inline" role="form" action="/decorations/{{decoration_id}}/" method="post">
     {% csrf_token %}
     <div class="form-group">
       <label for="{{form.name.id_for_label}}">Namn:</label>
