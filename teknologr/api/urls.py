@@ -10,6 +10,8 @@ router.register(r'groupTypes', GroupTypeViewSet)
 router.register(r'groupMembership', GroupMembershipViewSet)
 router.register(r'functionaries', FunctionaryViewSet)
 router.register(r'functionaryTypes', FunctionaryTypeViewSet)
+router.register(r'decorations', DecorationViewSet)
+router.register(r'decorationOwnership', DecorationOwnershipViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

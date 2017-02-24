@@ -10,31 +10,55 @@ class SerializableCountryField(serializers.ChoiceField):
         return super(SerializableCountryField, self).to_representation(value)
 
 # Serializers define the API representation.
+
+# Members
+
 class MemberSerializer(serializers.HyperlinkedModelSerializer):
     country = SerializableCountryField(allow_blank=True, choices=Countries())
     class Meta:
         model = Member
-        fields = ('full_name', 'full_preferred_name', 'given_names', 'preferred_name', 'surname', 'maiden_name',\
-            'nickname', 'birth_date', 'student_id', 'gender', 'graduated', 'graduated_year', 'dead', 'mobile_phone', \
-            'phone', 'street_address', 'postal_code', 'city', 'country', 'url', 'email', 'subscribed_to_modulen', \
-            'allow_publish_info', 'username', 'crm_id')
+        fields = '__all__'
+
+
+# Groups
 
 class GroupSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Group
+        fields = '__all__'
 
 class GroupTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = GroupType
+        fields = '__all__'
 
 class GroupMembershipSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = GroupMembership
+        fields = '__all__'
+
+
+# Functionaries
 
 class FunctionarySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Functionary
+        fields = '__all__'
 
 class FunctionaryTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = FunctionaryType
+        fields = '__all__'
+
+
+# Decorations
+
+class DecorationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Decoration
+        fields = '__all__'
+
+class DecorationOwnershipSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = DecorationOwnership
+        fields = '__all__'

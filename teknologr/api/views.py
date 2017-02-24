@@ -5,9 +5,15 @@ from api.serializers import *
 # Create your views here.
 
 # ViewSets define the view behavior.
+
+# Members
+
 class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
+
+
+# Groups
 
 class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
@@ -21,6 +27,9 @@ class GroupMembershipViewSet(viewsets.ModelViewSet):
     queryset = GroupMembership.objects.all()
     serializer_class = GroupMembershipSerializer
 
+
+# Functionaries
+
 class FunctionaryViewSet(viewsets.ModelViewSet):
     queryset = Functionary.objects.all()
     serializer_class = FunctionarySerializer
@@ -30,3 +39,12 @@ class FunctionaryTypeViewSet(viewsets.ModelViewSet):
     serializer_class = FunctionaryTypeSerializer
 
 
+# Decorations
+
+class DecorationViewSet(viewsets.ModelViewSet):
+	queryset = Decoration.objects.all()
+	serializer_class = DecorationSerializer
+
+class DecorationOwnershipViewSet(viewsets.ModelViewSet):
+	queryset = DecorationOwnership.objects.all()
+	serializer_class = DecorationOwnershipSerializer
