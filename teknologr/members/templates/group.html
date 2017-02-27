@@ -25,7 +25,7 @@
         <h4 class="modal-title">Editera grupp</h4>
       </div>
       <div class="modal-body container-fluid">
-        <form id="grouptypeform" autocomplete="off" method="post">
+        <form id="grouptypeform" autocomplete="off" method="post" data-id="{{ grouptype.id }}">
         {% csrf_token %}
         <div class="row form-group">
         <div class="col-md-12">
@@ -100,7 +100,7 @@
     <ul>
       {% for subgroup in groups %}
       <li>
-        <a onclick="return confirm('Vill du ta bort denna grupp?');" class="glyphicon glyphicon-remove text-danger"></a>
+        <span class="glyphicon glyphicon-remove text-danger removeGroup" role="button" data-id="{{ subgroup.id }}"></span>
         <a href="/groups/{{grouptype.id}}/{{subgroup.id}}/">{{subgroup}}</a>
       </li>
       {% endfor %}
@@ -143,7 +143,7 @@
     <ul>
       {% for membership in groupmembers %}
       <li>
-        <a href="/groups/{{grouptype.id}}/{{group.id}}/{{membership.id}}/del" onclick="return confirm('Vill du ta bort denna medlem från gruppen?');" class="glyphicon glyphicon-remove text-danger"></a>
+        <span class="glyphicon glyphicon-remove text-danger removeMembership" role="button" data-id="{{ membership.id }}"></span>
         <a href="/members/{{membership.member.id}}">{{membership.member.full_name}}</a>
       </li>
       {% endfor %}

@@ -92,15 +92,7 @@ def group(request, grouptype_id, group_id=None):
 	grouptype = get_object_or_404(GroupType, id=grouptype_id)
 	context['grouptype'] = grouptype
 
-	if request.method == 'POST':
-		form = GroupTypeForm(request.POST, instance=grouptype)
-		if form.is_valid():
-			form.save()
-			context['result'] = 'success'
-		else:
-			context['result'] = 'failure'
-	else: 
-		form = GroupTypeForm(instance=grouptype)
+	form = GroupTypeForm(instance=grouptype)
 
 	# Get groups of group type
 	context['groups'] = Group.objects.filter(grouptype__id=grouptype_id)

@@ -49,11 +49,11 @@ class DecorationOwnershipForm(BSModelForm):
 class GroupForm(BSModelForm):
     class Meta:
         model = Group
-        fields = ['name', 'begin_date', 'end_date']
+        fields = '__all__'
 
 class GroupMembershipForm(BSModelForm):
     class Meta:
         model = GroupMembership
-        fields = ['member']
+        fields = '__all__'
     # TODO: some ajax search field would be necessary
 

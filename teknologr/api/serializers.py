@@ -13,7 +13,7 @@ class SerializableCountryField(serializers.ChoiceField):
 
 # Members
 
-class MemberSerializer(serializers.HyperlinkedModelSerializer):
+class MemberSerializer(serializers.ModelSerializer):
     country = SerializableCountryField(allow_blank=True, choices=Countries())
     class Meta:
         model = Member
@@ -22,17 +22,17 @@ class MemberSerializer(serializers.HyperlinkedModelSerializer):
 
 # Groups
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = '__all__'
 
-class GroupTypeSerializer(serializers.HyperlinkedModelSerializer):
+class GroupTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupType
         fields = '__all__'
 
-class GroupMembershipSerializer(serializers.HyperlinkedModelSerializer):
+class GroupMembershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupMembership
         fields = '__all__'
@@ -40,12 +40,12 @@ class GroupMembershipSerializer(serializers.HyperlinkedModelSerializer):
 
 # Functionaries
 
-class FunctionarySerializer(serializers.HyperlinkedModelSerializer):
+class FunctionarySerializer(serializers.ModelSerializer):
     class Meta:
         model = Functionary
         fields = '__all__'
 
-class FunctionaryTypeSerializer(serializers.HyperlinkedModelSerializer):
+class FunctionaryTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = FunctionaryType
         fields = '__all__'
@@ -53,12 +53,12 @@ class FunctionaryTypeSerializer(serializers.HyperlinkedModelSerializer):
 
 # Decorations
 
-class DecorationSerializer(serializers.HyperlinkedModelSerializer):
+class DecorationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Decoration
         fields = '__all__'
 
-class DecorationOwnershipSerializer(serializers.HyperlinkedModelSerializer):
+class DecorationOwnershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = DecorationOwnership
         fields = '__all__'
