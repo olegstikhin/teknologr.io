@@ -83,6 +83,7 @@
               <label for="{{addgroupform.end_date.id_for_label}}">Till</label>
               {{ addgroupform.end_date }}
             </div>
+            {{ addgroupform.grouptype.as_hidden }}
             <div class="col-md-2">
               <br>
               <button type="submit" class="btn btn-success">Spara</button>
@@ -129,6 +130,7 @@
             <ul class="list-inline">
               <li><label for="{{groupmembershipform.member.id_for_label}}">Medlem</label></li>
               <li>{{groupmembershipform.member}}</li>
+              {{groupmembershipform.group.as_hidden}}
               <li><button type="submit" class="btn btn-success">Spara</button></li>
             </ul>
             </form>

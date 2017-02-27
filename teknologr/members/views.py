@@ -98,12 +98,12 @@ def group(request, grouptype_id, group_id=None):
 	context['groups'] = Group.objects.filter(grouptype__id=grouptype_id)
 	context['groupTypeForm'] = form
 
-	context['addgroupform'] = GroupForm()
+	context['addgroupform'] = GroupForm(initial={"grouptype": grouptype_id})
 
 	if group_id is not None:
 		group = get_object_or_404(Group, id=group_id)
 		context['group'] = group
-		context['groupmembershipform'] = GroupMembershipForm()
+		context['groupmembershipform'] = GroupMembershipForm(initial={"group": group_id})
 		context['groupmembers'] = GroupMembership.objects.filter(group=group)
 
 	set_side_context(context, 'groups')
