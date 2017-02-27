@@ -9,7 +9,7 @@
     {{ grouptype.name }}
   </li>
   <li>
-    <button id="editGroupType" class="btn btn-success" data-toggle="modal" data-target="#groupTypeModal">Ändra</button>
+    <button class="btn btn-success" data-toggle="modal" data-target="#groupTypeModal">Ändra</button>
   </li>
   <li>
     <button id="deleteGroupType" class="btn btn-danger" data-id="{{ grouptype.id }}">Radera</button>
@@ -25,16 +25,11 @@
         <h4 class="modal-title">Editera grupp</h4>
       </div>
       <div class="modal-body container-fluid">
-        <form id="grouptypeform" autocomplete="off" method="post" data-id="{{ grouptype.id }}">
+        <form id="grouptypeform" autocomplete="off" method="post" data-id="{{ grouptype.id }}" class="form-inline">
         {% csrf_token %}
-        <div class="row form-group">
-        <div class="col-md-12">
+        <div class="form-group">
           <label for="{{addgroupform.name.id_for_label}}">Namn</label>
           {{ groupTypeForm.name }}
-        </div>
-        </div>
-        <div class="col-md-2">
-          <br>
           <button type="submit" class="btn btn-success">Spara</button>
         </div>
         </form>
@@ -101,7 +96,7 @@
     <ul>
       {% for subgroup in groups %}
       <li>
-        <span class="glyphicon glyphicon-remove text-danger removeGroup" role="button" data-id="{{ subgroup.id }}"></span>
+        <span class="glyphicon glyphicon-remove text-danger removeGroup" role="button" data-id="{{ subgroup.id }}" data-grouptype_id="{{grouptype.id}}"></span>
         <a href="/groups/{{grouptype.id}}/{{subgroup.id}}/">{{subgroup}}</a>
       </li>
       {% endfor %}
@@ -161,6 +156,6 @@
   <script src="{% static "js/group/grouptype.js" %}"></script>
   <script src="{% static "js/group/subgroup.js" %}"></script>
   {% if group %}
-    <script src="{% static "js/group/addgroupmember.js" %}"></script>
+    <script src="{% static "js/group/groupmember.js" %}"></script>
   {% endif %}
 {% endblock %}

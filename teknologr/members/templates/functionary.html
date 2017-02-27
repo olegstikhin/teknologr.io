@@ -1,31 +1,47 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+
 {% block main %}
 <div class="container-fluid">
-<h1 class="page-header">{{form.name.value}}</h1><br>
+<h1 class="page-header">
 <ul class="list-inline">
   <li>
-  <form autocomplete="off" class="form-inline" role="form" action="/functionaries/{{functionarytype_id}}/" method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="{{form.name.id_for_label}}">Namn:</label>
-      {{form.name}}
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-success">Spara</button>
-    </div>
-  </form>
+    {{ functionaryType.name }}
   </li>
   <li>
-  <form class="form-inline" role="form" action="del" method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <button type="submit" class="btn btn-danger" onclick="return confirm('Vill du radera denna funktionär?')">Radera</button>
-    </div>
-  </form>
+    <button class="btn btn-success" data-toggle="modal" data-target="#functionaryTypeModal">Ändra</button>
+  </li>
+  <li>
+    <button id="deleteFunctionaryType" class="btn btn-danger" data-id="{{ functionaryType.id }}">Radera</button>
   </li>
 </ul>
+</h1>
+
+<div class="modal fade" id="functionaryTypeModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Editera Funktionär</h4>
+      </div>
+      <div class="modal-body container-fluid">
+        <form id="functionaryTypeForm" autocomplete="off" method="post" data-id="{{ functionaryType.id }}" class="form-inline">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="{{addgroupform.name.id_for_label}}">Namn</label>
+            {{ functionaryTypeForm.name }}
+            <button type="submit" class="btn btn-success">Spara</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
+      </div>
+    </div>
+  </div>
 </div>
-<hr>
+</div>
+
 <div class="container-fluid">
   <ul class="list-inline">
     <li><h3>Innehavare av posten</h3></li>
@@ -61,4 +77,9 @@
   </ul>
 </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static "js/functionary.js" %}"></script>
 {% endblock %}

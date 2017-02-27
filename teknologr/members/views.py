@@ -167,8 +167,8 @@ def delete_functionarytype(request, functionarytype_id):
 def functionary(request, functionarytype_id):
 	context = {}
 
-	context['functionarytype_id'] = functionarytype_id
 	functionarytype = get_object_or_404(FunctionaryType, id=functionarytype_id)
+	context['functionaryType'] = functionarytype
 	if request.method == 'POST':
 		form = FunctionaryTypeForm(request.POST, instance=functionarytype)
 		if form.is_valid():
@@ -181,7 +181,7 @@ def functionary(request, functionarytype_id):
 
 	# Get functionaries of functionary type
 	context['functionaries'] = Functionary.objects.filter(functionarytype__id=functionarytype_id)
-	context['form'] = form
+	context['functionaryTypeForm'] = form
 	context['addfunctionaryform'] = FunctionaryForm()
 
 	set_side_context(context, 'functionaries')

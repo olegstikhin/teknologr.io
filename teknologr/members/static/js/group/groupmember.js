@@ -1,11 +1,11 @@
 $(document).ready(function() {
 
-	$("#addgroupform").submit(function(event){
+	$("#addgroupmemberform").submit(function(event){
 
 		var data = $(this).serialize();
 	
 		var request = $.ajax({
-			url: "/api/groups/",
+			url: "/api/groupMembership/",
 			method: "POST",
 			data: data
 		});
@@ -21,18 +21,17 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 
-	$(".removeGroup").click(function(){
-		if(confirm("Vill du ta bort denna grupp?")) {		
-			var id = $(this).data('id');
-			var grouptype_id = $(this).data('grouptype_id');
+	$(".removeMembership").click(function(){
+		if(confirm("Vill du ta bort detta gruppmedlemskap?")) {		
+			var id = $(this).data('id');	
 
 			var request = $.ajax({
-				url: "/api/groups/" + id + "/",
+				url: "/api/groupMembership/" + id + "/",
 				method: "DELETE"
 			})
 
 			request.done(function() {
-				window.location = "/groups/" + grouptype_id + "/"; 
+				location.reload();
 			});
 
 			request.fail(function( jqHXR, textStatus ){

@@ -22,20 +22,22 @@ $(document).ready(function() {
 	});
 
 	$(".removeMembership").click(function(){
-		var id = $(this).data('id');	
+		if(confirm("Vill du ta bort detta gruppmedlemskap?")) {
+			var id = $(this).data('id');	
 
-		var request = $.ajax({
-			url: "/api/groupMembership/" + id + "/",
-			method: "DELETE"
-		})
+			var request = $.ajax({
+				url: "/api/groupMembership/" + id + "/",
+				method: "DELETE"
+			})
 
-		request.done(function() {
-			location.reload();
-		});
+			request.done(function() {
+				location.reload();
+			});
 
-		request.fail(function( jqHXR, textStatus ){
-			alert( "Request failed: " + textStatus + ": " + jqHXR.responseText );
-		});
+			request.fail(function( jqHXR, textStatus ){
+				alert( "Request failed: " + textStatus + ": " + jqHXR.responseText );
+			});
+		}
 	});
 
 });
