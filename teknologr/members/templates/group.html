@@ -1,33 +1,52 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block main %}
 <div class="container-fluid">
-<h1 class="page-header">{{form.name.value}}</h1><br>
 
+<h1 class="page-header">
 <ul class="list-inline">
   <li>
-  <form autocomplete="off" class="form-inline" role="form" action="/groups/{{grouptype_id}}/" method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="{{form.name.id_for_label}}">Namn:</label>
-      {{form.name}}
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-success">Spara</button>
-    </div>
-  </form>
+    {{ grouptype.name }}
   </li>
   <li>
-  <form autocomplete="off" class="form-inline" role="form" action="del" method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <button type="submit" class="btn btn-danger" onclick="return confirm('Vill du radera denna grupp med alla dess undergrupper?')">Radera</button>
-    </div>
-  </form>
+    <button id="editGroupType" class="btn btn-success" data-toggle="modal" data-target="#groupTypeModal">Ändra</button>
+  </li>
+  <li>
+    <button id="deleteGroupType" class="btn btn-danger" data-id="{{ grouptype.id }}">Radera</button>
   </li>
 </ul>
+</h1>
+
+<div class="modal fade" id="groupTypeModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Editera grupp</h4>
+      </div>
+      <div class="modal-body container-fluid">
+        <form id="grouptypeform" autocomplete="off" method="post">
+        {% csrf_token %}
+        <div class="row form-group">
+        <div class="col-md-12">
+          <label for="{{addgroupform.name.id_for_label}}">Namn</label>
+          {{ groupTypeForm.name }}
+        </div>
+        </div>
+        <div class="col-md-2">
+          <br>
+          <button type="submit" class="btn btn-success">Spara</button>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<hr>
+</div>
 
 <div class="container-fluid">
 <div class="row">
@@ -35,11 +54,11 @@
     <ul class="list-inline">
       <li><h3>Undergrupper</h3></li>
       <li>
-        <button class="btn btn-success" data-toggle="modal" data-target="#addGroup">Lägg till ny</button>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addGroupModal">Lägg till ny</button>
       </li>
     </ul>
 
-    <div class="modal fade" id="addGroup" role="dialog">
+    <div class="modal fade" id="addGroupModal" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -47,26 +66,26 @@
             <h4 class="modal-title">Lägg till grupp</h4>
           </div>
           <div class="modal-body container-fluid">
-            <form autocomplete="off" action="/groups/{{grouptype_id}}/add" method="post">
+            <form id="addgroupform" autocomplete="off" method="post">
             {% csrf_token %}
             <div class="row form-group">
             <div class="col-md-12">
               <label for="{{addgroupform.name.id_for_label}}">Namn</label>
-            	{{ addgroupform.name }}
+              {{ addgroupform.name }}
             </div>
             </div>
             <div class="row form-group">
             <div class="col-md-5">
               <label for="{{addgroupform.begin_date.id_for_label}}">Från</label>
-            	{{ addgroupform.begin_date }}
+              {{ addgroupform.begin_date }}
             </div>
             <div class="col-md-5">
               <label for="{{addgroupform.end_date.id_for_label}}">Till</label>
-            	{{ addgroupform.end_date }}
+              {{ addgroupform.end_date }}
             </div>
             <div class="col-md-2">
               <br>
-            	<button type="submit" class="btn btn-success">Spara</button>
+              <button type="submit" class="btn btn-success">Spara</button>
             </div>
             </div>
             </form>
@@ -79,20 +98,67 @@
     </div>
 
     <ul>
-      {% for group in groups %}
+      {% for subgroup in groups %}
       <li>
-        <a href="/groups/{{grouptype_id}}/{{group.id}}/del" onclick="return confirm('Vill du ta bort denna grupp?');" class="glyphicon glyphicon-remove text-danger"></a>
-        <a href="/groups/{{grouptype_id}}/{{group.id}}/">{{group}}</a>
+        <a onclick="return confirm('Vill du ta bort denna grupp?');" class="glyphicon glyphicon-remove text-danger"></a>
+        <a href="/groups/{{grouptype.id}}/{{subgroup.id}}/">{{subgroup}}</a>
       </li>
       {% endfor %}
     </ul>
   </div>
 
   <div class="col-md-6">
-  {% if group_id %}
-    {% include "subgroup.html" %}
+  {% if group %}
+    <ul class="list-inline">
+      <li><h3>Medlemmar i gruppen</h3></li>
+      <li>
+        <button class="btn btn-success" data-toggle="modal" data-target="#groupMembershipModal">Lägg till ny</button>
+      </li>
+    </ul>
+
+    <div class="modal fade" id="groupMembershipModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Lägg till i grupp</h4>
+          </div>
+          <div class="modal-body container-fluid">
+            <form id="addgroupmemberform" method="post">
+            {% csrf_token %}
+            <ul class="list-inline">
+              <li><label for="{{groupmembershipform.member.id_for_label}}">Medlem</label></li>
+              <li>{{groupmembershipform.member}}</li>
+              <li><button type="submit" class="btn btn-success">Spara</button></li>
+            </ul>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul>
+      {% for membership in groupmembers %}
+      <li>
+        <a href="/groups/{{grouptype.id}}/{{group.id}}/{{membership.id}}/del" onclick="return confirm('Vill du ta bort denna medlem från gruppen?');" class="glyphicon glyphicon-remove text-danger"></a>
+        <a href="/members/{{membership.member.id}}">{{membership.member.full_name}}</a>
+      </li>
+      {% endfor %}
+    </ul>
   {% endif %}
   </div>
 </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static "js/group/grouptype.js" %}"></script>
+  <script src="{% static "js/group/subgroup.js" %}"></script>
+  {% if group %}
+    <script src="{% static "js/group/addgroupmember.js" %}"></script>
+  {% endif %}
 {% endblock %}

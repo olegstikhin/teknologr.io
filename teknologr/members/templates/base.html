@@ -21,7 +21,6 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static "css/style.css" %}" rel="stylesheet">
-    <script src="{% static "assets/js/vendor/jquery.min.js" %}"></script>
 
 </head>
 
@@ -62,13 +61,20 @@
         </div>
     </div>
 
+    {% block scripts %}
+    <!-- Always include block.super in this block in templates to avoid removing previous scripts-->
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static "assets/js/vendor/jquery.min.js" %}"></script>
     <script src="{% static "assets/js/bootstrap.min.js" %}"></script>
     <script src="{% static "assets/js/bootstrap-select.min.js" %}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{% static "assets/js/ie10-viewport-bug-workaround.js" %}"></script>
+    <script src="{% static "js/ajax_api.js" %}"></script>
+    {% endblock %}
+
 
 </body>
 </html>

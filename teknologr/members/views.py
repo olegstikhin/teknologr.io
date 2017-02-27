@@ -89,8 +89,8 @@ def new_group(request):
 def group(request, grouptype_id, group_id=None):
 	context = {}
 
-	context['grouptype_id'] = grouptype_id
 	grouptype = get_object_or_404(GroupType, id=grouptype_id)
+	context['grouptype'] = grouptype
 
 	if request.method == 'POST':
 		form = GroupTypeForm(request.POST, instance=grouptype)
@@ -104,13 +104,13 @@ def group(request, grouptype_id, group_id=None):
 
 	# Get groups of group type
 	context['groups'] = Group.objects.filter(grouptype__id=grouptype_id)
-	context['form'] = form
+	context['groupTypeForm'] = form
 
 	context['addgroupform'] = GroupForm()
 
 	if group_id is not None:
-		context['group_id'] = group_id
 		group = get_object_or_404(Group, id=group_id)
+		context['group'] = group
 		context['groupmembershipform'] = GroupMembershipForm()
 		context['groupmembers'] = GroupMembership.objects.filter(group=group)
 
