@@ -1,10 +1,12 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+
 {% block main %}
 <div class="container-fluid">
-<h1 class="page-header">{{full_name}}</h1><br>
+<h1 class="page-header">{{member.full_name}}</h1><br>
 <div class="row form-group">
   <div class="col-md-7">
-    <form autocomplete="off" role ="form" action="/members/{{member_id}}/" method="post">
+    <form autocomplete="off" role ="form" action="/members/{{member.id}}/" method="post">
     {% csrf_token %}
     <div class="row form-group">
       <div class="col-md-4">
@@ -174,10 +176,7 @@
 
   </form>
   <br>
-  <form role ="form" action="del" method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger" onclick="return confirm('Vill du radera denna medlem?')">Radera</button>
-  </form>
+  <button id="deletemember" type="submit" class="btn btn-danger" data-id={{member.id}}>Radera</button>
   </div>
 
   <div class="col-md-5">
@@ -208,4 +207,9 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static "js/member.js" %}"></script>
 {% endblock %}

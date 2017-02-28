@@ -48,7 +48,7 @@ def member(request, member_id):
 	context = {}
 
 	member = get_object_or_404(Member, id=member_id)
-	context['member_id'] = member_id
+	context['member'] = member
 
 	if request.method == 'POST':
 		form = MemberForm(request.POST, instance=member)
@@ -61,7 +61,7 @@ def member(request, member_id):
 		form = MemberForm(instance=member)
 
 	context['form'] = form
-	context['full_name'] = member.full_name
+	context['full_name'] = member
 
 	# Get functionary positions
 	context['functionaries'] = Functionary.objects.filter(member__id=member_id)
