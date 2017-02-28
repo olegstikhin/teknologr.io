@@ -169,20 +169,12 @@ def functionary(request, functionarytype_id):
 
 	functionarytype = get_object_or_404(FunctionaryType, id=functionarytype_id)
 	context['functionaryType'] = functionarytype
-	if request.method == 'POST':
-		form = FunctionaryTypeForm(request.POST, instance=functionarytype)
-		if form.is_valid():
-			form.save()
-			context['result'] = 'success'
-		else:
-			context['result'] = 'failure'
-	else: 
-		form = FunctionaryTypeForm(instance=functionarytype)
+	form = FunctionaryTypeForm(instance=functionarytype)
 
 	# Get functionaries of functionary type
 	context['functionaries'] = Functionary.objects.filter(functionarytype__id=functionarytype_id)
 	context['functionaryTypeForm'] = form
-	context['addfunctionaryform'] = FunctionaryForm()
+	context['addfunctionaryform'] = FunctionaryForm(initial={"functionarytype": functionarytype_id})
 
 	set_side_context(context, 'functionaries')
 	return render(request, 'functionary.html', context)

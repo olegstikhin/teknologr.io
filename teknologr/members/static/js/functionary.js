@@ -37,4 +37,42 @@ $(document).ready(function() {
 			});
 		}
 	});
+
+	$("#addfunctionaryform").submit(function(event){
+		var request = $.ajax({
+			url: "/api/functionaries/",
+			method: 'POST',
+			data: $(this).serialize()
+		});
+
+		request.done(function() {
+			location.reload();
+		});
+
+		request.fail(function( jqHXR, textStatus ){
+			alert( "Request failed: " + textStatus + ": " + jqHXR.responseText );
+		});
+
+		event.preventDefault();
+	});
+
+	$(".removeFunctionary").click(function(){
+		if(confirm("Vill du radera denna funktionärstyp?")) {
+			var id = $(this).data('id');
+			var functionaryTypeID = $(this).data("functionarytype_id");
+			console.log(functionaryTypeID)
+			var request = $.ajax({
+				url: "/api/functionaries/" + id + "/",
+				method: "DELETE",
+			});
+
+			request.done(function() { 
+				window.location = "/functionaries/" + functionaryTypeID + "/"; 
+			});
+
+			request.fail(function( jqHXR, textStatus ){
+				alert( "Request failed: " + textStatus + ": " + jqHXR.responseText );
+			});
+		}
+	});
 });

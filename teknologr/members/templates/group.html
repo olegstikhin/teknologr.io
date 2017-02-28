@@ -62,28 +62,28 @@
           </div>
           <div class="modal-body container-fluid">
             <form id="addgroupform" autocomplete="off" method="post">
-            {% csrf_token %}
-            <div class="row form-group">
-            <div class="col-md-12">
-              <label for="{{addgroupform.name.id_for_label}}">Namn</label>
-              {{ addgroupform.name }}
-            </div>
-            </div>
-            <div class="row form-group">
-            <div class="col-md-5">
-              <label for="{{addgroupform.begin_date.id_for_label}}">Från</label>
-              {{ addgroupform.begin_date }}
-            </div>
-            <div class="col-md-5">
-              <label for="{{addgroupform.end_date.id_for_label}}">Till</label>
-              {{ addgroupform.end_date }}
-            </div>
-            {{ addgroupform.grouptype.as_hidden }}
-            <div class="col-md-2">
-              <br>
-              <button type="submit" class="btn btn-success">Spara</button>
-            </div>
-            </div>
+              {% csrf_token %}
+              <div class="row form-group">
+              <div class="col-md-12">
+                <label for="{{addgroupform.name.id_for_label}}">Namn</label>
+                {{ addgroupform.name }}
+              </div>
+              </div>
+              <div class="row form-group">
+              <div class="col-md-5">
+                <label for="{{addgroupform.begin_date.id_for_label}}">Från</label>
+                {{ addgroupform.begin_date }}
+              </div>
+              <div class="col-md-5">
+                <label for="{{addgroupform.end_date.id_for_label}}">Till</label>
+                {{ addgroupform.end_date }}
+              </div>
+              {{ addgroupform.grouptype.as_hidden }}
+              <div class="col-md-2">
+                <br>
+                <button type="submit" class="btn btn-success">Spara</button>
+              </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">

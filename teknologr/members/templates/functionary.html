@@ -55,12 +55,38 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Lägg till post</h4>
+          <h4 class="modal-title">Lägg till ny {{ functionaryType.name }}</h4>
         </div>
         <div class="modal-body container-fluid">
-          <form autocomplete="off" action="/functionaries/{{functionarytype_id}}/add" method="post">
-          {% csrf_token %}
-          {{addfunctionaryform}}
+          <form id="addfunctionaryform" autocomplete="off">
+            {% csrf_token %}
+            <div class="row form-group">
+            <div class="col-md-12">
+              <label for="{{addfunctionaryform.name.id_for_label}}">Namn</label>
+              {{ addfunctionaryform.name }}
+            </div>
+            </div>
+            <div class="row form-group">
+            <div class="col-md-12">
+              <label for={{addfunctoinaryform.member.id_for_label}}>Medlem</label>
+              {{ addfunctionaryform.member }}
+            </div>
+            </div>
+            <div class="row form-group">
+            <div class="col-md-5">
+              <label for={{addfunctoinaryform.begin_date.id_for_label}}>Från</label>
+              {{ addfunctionaryform.begin_date }}
+            </div>
+            <div class="col-md-5">
+              <label for={{addfunctoinaryform.end_date.id_for_label}}>Till</label>
+              {{ addfunctionaryform.end_date }}
+            </div>
+            <div class="col-md-2">
+              <br>
+              <button type="submit" class="btn btn-success">Spara</button>
+            </div>
+            </div>
+            {{ addfunctionaryform.functionarytype.as_hidden}}
           </form>
         </div>
         <div class="modal-footer">
@@ -72,7 +98,10 @@
 
   <ul>
     {% for functionary in functionaries %}
-    <li><a href="/members/{{functionary.member.id}}/">{{functionary}}</a></li>
+      <li>
+      <span class="glyphicon glyphicon-remove text-danger removeFunctionary" role="button" data-id="{{ functionary.id }}" data-functionarytype_id="{{functionaryType.id}}"></span>
+      <a href="/members/{{functionary.member.id}}/">{{functionary}}</a>
+      </li>
     {% endfor %}
   </ul>
 </div>
