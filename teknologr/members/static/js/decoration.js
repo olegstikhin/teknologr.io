@@ -1,9 +1,9 @@
 $(document).ready(function() {
 	
-	$("#functionaryTypeForm").submit(function(event){
+	$("#decorationform").submit(function(event){
 		var id = $(this).data('id');	
 		var request = $.ajax({
-			url: "/api/functionaryTypes/" + id + "/",
+			url: "/api/decorations/" + id + "/",
 			method: 'PUT',
 			data: $(this).serialize()
 		});
@@ -20,16 +20,16 @@ $(document).ready(function() {
 	});
 
 
-	$("#deleteFunctionaryType").click(function(){
-		if(confirm("Vill du radera denna funktionärstyp?")) {
+	$("#deleteDecoration").click(function(){
+		if(confirm("Vill du radera denna betygelse?")) {
 			var id = $(this).data('id');
 			var request = $.ajax({
-				url: "/api/functionaryTypes/" + id + "/",
+				url: "/api/decorations/" + id + "/",
 				method: "DELETE",
 			});
  
 			request.done(function() { 
-				window.location = "/functionaries/"; 
+				window.location = "/decorations/"; 
 			});
 
 			request.fail(function( jqHXR, textStatus ){
@@ -38,9 +38,9 @@ $(document).ready(function() {
 		}
 	});
 
-	$("#addfunctionaryform").submit(function(event){
+	$("#adddecorationform").submit(function(event){
 		var request = $.ajax({
-			url: "/api/functionaries/",
+			url: "/api/decorationOwnership/",
 			method: 'POST',
 			data: $(this).serialize()
 		});
@@ -56,17 +56,17 @@ $(document).ready(function() {
 		event.preventDefault();
 	});
 
-	$(".removeFunctionary").click(function(){
-		if(confirm("Vill du radera denna funktionärstyp?")) {
+	$(".removeDecoration").click(function(){
+		if(confirm("Vill du radera detta betygelseinnehav?")) {
 			var id = $(this).data('id');
-			var functionaryTypeID = $(this).data("functionarytype_id");
+			var decorationid = $(this).data("decoration_id");
 			var request = $.ajax({
-				url: "/api/functionaries/" + id + "/",
+				url: "/api/decorationOwnership/" + id + "/",
 				method: "DELETE",
 			});
 
 			request.done(function() { 
-				window.location = "/functionaries/" + functionaryTypeID + "/"; 
+				window.location = "/decorations/" + decorationid + "/"; 
 			});
 
 			request.fail(function( jqHXR, textStatus ){

@@ -1,31 +1,47 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+
 {% block main %}
 <div class="container-fluid">
-<h1 class="page-header">{{form.name.value}}</h1><br>
+<h1 class="page-header">
 <ul class="list-inline">
   <li>
-  <form autocomplete="off" class="form-inline" role="form" action="/decorations/{{decoration_id}}/" method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="{{form.name.id_for_label}}">Namn:</label>
-      {{form.name}}
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-success">Spara</button>
-    </div>
-  </form>
+    {{decoration.name}}
   </li>
   <li>
-  <form class="form-inline" role="form" action="del" method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <button type="submit" class="btn btn-danger" onclick="return confirm('Vill du radera denna betygelse?')">Radera</button>
-    </div>
-  </form>
+  <button class="btn btn-success" data-toggle="modal" data-target="#decorationModal">Ändra</button>
+  </li>
+  <li>
+    <button id="deleteDecoration" class="btn btn-danger" data-id="{{ decoration.id }}">Radera</button>
   </li>
 </ul>
+</h1>
+
+<div class="modal fade" id="decorationModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Editera Betygelse</h4>
+      </div>
+      <div class="modal-body container-fluid">
+        <form id="decorationform" autocomplete="off" data-id="{{ decoration.id }}" class="form-inline">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="{{decorationform.name.id_for_label}}">Namn</label>
+            {{ decorationform.name }}
+            <button type="submit" class="btn btn-success">Spara</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
+      </div>
+    </div>
+  </div>
 </div>
-<hr>
+</div>
+
 <div class="container-fluid">
 
   <ul class="list-inline">
@@ -40,12 +56,28 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Lägg till grupp</h4>
+        <h4 class="modal-title">Lägg till innehavare av betygelse {{decoration.name}}</h4>
       </div>
       <div class="modal-body container-fluid">
-        <form action="/groups/{{grouptype_id}}/add" method="post">
-        {% csrf_token %}
-        {{adddecorationform}}
+        <form id="adddecorationform" autocomplete="off">
+          {% csrf_token %}
+          <div class="row form-group">
+          <div class="col-md-12">
+            <label for={{adddecorationform.member.id_for_label}}>Medlem</label>
+            {{ adddecorationform.member }}
+          </div>
+          </div>
+          <div class="row form-group">
+          <div class="col-md-10">
+            <label for={{adddecorationform.acquired.id_for_label}}>Utdelat</label>
+            {{ adddecorationform.acquired }}
+          </div>
+          <div class="col-md-2">
+            <br>
+            <button type="submit" class="btn btn-success">Spara</button>
+          </div>
+          </div>
+          {{ adddecorationform.decoration.as_hidden }}
         </form>
       </div>
       <div class="modal-footer">
@@ -55,7 +87,20 @@
   </div>
 </div>
 
+<ul>
+  {% for ownership in decorations %}
+    <li>
+    <span class="glyphicon glyphicon-remove text-danger removeDecoration" role="button" data-id="{{ ownership.id }}" data-decoration_id="{{decoration.id}}"></span>
+    <a href="/members/{{ownership.member.id}}/">{{ownership.member.full_name}}</a>
+    </li>
+  {% endfor %}
+</ul>
 
 </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static "js/decoration.js" %}"></script>
 {% endblock %}

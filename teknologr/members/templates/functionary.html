@@ -25,7 +25,7 @@
         <h4 class="modal-title">Editera Funktionär</h4>
       </div>
       <div class="modal-body container-fluid">
-        <form id="functionaryTypeForm" autocomplete="off" method="post" data-id="{{ functionaryType.id }}" class="form-inline">
+        <form id="functionaryTypeForm" autocomplete="off" data-id="{{ functionaryType.id }}" class="form-inline">
           {% csrf_token %}
           <div class="form-group">
             <label for="{{addgroupform.name.id_for_label}}">Namn</label>

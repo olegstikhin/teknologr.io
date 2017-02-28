@@ -107,6 +107,9 @@ class DecorationOwnership(SuperClass):
     decoration = models.ForeignKey("Decoration")
     acquired = models.DateField(default=getEpoch())
 
+    def __str__(self):
+        return "%s - %s" % (self.decoration.name, self.member.full_name)
+
 class Decoration(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 

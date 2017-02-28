@@ -196,22 +196,13 @@ def new_decoration(request):
 def decoration(request, decoration_id):
 	context = {}
 
-	context['decoration_id'] = decoration_id
 	decoration = get_object_or_404(Decoration, id=decoration_id)
-	if request.method == 'POST':
-		form = DecorationForm(request.POST, instance=decoration)
-		if form.is_valid():
-			form.save()
-			context['result'] = 'success'
-		else:
-			context['result'] = 'failure'
-	else: 
-		form = DecorationForm(instance=decoration)
+	context['decoration'] = decoration
+	context['decorationform'] = DecorationForm(instance=decoration)
 
 	# Get groups of group type
 	context['decorations'] = DecorationOwnership.objects.filter(decoration__id=decoration_id)
-	context['form'] = form
-	context['adddecorationform'] = DecorationOwnershipForm()
+	context['adddecorationform'] = DecorationOwnershipForm(initial={"decoration": decoration_id})
 
 	set_side_context(context, 'decorations')
 	return render(request, 'decoration.html', context)
