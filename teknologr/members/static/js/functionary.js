@@ -57,7 +57,7 @@ $(document).ready(function() {
 	});
 
 	$(".removeFunctionary").click(function(){
-		if(confirm("Vill du radera denna funktionärstyp?")) {
+		if(confirm("Vill du radera denna funktionär?")) {
 			var id = $(this).data('id');
 			var functionaryTypeID = $(this).data("functionarytype_id");
 			var request = $.ajax({

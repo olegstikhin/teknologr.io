@@ -5,7 +5,7 @@
 <div class="container-fluid">
 <h1 class="page-header">{{member.full_name}}</h1><br>
 <div class="row form-group">
-  <div class="col-md-7">
+  <div class="col-md-8">
     <form autocomplete="off" role ="form" action="/members/{{member.id}}/" method="post">
     {% csrf_token %}
     <div class="row form-group">
@@ -179,7 +179,7 @@
   <button id="deletemember" type="submit" class="btn btn-danger" data-id={{member.id}}>Radera</button>
   </div>
 
-  <div class="col-md-5">
+  <div class="col-md-4">
     <ul class="list-inline">
       <li><h3>Poster</h3></li>
       <li>
