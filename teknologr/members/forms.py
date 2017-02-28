@@ -1,5 +1,5 @@
 from members.models import *
-from django.forms import ModelForm
+from django.forms import ModelForm, DateField
 from django.forms.widgets import CheckboxInput, DateInput, HiddenInput
 
 class BSModelForm(ModelForm):
@@ -21,6 +21,8 @@ class MemberForm(ModelForm):
             else:
               field.widget.attrs['class'] = 'form-control'
 
+    birth_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+
 class GroupTypeForm(BSModelForm):
     class Meta:
         model = GroupType
@@ -36,6 +38,9 @@ class FunctionaryForm(BSModelForm):
         model = Functionary
         fields = '__all__'
 
+    begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+    end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+
 class DecorationForm(BSModelForm):
     class Meta:
         model = Decoration
@@ -46,10 +51,15 @@ class DecorationOwnershipForm(BSModelForm):
         model = DecorationOwnership
         fields = '__all__'
 
+    acquired = DateField(widget=DateInput(attrs={'type': 'date'}))
+
 class GroupForm(BSModelForm):
     class Meta:
         model = Group
         fields = '__all__'
+
+    begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+    end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
 
 class GroupMembershipForm(BSModelForm):
     class Meta:

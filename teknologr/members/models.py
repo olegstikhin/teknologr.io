@@ -5,6 +5,9 @@ import datetime
 def getEpoch():
     return datetime.date(1872, 1, 1)
 
+def getCurrentDate():
+    return datetime.datetime.now()
+
 class SuperClass(models.Model):
     # This class is the base of everything
     created = models.DateTimeField(auto_now_add=True)
@@ -105,7 +108,7 @@ class Member(SuperClass):
 class DecorationOwnership(SuperClass):
     member = models.ForeignKey("Member")
     decoration = models.ForeignKey("Decoration")
-    acquired = models.DateField(default=getEpoch())
+    acquired = models.DateField(default=getCurrentDate())
 
     def __str__(self):
         return "%s - %s" % (self.decoration.name, self.member.full_name)
@@ -123,8 +126,8 @@ class GroupMembership(SuperClass):
 class Group(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     grouptype = models.ForeignKey("GroupType")
-    begin_date = models.DateField(default=getEpoch())
-    end_date = models.DateField(default=getEpoch())
+    begin_date = models.DateField(default=getCurrentDate())
+    end_date = models.DateField(default=getCurrentDate())
 
     def __str__(self):
         return "{0} - {1}".format(self.grouptype.name, self.name)
@@ -139,8 +142,8 @@ class Functionary(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     member = models.ForeignKey("Member")
     functionarytype = models.ForeignKey("FunctionaryType")
-    begin_date = models.DateField(default=getEpoch())
-    end_date = models.DateField(default=getEpoch())
+    begin_date = models.DateField(default=getCurrentDate())
+    end_date = models.DateField(default=getCurrentDate())
 
     def __str__(self):
     	return "{0} - {1}".format(self.name, self.member)
