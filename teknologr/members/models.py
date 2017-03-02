@@ -5,6 +5,12 @@ import datetime
 def getEpoch():
     return datetime.date(1872, 1, 1)
 
+def getFirstDayOfCurrentYear():
+    return datetime.date(datetime.date.today().year, 1, 1)
+
+def getLastDayOfCurrentYear():
+    return datetime.date(datetime.date.today().year, 12, 31)
+
 def getCurrentDate():
     return datetime.datetime.now()
 
@@ -124,13 +130,12 @@ class GroupMembership(SuperClass):
     group = models.ForeignKey("Group")
 
 class Group(SuperClass):
-    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     grouptype = models.ForeignKey("GroupType")
-    begin_date = models.DateField(default=datetime.date.today)
-    end_date = models.DateField(default=datetime.date.today)
+    begin_date = models.DateField(default=getFirstDayOfCurrentYear)
+    end_date = models.DateField(default=getLastDayOfCurrentYear)
 
     def __str__(self):
-        return "{0} - {1}".format(self.grouptype.name, self.name)
+        return "{0} - {1}, {2}".format(self.begin_date, self.end_date, self.grouptype.name)
 
 class GroupType(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
@@ -139,14 +144,13 @@ class GroupType(SuperClass):
         return self.name
 
 class Functionary(SuperClass):
-    name = models.CharField(max_length=64, blank=False, null=False, unique=True)
     member = models.ForeignKey("Member")
     functionarytype = models.ForeignKey("FunctionaryType")
-    begin_date = models.DateField(default=datetime.date.today)
-    end_date = models.DateField(default=datetime.date.today)
+    begin_date = models.DateField(default=getFirstDayOfCurrentYear)
+    end_date = models.DateField(default=getLastDayOfCurrentYear)
 
     def __str__(self):
-    	return "{0} - {1}".format(self.name, self.member)
+    	return "{0} - {1}, {2}".format(self.begin_date, self.end_date, self.member)
 
 class FunctionaryType(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)

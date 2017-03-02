@@ -58,17 +58,11 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Lägg till grupp</h4>
+            <h4 class="modal-title">Lägg till grupp av typ {{grouptype.name}}</h4>
           </div>
           <div class="modal-body container-fluid">
             <form id="addgroupform" autocomplete="off" method="post">
               {% csrf_token %}
-              <div class="row form-group">
-              <div class="col-md-12">
-                <label for="{{addgroupform.name.id_for_label}}">Namn</label>
-                {{ addgroupform.name }}
-              </div>
-              </div>
               <div class="row form-group">
               <div class="col-md-5">
                 <label for="{{addgroupform.begin_date.id_for_label}}">Från</label>
