@@ -5,11 +5,14 @@ import datetime
 def getEpoch():
     return datetime.date(1872, 1, 1)
 
+def getCurrentYear():
+    return datetime.date.today().year
+
 def getFirstDayOfCurrentYear():
-    return datetime.date(datetime.date.today().year, 1, 1)
+    return datetime.date(getCurrentYear(), 1, 1)
 
 def getLastDayOfCurrentYear():
-    return datetime.date(datetime.date.today().year, 12, 31)
+    return datetime.date(getCurrentYear(), 12, 31)
 
 def getCurrentDate():
     return datetime.datetime.now()
@@ -77,7 +80,8 @@ class Member(SuperClass):
     birth_date = models.DateField(blank=True, null=True, default=datetime.date.today)
     student_id = models.CharField(max_length=10, blank=True, null=False, default="")
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default="UN")
-    enrolment_year = models.IntegerField(blank=True, null=True)
+    nationality = CountryField(blank_label="Välj land", blank=True, null=False, default="") # https://pypi.python.org/pypi/django-countries/1.0.1
+    enrolment_year = models.IntegerField(blank=True, null=True, default=getCurrentYear)
     graduated = models.BooleanField(default=False)
     graduated_year = models.IntegerField(blank=True, null=True)
     degree_programme = models.CharField(max_length=256, choices=DEGREE_PROGRAMME_CHOICES, default="UN")
