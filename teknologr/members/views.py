@@ -4,6 +4,16 @@ from django.shortcuts import render, get_object_or_404, redirect
 from members.models import *
 from members.forms import *
 
+
+def getCurrentYear():
+    return datetime.date.today().year
+
+def getFirstDayOfCurrentYear():
+    return datetime.date(getCurrentYear(), 1, 1)
+
+def getLastDayOfCurrentYear():
+    return datetime.date(getCurrentYear(), 12, 31)
+
 # Create your views here.s
 
 def home_view(request):
@@ -92,7 +102,11 @@ def group(request, grouptype_id, group_id=None):
 	context['groups'] = Group.objects.filter(grouptype__id=grouptype_id)
 	context['groupTypeForm'] = form
 
-	context['addgroupform'] = GroupForm(initial={"grouptype": grouptype_id})
+	context['addgroupform'] = GroupForm(initial={
+			"grouptype": grouptype_id,
+			"begin_date": getFirstDayOfCurrentYear(),
+			"end_date": getLastDayOfCurrentYear()
+		})
 
 	if group_id is not None:
 		group = get_object_or_404(Group, id=group_id)
@@ -120,7 +134,11 @@ def functionary(request, functionarytype_id):
 	# Get functionaries of functionary type
 	context['functionaries'] = Functionary.objects.filter(functionarytype__id=functionarytype_id)
 	context['functionaryTypeForm'] = form
-	context['addfunctionaryform'] = FunctionaryForm(initial={"functionarytype": functionarytype_id})
+	context['addfunctionaryform'] = FunctionaryForm(initial={
+			"functionarytype": functionarytype_id,
+			"begin_date": getFirstDayOfCurrentYear(),
+			"end_date": getLastDayOfCurrentYear()
+		})
 
 	set_side_context(context, 'functionaries')
 	return render(request, 'functionary.html', context)

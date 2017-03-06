@@ -5,15 +5,6 @@ import datetime
 def getEpoch():
     return datetime.date(1872, 1, 1)
 
-def getCurrentYear():
-    return datetime.date.today().year
-
-def getFirstDayOfCurrentYear():
-    return datetime.date(getCurrentYear(), 1, 1)
-
-def getLastDayOfCurrentYear():
-    return datetime.date(getCurrentYear(), 12, 31)
-
 def getCurrentDate():
     return datetime.datetime.now()
 
@@ -81,7 +72,7 @@ class Member(SuperClass):
     student_id = models.CharField(max_length=10, blank=True, null=False, default="")
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default="UN")
     nationality = CountryField(blank_label="Välj land", blank=True, null=False, default="") # https://pypi.python.org/pypi/django-countries/1.0.1
-    enrolment_year = models.IntegerField(blank=True, null=True, default=getCurrentYear)
+    enrolment_year = models.IntegerField(blank=True, null=True)
     graduated = models.BooleanField(default=False)
     graduated_year = models.IntegerField(blank=True, null=True)
     degree_programme = models.CharField(max_length=256, choices=DEGREE_PROGRAMME_CHOICES, default="UN")
@@ -135,8 +126,8 @@ class GroupMembership(SuperClass):
 
 class Group(SuperClass):
     grouptype = models.ForeignKey("GroupType")
-    begin_date = models.DateField(default=getFirstDayOfCurrentYear)
-    end_date = models.DateField(default=getLastDayOfCurrentYear)
+    begin_date = models.DateField()
+    end_date = models.DateField()
 
     def __str__(self):
         return "{0} - {1}, {2}".format(self.begin_date, self.end_date, self.grouptype.name)
@@ -150,8 +141,8 @@ class GroupType(SuperClass):
 class Functionary(SuperClass):
     member = models.ForeignKey("Member")
     functionarytype = models.ForeignKey("FunctionaryType")
-    begin_date = models.DateField(default=getFirstDayOfCurrentYear)
-    end_date = models.DateField(default=getLastDayOfCurrentYear)
+    begin_date = models.DateField()
+    end_date = models.DateField()
 
     def __str__(self):
     	return "{0} - {1}, {2}".format(self.begin_date, self.end_date, self.member)
