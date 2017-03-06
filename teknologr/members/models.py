@@ -1,12 +1,6 @@
 from django.db import models
 from django_countries.fields import CountryField
-import datetime
 
-def getEpoch():
-    return datetime.date(1872, 1, 1)
-
-def getCurrentDate():
-    return datetime.datetime.now()
 
 class SuperClass(models.Model):
     # This class is the base of everything
@@ -68,7 +62,7 @@ class Member(SuperClass):
     surname = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
     maiden_name = models.CharField(max_length=32, blank=True, null=False, default="")
     nickname = models.CharField(max_length=32, blank=True, null=False, default="")
-    birth_date = models.DateField(blank=True, null=True, default=datetime.date.today)
+    birth_date = models.DateField(blank=True, null=True)
     student_id = models.CharField(max_length=10, blank=True, null=False, default="")
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default="UN")
     nationality = CountryField(blank_label="Välj land", blank=True, null=False, default="") # https://pypi.python.org/pypi/django-countries/1.0.1
@@ -109,7 +103,7 @@ class Member(SuperClass):
 class DecorationOwnership(SuperClass):
     member = models.ForeignKey("Member")
     decoration = models.ForeignKey("Decoration")
-    acquired = models.DateField(default=datetime.date.today)
+    acquired = models.DateField()
 
     def __str__(self):
         return "%s - %s" % (self.decoration.name, self.member.full_name)

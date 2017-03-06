@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from members.models import *
 from members.forms import *
+import datetime
 
 
 def getCurrentYear():
@@ -13,6 +14,9 @@ def getFirstDayOfCurrentYear():
 
 def getLastDayOfCurrentYear():
     return datetime.date(getCurrentYear(), 12, 31)
+
+def getCurrentDate():
+    return datetime.datetime.now()
 
 # Create your views here.s
 
@@ -159,7 +163,7 @@ def decoration(request, decoration_id):
 
 	# Get groups of group type
 	context['decorations'] = DecorationOwnership.objects.filter(decoration__id=decoration_id)
-	context['adddecorationform'] = DecorationOwnershipForm(initial={"decoration": decoration_id})
+	context['adddecorationform'] = DecorationOwnershipForm(initial={"decoration": decoration_id, 'acquired': getCurrentDate()})
 
 	set_side_context(context, 'decorations')
 	return render(request, 'decoration.html', context)
