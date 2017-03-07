@@ -37,16 +37,19 @@
       {% for subgroup in groups %}
       <li>
         <span class="glyphicon glyphicon-remove text-danger removeGroup" role="button" data-id="{{ subgroup.id }}" data-grouptype_id="{{grouptype.id}}"></span>
+        <span class="glyphicon glyphicon-edit text-info editGroup" role="button" data-id="{{ subgroup.id }}" data-grouptype_id="{{grouptype.id}}"></span>
         <a href="/groups/{{grouptype.id}}/{{subgroup.id}}/">{{subgroup}}</a>
       </li>
       {% endfor %}
+      {% include "modals/modal.html" with modalname="editGroupModal" title="Editera grupp" only %}
     </ul>
   </div>
 
   <div class="col-md-6">
   {% if group %}
     <ul class="list-inline">
-      <li><h3>Medlemmar i gruppen</h3></li>
+      <h3> {{ group }} </h3>
+      <li><h4>Medlemmar i gruppen</h4></li>
       <li>
         <button class="btn btn-success" data-toggle="modal" data-target="#groupMembershipModal">Lägg till ny</button>
       </li>
@@ -61,6 +64,7 @@
         <a href="/members/{{membership.member.id}}">{{membership.member.full_name}}</a>
       </li>
       {% endfor %}
+
     </ul>
   {% endif %}
   </div>

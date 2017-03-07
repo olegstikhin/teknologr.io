@@ -41,4 +41,29 @@ $(document).ready(function() {
 		}
 	});
 
+	$(".editGroup").click(function(){
+		var id = $(this).data('id');
+		$("#editGroupModal .modal-body").load("/groups/"+ id +"/edit", function(){
+			$("#editgroupform").submit(function(event){
+				var data = $(this).serialize();
+				var request = $.ajax({
+					url: "/api/groups/" + id + "/",
+					method: "PUT",
+					data: data
+				});
+
+				request.done(function() {
+					location.reload();
+				});
+
+				request.fail(function( jqHXR, textStatus ){
+					alert( "Request failed: " + textStatus + ": " + jqHXR.responseText );
+				});
+				event.preventDefault();
+			});
+		});
+
+		$("#editGroupModal").modal();
+	});
+
 });
