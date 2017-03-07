@@ -118,6 +118,13 @@ def group(request, grouptype_id, group_id=None):
 	return render(request, 'group.html', context)
 
 
+def editgroup(request, group_id):
+	context = {}
+	group = get_object_or_404(Group, id=group_id)
+	context['form'] = GroupForm(instance=group)
+	return render(request, 'editgroup.html', context)
+
+
 def functionary(request, functionarytype_id):
 	context = {}
 

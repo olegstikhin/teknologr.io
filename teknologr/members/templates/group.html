@@ -41,6 +41,7 @@
         <a href="/groups/{{grouptype.id}}/{{subgroup.id}}/">{{subgroup}}</a>
       </li>
       {% endfor %}
+      {% include "modals/modal.html" with modalname="editGroupModal" title="Editera grupp" only %}
     </ul>
   </div>
 
@@ -62,6 +63,7 @@
         <a href="/members/{{membership.member.id}}">{{membership.member.full_name}}</a>
       </li>
       {% endfor %}
+
     </ul>
   {% endif %}
   </div>
