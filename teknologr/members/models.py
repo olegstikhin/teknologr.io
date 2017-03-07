@@ -124,7 +124,7 @@ class Group(SuperClass):
     end_date = models.DateField()
 
     def __str__(self):
-        return "{0} - {1}, {2}".format(self.begin_date, self.end_date, self.grouptype.name)
+        return "{0}: {1} - {2}".format(self.grouptype.name, self.begin_date, self.end_date)
 
 class GroupType(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
@@ -138,8 +138,17 @@ class Functionary(SuperClass):
     begin_date = models.DateField()
     end_date = models.DateField()
 
+    def _get_str_member(self):
+        return "{0} - {1}: {2}".format(self.begin_date, self.end_date, self.member)
+
+    def _get_str_type(self):
+        return "{0}: {1} - {2}".format(self.functionarytype, self.begin_date, self.end_date)
+
+    str_member = property(_get_str_member)
+    str_type = property(_get_str_type)
+
     def __str__(self):
-    	return "{0} - {1}, {2}".format(self.begin_date, self.end_date, self.member)
+    	return "{0}: {1} - {2}, {3}".format(self.functionarytype, self.begin_date, self.end_date, self.member)
 
 class FunctionaryType(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)

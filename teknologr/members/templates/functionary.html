@@ -33,7 +33,7 @@
     {% for functionary in functionaries %}
       <li>
       <span class="glyphicon glyphicon-remove text-danger removeFunctionary" role="button" data-id="{{ functionary.id }}" data-functionarytype_id="{{functionaryType.id}}"></span>
-      <a href="/members/{{functionary.member.id}}/">{{functionary}}</a>
+      <a href="/members/{{functionary.member.id}}/">{{functionary.str_member}}</a>
       </li>
     {% endfor %}
   </ul>
