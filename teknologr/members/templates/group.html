@@ -37,6 +37,7 @@
       {% for subgroup in groups %}
       <li>
         <span class="glyphicon glyphicon-remove text-danger removeGroup" role="button" data-id="{{ subgroup.id }}" data-grouptype_id="{{grouptype.id}}"></span>
+        <span class="glyphicon glyphicon-edit text-info editGroup" role="button" data-id="{{ subgroup.id }}" data-grouptype_id="{{grouptype.id}}"></span>
         <a href="/groups/{{grouptype.id}}/{{subgroup.id}}/">{{subgroup}}</a>
       </li>
       {% endfor %}
