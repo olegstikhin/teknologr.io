@@ -17,29 +17,7 @@
 </ul>
 </h1>
 
-<div class="modal fade" id="groupTypeModal" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Editera grupp</h4>
-      </div>
-      <div class="modal-body container-fluid">
-        <form id="grouptypeform" autocomplete="off" method="post" data-id="{{ grouptype.id }}" class="form-inline">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="{{addgroupform.name.id_for_label}}">Namn</label>
-          {{ groupTypeForm.name }}
-          <button type="submit" class="btn btn-success">Spara</button>
-        </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
-      </div>
-    </div>
-  </div>
-</div>
+{% include "modals/grouptype.html" with modalname="groupTypeModal" title="Editera grupptyp" groupTypeForm=groupTypeForm grouptype=grouptype only %}
 
 </div>
 
@@ -53,39 +31,7 @@
       </li>
     </ul>
 
-    <div class="modal fade" id="addGroupModal" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Lägg till grupp av typ {{grouptype.name}}</h4>
-          </div>
-          <div class="modal-body container-fluid">
-            <form id="addgroupform" autocomplete="off" method="post">
-              {% csrf_token %}
-              <div class="row form-group">
-              <div class="col-md-5">
-                <label for="{{addgroupform.begin_date.id_for_label}}">Från</label>
-                {{ addgroupform.begin_date }}
-              </div>
-              <div class="col-md-5">
-                <label for="{{addgroupform.end_date.id_for_label}}">Till</label>
-                {{ addgroupform.end_date }}
-              </div>
-              {{ addgroupform.grouptype.as_hidden }}
-              <div class="col-md-2">
-                <br>
-                <button type="submit" class="btn btn-success">Spara</button>
-              </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include "modals/addgroup.html" with modalname="addGroupModal" title="Lägg till grupp" addgroupform=addgroupform grouptype=grouptype only %}
 
     <ul>
       {% for subgroup in groups %}
@@ -106,30 +52,7 @@
       </li>
     </ul>
 
-    <div class="modal fade" id="groupMembershipModal" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Lägg till i grupp</h4>
-          </div>
-          <div class="modal-body container-fluid">
-            <form id="addgroupmemberform" method="post">
-            {% csrf_token %}
-            <ul class="list-inline">
-              <li><label for="{{groupmembershipform.member.id_for_label}}">Medlem</label></li>
-              <li>{{groupmembershipform.member}}</li>
-              {{groupmembershipform.group.as_hidden}}
-              <li><button type="submit" class="btn btn-success">Spara</button></li>
-            </ul>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include "modals/groupmembership.html" with modalname="groupMembershipModal" title="Lägg till medlem i grupp" groupmembershipform=groupmembershipform only %}
 
     <ul>
       {% for membership in groupmembers %}

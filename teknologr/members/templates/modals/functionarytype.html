@@ -1,0 +1,12 @@
+{% extends "modals/modal.html" %}
+
+{% block modalcontent %}
+<form id="functionaryTypeForm" autocomplete="off" data-id="{{ functionaryType.id }}" class="form-inline">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="{{addgroupform.name.id_for_label}}">Namn</label>
+    {{ functionaryTypeForm.name }}
+    <button type="submit" class="btn btn-success">Spara</button>
+  </div>
+</form>
+{% endblock %}
