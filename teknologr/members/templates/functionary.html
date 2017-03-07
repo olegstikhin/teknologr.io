@@ -17,78 +17,17 @@
 </ul>
 </h1>
 
-<div class="modal fade" id="functionaryTypeModal" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Editera Funktionär</h4>
-      </div>
-      <div class="modal-body container-fluid">
-        <form id="functionaryTypeForm" autocomplete="off" data-id="{{ functionaryType.id }}" class="form-inline">
-          {% csrf_token %}
-          <div class="form-group">
-            <label for="{{addgroupform.name.id_for_label}}">Namn</label>
-            {{ functionaryTypeForm.name }}
-            <button type="submit" class="btn btn-success">Spara</button>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
+{% include "modals/functionarytype.html" with modalname="functionaryTypeModal" title="Editera Funktionär" functionaryTypeForm=functionaryTypeForm functionaryType=functionaryType only %}
 
 <div class="container-fluid">
   <ul class="list-inline">
     <li><h3>Innehavare av posten</h3></li>
     <li>
-      <button class="btn btn-success" data-toggle="modal" data-target="#addFunctionary">Lägg till ny</button>
+      <button class="btn btn-success" data-toggle="modal" data-target="#addFunctionaryModal">Lägg till ny</button>
     </li>
   </ul>
 
-  <div class="modal fade" id="addFunctionary" role="dialog">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Lägg till ny {{ functionaryType.name }}</h4>
-        </div>
-        <div class="modal-body container-fluid">
-          <form id="addfunctionaryform" autocomplete="off">
-            {% csrf_token %}
-            <div class="row form-group">
-            <div class="col-md-12">
-              <label for={{addfunctoinaryform.member.id_for_label}}>Medlem</label>
-              {{ addfunctionaryform.member }}
-            </div>
-            </div>
-            <div class="row form-group">
-            <div class="col-md-5">
-              <label for={{addfunctoinaryform.begin_date.id_for_label}}>Från</label>
-              {{ addfunctionaryform.begin_date }}
-            </div>
-            <div class="col-md-5">
-              <label for={{addfunctoinaryform.end_date.id_for_label}}>Till</label>
-              {{ addfunctionaryform.end_date }}
-            </div>
-            <div class="col-md-2">
-              <br>
-              <button type="submit" class="btn btn-success">Spara</button>
-            </div>
-            </div>
-            {{ addfunctionaryform.functionarytype.as_hidden}}
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  {% include "modals/functionary.html" with modalname="addFunctionaryModal" title="Lägg till ny "|add:functionaryType.name addfunctionaryform=addfunctionaryform only %}
 
   <ul>
     {% for functionary in functionaries %}

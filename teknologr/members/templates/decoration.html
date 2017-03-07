@@ -17,30 +17,7 @@
 </ul>
 </h1>
 
-<div class="modal fade" id="decorationModal" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Editera Betygelse</h4>
-      </div>
-      <div class="modal-body container-fluid">
-        <form id="decorationform" autocomplete="off" data-id="{{ decoration.id }}" class="form-inline">
-          {% csrf_token %}
-          <div class="form-group">
-            <label for="{{decorationform.name.id_for_label}}">Namn</label>
-            {{ decorationform.name }}
-            <button type="submit" class="btn btn-success">Spara</button>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
+{% include "modals/decoration.html" with modalname="decorationModal" title="Editera Betygelse" decorationform=decorationform decoration=decoration only %}
 
 <div class="container-fluid">
 
@@ -51,41 +28,7 @@
     </li>
   </ul>
 
-  <div class="modal fade" id="addDecoration" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Lägg till innehavare av betygelse {{decoration.name}}</h4>
-      </div>
-      <div class="modal-body container-fluid">
-        <form id="adddecorationform" autocomplete="off">
-          {% csrf_token %}
-          <div class="row form-group">
-          <div class="col-md-12">
-            <label for={{adddecorationform.member.id_for_label}}>Medlem</label>
-            {{ adddecorationform.member }}
-          </div>
-          </div>
-          <div class="row form-group">
-          <div class="col-md-10">
-            <label for={{adddecorationform.acquired.id_for_label}}>Utdelat</label>
-            {{ adddecorationform.acquired }}
-          </div>
-          <div class="col-md-2">
-            <br>
-            <button type="submit" class="btn btn-success">Spara</button>
-          </div>
-          </div>
-          {{ adddecorationform.decoration.as_hidden }}
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>
-      </div>
-    </div>
-  </div>
-</div>
+  {% include "modals/decorationownership.html" with modalname="addDecoration" title="Lägg till innehavare av betygelse "|add:decoration.name adddecorationform=adddecorationform only %}
 
 <ul>
   {% for ownership in decorations %}
