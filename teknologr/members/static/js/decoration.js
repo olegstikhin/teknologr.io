@@ -29,7 +29,7 @@ $(document).ready(function() {
 			});
  
 			request.done(function() { 
-				window.location = "/decorations/"; 
+				window.location = "/decorations/";
 			});
 
 			request.fail(function( jqHXR, textStatus ){

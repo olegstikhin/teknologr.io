@@ -14,7 +14,8 @@ class SerializableCountryField(serializers.ChoiceField):
 # Members
 
 class MemberSerializer(serializers.ModelSerializer):
-    country = SerializableCountryField(allow_blank=True, choices=Countries())
+    country = SerializableCountryField(allow_blank=True, choices=Countries(), required=False)
+    nationality = SerializableCountryField(allow_blank=True, choices=Countries(), required=False)
     class Meta:
         model = Member
         fields = '__all__'

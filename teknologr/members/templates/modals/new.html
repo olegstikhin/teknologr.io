@@ -1,0 +1,19 @@
+{% extends "modals/modal.html" %}
+
+{% block modalcontent %}
+<form id="newform" autocomplete="off" class="form-inline" data-active="{{ active }}">
+  {% csrf_token %}
+  <div class="form-group">
+  {% if active == "members" %}
+    <label for="{{ newForm.given_names.id_for_label}}">Förnamn</label>
+    {{ newForm.given_names }}
+    <label for="{{ newForm.surname.id_for_label}}">Efternamn</label>
+    {{ newForm.surname }}
+  {% else %}
+    <label for="{{ newForm.name.id_for_label}}">Namn</label>
+    {{ newForm.name }}
+  {% endif %}
+  <button type="submit" class="btn btn-success">Spara</button>
+  </div>
+</form>
+{% endblock %}

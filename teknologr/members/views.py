@@ -18,7 +18,7 @@ def getLastDayOfCurrentYear():
 def getCurrentDate():
     return datetime.datetime.now()
 
-# Create your views here.s
+# Create your views here
 
 def home_view(request):
 
@@ -31,15 +31,23 @@ def set_side_context(context, category):
 	side['active'] = category
 	summary = []
 	if category == 'members':
-		for obj in Member.objects.all():
+		side['sname'] = 'medlem'
+		side['newForm'] = MemberForm(initial={'given_names':'', 'surname':''})
+		for obj in Member.objects.order_by('modified')[:50]:
 			summary.append({'name': obj.full_name, 'id': obj.id})
 	elif category == 'groups':
+		side['sname'] = 'grupp'
+		side['newForm'] = GroupTypeForm()
 		for obj in GroupType.objects.all():
 			summary.append({'name': obj.name, 'id': obj.id})
 	elif category == 'functionaries':
+		side['sname'] = 'post'
+		side['newForm'] = FunctionaryTypeForm()
 		for obj in FunctionaryType.objects.all():
 			summary.append({'name': obj.name, 'id': obj.id})
 	elif category == 'decorations':
+		side['sname'] = 'betygelse'
+		side['newForm'] = DecorationForm()
 		for obj in Decoration.objects.all():
 			summary.append({'name': obj.name, 'id': obj.id})
 	side['objects'] = summary
@@ -50,12 +58,6 @@ def empty(request, category):
 	context = {}
 	set_side_context(context, category)
 	return render(request, 'base.html', context)
-
-
-def new_member(request):
-	member = Member(given_names='Ny', surname='Medlem')
-	member.save()
-	return redirect('/members/{0}/'.format(member.id))
 
 
 def member(request, member_id):
@@ -88,12 +90,6 @@ def member(request, member_id):
 	return render(request, 'member.html', context)
 
 
-def new_group(request):
-	group = GroupType()
-	group.save()
-	return redirect('/groups/{0}/'.format(group.id))
-
-
 def group(request, grouptype_id, group_id=None):
 	context = {}
 
@@ -122,12 +118,6 @@ def group(request, grouptype_id, group_id=None):
 	return render(request, 'group.html', context)
 
 
-def new_functionarytype(request):
-	functionary = FunctionaryType()
-	functionary.save()
-	return redirect('/functionaries/{0}/'.format(functionary.id))
-
-
 def functionary(request, functionarytype_id):
 	context = {}
 
@@ -146,12 +136,6 @@ def functionary(request, functionarytype_id):
 
 	set_side_context(context, 'functionaries')
 	return render(request, 'functionary.html', context)
-
-
-def new_decoration(request):
-	decoration = Decoration()
-	decoration.save()
-	return redirect('/decorations/{0}/'.format(decoration.id))
 
 
 def decoration(request, decoration_id):
