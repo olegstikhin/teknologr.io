@@ -54,26 +54,26 @@
         {{form.postal_code}}
       </div>
       <div class="col-md-3">
-        <label for="form.city.id_for_label">Postanstalt</label>
+        <label for="{{form.city.id_for_label}}">Postanstalt</label>
         {{form.city.errors}}
         {{form.city}}
       </div>
     </div>
     <div class="row form-group">
       <div class="col-md-6">
-        <label for="form.country.id_for_label">Land</label>
+        <label for="{{form.country.id_for_label}}">Land</label>
         {{form.country.errors}}
         {{form.country}}
       </div>
       <div class="col-md-6">
-        <label for="form.nationality.id_for_label">Nationalitet</label>
+        <label for="{{form.nationality.id_for_label}}">Nationalitet</label>
         {{form.nationality.errors}}
         {{form.nationality}}
       </div>
     </div>
     <div class="row form-group">
       <div class="col-md-5">
-        <label for="form.mobile_phone.id_for_label">Telefonnummer</label>
+        <label for="{{form.mobile_phone.id_for_label}}">Telefonnummer</label>
         {{form.mobile_phone.errors}}
         {{form.mobile_phone}}
       </div>
@@ -95,32 +95,40 @@
         {{form.birth_date}}
       </div>
       <div class="col-md-5">
-        <label for="form.enrolment_year.id_for_label">Inskrivningsår vid Aalto</label>
+        <label for="{{form.enrolment_year.id_for_label}}">Inskrivningsår vid Aalto</label>
         {{form.enrolment_year.errors}}
         {{form.enrolment_year}}
       </div>
     </div>
     <div class="row form-group">
       <div class="col-md-6">
-        <label for="form.degree_programme.id_for_label">Studieinriktning</label>
+        <label for="{{form.degree_programme.id_for_label}}">Studieinriktning</label>
+        <a href="https://www.google.com" target="_blank" class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-original-title="Välj alltid om möjligt ett alternativ från listan. Om listan behöver ändras, klicka på denna ikon för att se instruktioner till det."></a>
         {{form.degree_programme.errors}}
-        {{form.degree_programme}}
+        <select id="{{form.degree_programme.auto_id}}" autocomplete="off" class="form-control es-input" name="{{form.degree_programme.html_name}}">
+          {% for option in programmes %}
+          <option{% if option == form.degree_programme.value %} selected {% endif %}>{{option}}</option>
+          {% endfor %}
+          {% if form.degree_programme.value not in programmes %}
+          <option selected>{{form.degree_programme.value}}</option>
+          {% endif %}
+        </select>
       </div>
       <div class="col-md-3">
-        <label class="form-check-label" for="form.graduated.id_for_label">
+        <label class="form-check-label" for="{{form.graduated.id_for_label}}">
           {{form.graduated.errors}}
           {{form.graduated}} Utexaminerad
         </label>
       </div>
       <div class="col-md-3">
-        <label for="form.graduated_year.id_for_label">År Utexaminerad</label>
+        <label for="{{form.graduated_year.id_for_label}}">År Utexaminerad</label>
         {{form.graduated_year.errors}}
         {{form.graduated_year}}
       </div>
     </div>
     <div class="row form-group">
       <div class="col-md-3">
-        <label class="form-check-label" for="form.subscribed_to_modulen.id_for_label">
+        <label class="form-check-label" for="{{form.subscribed_to_modulen.id_for_label}}">
           {{form.subscribed_to_modulen.errors}}
           {{form.subscribed_to_modulen}} Vill ha modulen hemskickad
         </label>
@@ -217,4 +225,5 @@
 {% block scripts %}
   {{ block.super }}
   <script src="{% static "js/member.js" %}"></script>
+  <script> $('#{{form.degree_programme.id_for_label}}').editableSelect({ effects: 'slide' }); </script>
 {% endblock %}

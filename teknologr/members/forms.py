@@ -1,5 +1,5 @@
 from members.models import *
-from django.forms import ModelForm, DateField
+from django.forms import ModelForm, DateField, ChoiceField
 from django.forms.widgets import CheckboxInput, DateInput, HiddenInput
 
 class BSModelForm(ModelForm):
@@ -20,7 +20,6 @@ class MemberForm(ModelForm):
               field.widget.attrs['class'] = 'form-check-input'
             else:
               field.widget.attrs['class'] = 'form-control'
-
     birth_date = DateField(widget=DateInput(attrs={'type': 'date'}))
 
 class GroupTypeForm(BSModelForm):
