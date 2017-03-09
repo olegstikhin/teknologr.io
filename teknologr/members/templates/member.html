@@ -3,7 +3,16 @@
 
 {% block main %}
 <div class="container-fluid">
-<h1 class="page-header">{{member.full_name}}&nbsp;<a href="/api/members/{{member.id}}/"><font size=5>API länk</font></a></h1><br>
+<h1 class="page-header">{{member.full_name}}&nbsp;<a href="/api/members/{{member.id}}/"><font size=5>API länk</font></a></h1>
+  {% if result %}
+	<div class="row">
+    {% if result == 'success' %}
+    <div class="col-md-12 alert alert-success" role="alert"> <strong>Ändringarna sparade</strong> </div>
+    {% else %}
+    <div class="col-md-12 alert alert-danger" role="alert"> <strong>Ett fel uppstod, kontrollera fälten</strong> </div>
+    {% endif %}
+    </div>
+  {% endif %}
 <div class="row form-group">
   <div class="col-md-8">
     <form autocomplete="off" role ="form" action="/members/{{member.id}}/" method="post">
@@ -178,13 +187,6 @@
     </div>
     <div class = "row">
       <div class = "col-md-2"><button type="submit" class="btn btn-success">Spara</button></div>
-      {% if result %}
-        {% if result == 'success' %}
-        <div class="col-md-10 alert alert-success" role="alert"> <strong>Ändringarna sparade</strong> </div>
-        {% else %}
-        <div class="col-md-10 alert alert-danger" role="alert"> <strong>Ett fel uppstod, kontrollera fälten</strong> </div>
-        {% endif %}
-      {% endif %}
     </div>
 
   </form>

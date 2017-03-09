@@ -20,7 +20,7 @@ class MemberForm(ModelForm):
               field.widget.attrs['class'] = 'form-check-input'
             else:
               field.widget.attrs['class'] = 'form-control'
-    birth_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+    birth_date = DateField(widget=DateInput(attrs={'type': 'date'}), required=False)
 
 class GroupTypeForm(BSModelForm):
     class Meta:

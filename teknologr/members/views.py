@@ -34,7 +34,7 @@ def set_side_context(context, category):
 	if category == 'members':
 		side['sname'] = 'medlem'
 		side['newForm'] = MemberForm(initial={'given_names':'', 'surname':''})
-		for obj in Member.objects.order_by('modified')[:50]:
+		for obj in Member.objects.order_by('-modified')[:50]:
 			summary.append({'name': obj.full_name, 'id': obj.id})
 	elif category == 'groups':
 		side['sname'] = 'grupp'
