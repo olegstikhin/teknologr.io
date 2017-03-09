@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from members.models import *
 from members.forms import *
+from members.programmes import DEGREE_PROGRAMME_CHOICES
 import datetime
 
 
@@ -76,6 +77,7 @@ def member(request, member_id):
 	else: 
 		form = MemberForm(instance=member)
 
+	context['programmes'] = DEGREE_PROGRAMME_CHOICES
 	context['form'] = form
 	context['full_name'] = member
 
