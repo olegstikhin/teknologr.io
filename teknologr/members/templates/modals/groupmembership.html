@@ -1,13 +1,20 @@
 {% extends "modals/modal.html" %}
 
 {% block modalcontent %}
-<form id="addgroupmemberform" method="post">
-{% csrf_token %}
-<ul class="list-inline">
-  <li><label for="{{groupmembershipform.member.id_for_label}}">Medlem</label></li>
-  <li>{{groupmembershipform.member}}</li>
-  {{groupmembershipform.group.as_hidden}}
-  <li><button type="submit" class="btn btn-success">Spara</button></li>
-</ul>
+<form id="addgroupmemberform" action="" method="post">
+
+  {% csrf_token %}
+  {{ groupmembershipform.media }} 
+  {{ groupmembershipform.group.as_hidden }}
+<!--
+  <ul class="list-inline">
+  
+    <li><label for="{{groupmembershipform.member.id_for_label}}">Medlem</label></li>
+    <li>{{groupmembershipform.member}}</li>
+  
+  </ul>
+-->
+  {{ groupmembershipform.member }}
+  <button type="submit" class="btn btn-success">Spara</button>
 </form>
 {% endblock %}

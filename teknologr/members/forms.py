@@ -1,6 +1,7 @@
 from members.models import *
 from django.forms import ModelForm, DateField
 from django.forms.widgets import CheckboxInput, DateInput, HiddenInput
+from ajax_select.fields import AutoCompleteSelectField,AutoCompleteSelectMultipleField
 
 class BSModelForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -62,8 +63,10 @@ class GroupForm(BSModelForm):
     end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
 
 class GroupMembershipForm(BSModelForm):
+
     class Meta:
         model = GroupMembership
         fields = '__all__'
-    # TODO: some ajax search field would be necessary
 
+    member = AutoCompleteSelectField('member', required=True, help_text=None)
+    #member = AutoCompleteSelectMultipleField('member', required=True, help_text=None)
