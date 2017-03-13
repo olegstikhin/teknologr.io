@@ -66,3 +66,10 @@ class GroupMembershipForm(BSModelForm):
         fields = '__all__'
     # TODO: some ajax search field would be necessary
 
+class MemberTypeForm(BSModelForm):
+    class Meta:
+        model = MemberType
+        fields = '__all__'
+
+    begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+    end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
