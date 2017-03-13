@@ -1,9 +1,7 @@
 $(document).ready(function() {
 
 	$("#addgroupmemberform").submit(function(event){
-
 		var data = $(this).serialize();
-	
 		var request = $.ajax({
 			url: "/api/groupMembership/",
 			method: "POST",

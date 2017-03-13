@@ -1,5 +1,5 @@
 from members.models import *
-from django.forms import ModelForm, DateField
+from django.forms import ModelForm, DateField, ChoiceField
 from django.forms.widgets import CheckboxInput, DateInput, HiddenInput
 from ajax_select.fields import AutoCompleteSelectField,AutoCompleteSelectMultipleField
 
@@ -21,8 +21,7 @@ class MemberForm(ModelForm):
               field.widget.attrs['class'] = 'form-check-input'
             else:
               field.widget.attrs['class'] = 'form-control'
-
-    birth_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+    birth_date = DateField(widget=DateInput(attrs={'type': 'date'}), required=False)
 
 class GroupTypeForm(BSModelForm):
     class Meta:
@@ -71,3 +70,10 @@ class GroupMembershipForm(BSModelForm):
     member = AutoCompleteSelectField('member', required=True, help_text=None)
     #member = AutoCompleteSelectMultipleField('member', required=True, help_text=None)
     
+class MemberTypeForm(BSModelForm):
+    class Meta:
+        model = MemberType
+        fields = '__all__'
+
+    begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+    end_date = DateField(widget=DateInput(attrs={'type': 'date'}))

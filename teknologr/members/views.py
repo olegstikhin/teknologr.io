@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 
 from members.models import *
 from members.forms import *
+from members.programmes import DEGREE_PROGRAMME_CHOICES
 import datetime
 
 
@@ -33,7 +34,7 @@ def set_side_context(context, category):
 	if category == 'members':
 		side['sname'] = 'medlem'
 		side['newForm'] = MemberForm(initial={'given_names':'', 'surname':''})
-		for obj in Member.objects.order_by('modified')[:50]:
+		for obj in Member.objects.order_by('-modified')[:50]:
 			summary.append({'name': obj.full_name, 'id': obj.id})
 	elif category == 'groups':
 		side['sname'] = 'grupp'
@@ -76,6 +77,7 @@ def member(request, member_id):
 	else: 
 		form = MemberForm(instance=member)
 
+	context['programmes'] = DEGREE_PROGRAMME_CHOICES
 	context['form'] = form
 	context['full_name'] = member
 
@@ -84,6 +86,10 @@ def member(request, member_id):
 
 	# Get groups
 	context['groups'] = GroupMembership.objects.filter(member__id=member_id)
+
+	# Get membertypes
+	context['membertypes'] = MemberType.objects.filter(member__id=member_id)
+	context['addmembertypeform'] = MemberTypeForm(initial={'member': member_id})
 
 	# load side list items
 	set_side_context(context, 'members')

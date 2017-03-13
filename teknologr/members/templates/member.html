@@ -3,7 +3,16 @@
 
 {% block main %}
 <div class="container-fluid">
-<h1 class="page-header">{{member.full_name}}</h1><br>
+<h1 class="page-header">{{member.full_name}}&nbsp;<a href="/api/members/{{member.id}}/"><font size=5>API länk</font></a></h1>
+  {% if result %}
+	<div class="row">
+    {% if result == 'success' %}
+    <div class="col-md-12 alert alert-success" role="alert"> <strong>Ändringarna sparade</strong> </div>
+    {% else %}
+    <div class="col-md-12 alert alert-danger" role="alert"> <strong>Ett fel uppstod, kontrollera fälten</strong> </div>
+    {% endif %}
+    </div>
+  {% endif %}
 <div class="row form-group">
   <div class="col-md-8">
     <form autocomplete="off" role ="form" action="/members/{{member.id}}/" method="post">
@@ -54,26 +63,26 @@
         {{form.postal_code}}
       </div>
       <div class="col-md-3">
-        <label for="form.city.id_for_label">Postanstalt</label>
+        <label for="{{form.city.id_for_label}}">Postanstalt</label>
         {{form.city.errors}}
         {{form.city}}
       </div>
     </div>
     <div class="row form-group">
       <div class="col-md-6">
-        <label for="form.country.id_for_label">Land</label>
+        <label for="{{form.country.id_for_label}}">Land</label>
         {{form.country.errors}}
         {{form.country}}
       </div>
       <div class="col-md-6">
-        <label for="form.nationality.id_for_label">Nationalitet</label>
+        <label for="{{form.nationality.id_for_label}}">Nationalitet</label>
         {{form.nationality.errors}}
         {{form.nationality}}
       </div>
     </div>
     <div class="row form-group">
       <div class="col-md-5">
-        <label for="form.mobile_phone.id_for_label">Telefonnummer</label>
+        <label for="{{form.mobile_phone.id_for_label}}">Telefonnummer</label>
         {{form.mobile_phone.errors}}
         {{form.mobile_phone}}
       </div>
@@ -95,32 +104,40 @@
         {{form.birth_date}}
       </div>
       <div class="col-md-5">
-        <label for="form.enrolment_year.id_for_label">Inskrivningsår vid Aalto</label>
+        <label for="{{form.enrolment_year.id_for_label}}">Inskrivningsår vid Aalto</label>
         {{form.enrolment_year.errors}}
         {{form.enrolment_year}}
       </div>
     </div>
     <div class="row form-group">
       <div class="col-md-6">
-        <label for="form.degree_programme.id_for_label">Studieinriktning</label>
+        <label for="{{form.degree_programme.id_for_label}}">Studieinriktning</label>
+        <a href="https://wiki.teknologforeningen.fi/itwiki/index.php/Medlemsregister#Studieprogramslistan" target="_blank" class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-original-title="Välj alltid om möjligt ett alternativ från listan. Om listan behöver ändras, klicka på denna ikon för att se instruktioner till det."></a>
         {{form.degree_programme.errors}}
-        {{form.degree_programme}}
+        <select id="{{form.degree_programme.auto_id}}" autocomplete="off" class="form-control es-input" name="{{form.degree_programme.html_name}}">
+          {% for option in programmes %}
+          <option{% if option == form.degree_programme.value %} selected {% endif %}>{{option}}</option>
+          {% endfor %}
+          {% if form.degree_programme.value not in programmes %}
+          <option selected>{{form.degree_programme.value}}</option>
+          {% endif %}
+        </select>
       </div>
       <div class="col-md-3">
-        <label class="form-check-label" for="form.graduated.id_for_label">
+        <label class="form-check-label" for="{{form.graduated.id_for_label}}">
           {{form.graduated.errors}}
           {{form.graduated}} Utexaminerad
         </label>
       </div>
       <div class="col-md-3">
-        <label for="form.graduated_year.id_for_label">År Utexaminerad</label>
+        <label for="{{form.graduated_year.id_for_label}}">År Utexaminerad</label>
         {{form.graduated_year.errors}}
         {{form.graduated_year}}
       </div>
     </div>
     <div class="row form-group">
       <div class="col-md-3">
-        <label class="form-check-label" for="form.subscribed_to_modulen.id_for_label">
+        <label class="form-check-label" for="{{form.subscribed_to_modulen.id_for_label}}">
           {{form.subscribed_to_modulen.errors}}
           {{form.subscribed_to_modulen}} Vill ha modulen hemskickad
         </label>
@@ -170,13 +187,6 @@
     </div>
     <div class = "row">
       <div class = "col-md-2"><button type="submit" class="btn btn-success">Spara</button></div>
-      {% if result %}
-        {% if result == 'success' %}
-        <div class="col-md-10 alert alert-success" role="alert"> <strong>Ändringarna sparade</strong> </div>
-        {% else %}
-        <div class="col-md-10 alert alert-danger" role="alert"> <strong>Ett fel uppstod, kontrollera fälten</strong> </div>
-        {% endif %}
-      {% endif %}
     </div>
 
   </form>
@@ -188,7 +198,7 @@
     <ul class="list-inline">
       <li><h3>Poster</h3></li>
       <li>
-        <button class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
+        <button disabled class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
       </li>
     </ul>
     <ul>
@@ -199,7 +209,7 @@
     <ul class="list-inline">
       <li><h3>Grupper</h3></li>
       <li>
-        <button class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
+        <button disabled class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
       </li>
     </ul>
     <ul>
@@ -209,7 +219,22 @@
     </li>
     {% endfor %}
     </ul>
-    </div>
+    <ul class="list-inline">
+      <li><h3>Medlemstyper</h3></li>
+      <li>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addMemberType">Lägg till ny</button>
+        {% include "modals/membertype.html" with modalname="addMemberType" title="Lägg till medlemstyp" form=addmembertypeform only %}
+      </li>
+    </ul>
+    <ul>
+    {% for type in membertypes %}
+    <li>
+      <span class="glyphicon glyphicon-remove text-danger removeMemberType" role="button" data-id="{{ type.id }}"></span>
+      {{type}}
+    </li>
+    {% endfor %}
+    </ul>
+  </div>
   </div>
 </div>
 {% endblock %}
@@ -217,4 +242,5 @@
 {% block scripts %}
   {{ block.super }}
   <script src="{% static "js/member.js" %}"></script>
+  <script> $('#{{form.degree_programme.id_for_label}}').editableSelect({ effects: 'slide' }); </script>
 {% endblock %}
