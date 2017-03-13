@@ -63,3 +63,11 @@ class DecorationOwnershipSerializer(serializers.ModelSerializer):
     class Meta:
         model = DecorationOwnership
         fields = '__all__'
+
+
+# MemberTypes
+
+class MemberTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MemberType
+        fields = '__all__'

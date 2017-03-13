@@ -48,3 +48,10 @@ class DecorationViewSet(viewsets.ModelViewSet):
 class DecorationOwnershipViewSet(viewsets.ModelViewSet):
 	queryset = DecorationOwnership.objects.all()
 	serializer_class = DecorationOwnershipSerializer
+
+
+# MemberTypes
+
+class MemberTypeViewSet(viewsets.ModelViewSet):
+    queryset = MemberType.objects.all()
+    serializer_class = MemberTypeSerializer

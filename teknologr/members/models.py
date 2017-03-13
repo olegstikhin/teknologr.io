@@ -110,3 +110,21 @@ class FunctionaryType(SuperClass):
 
     def __str__(self):
         return self.name
+
+class MemberType(SuperClass):
+    TYPES = (
+        ("PH","Phux"),
+        ("OM","Ordinarie Medlem"),
+        ("JS","JuniorStÄlM"),
+        ("ST","StÄlM"),
+        ("AA","Aktiv Alumn"),
+    )
+    member = models.ForeignKey("Member")
+    begin_date = models.DateField()
+    end_date = models.DateField(null=True)
+    type = models.CharField(max_length=2, choices=TYPES, default="PH")
+
+    def __str__(self):
+        return "{0}: {1} - {2}".format(self.get_type_display(), self.begin_date, self.end_date)
+
+
