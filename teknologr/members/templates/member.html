@@ -198,7 +198,7 @@
     <ul class="list-inline">
       <li><h3>Poster</h3></li>
       <li>
-        <button class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
+        <button disabled class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
       </li>
     </ul>
     <ul>
@@ -209,7 +209,7 @@
     <ul class="list-inline">
       <li><h3>Grupper</h3></li>
       <li>
-        <button class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
+        <button disabled class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
       </li>
     </ul>
     <ul>
@@ -219,7 +219,22 @@
     </li>
     {% endfor %}
     </ul>
-    </div>
+    <ul class="list-inline">
+      <li><h3>Medlemstyper</h3></li>
+      <li>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addMemberType">Lägg till ny</button>
+        {% include "modals/membertype.html" with modalname="addMemberType" title="Lägg till medlemstyp" form=addmembertypeform only %}
+      </li>
+    </ul>
+    <ul>
+    {% for type in membertypes %}
+    <li>
+      <span class="glyphicon glyphicon-remove text-danger removeMemberType" role="button" data-id="{{ type.id }}"></span>
+      {{type}}
+    </li>
+    {% endfor %}
+    </ul>
+  </div>
   </div>
 </div>
 {% endblock %}

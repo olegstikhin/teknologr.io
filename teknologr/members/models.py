@@ -25,7 +25,6 @@ class Member(SuperClass):
     graduated = models.BooleanField(default=False)
     graduated_year = models.IntegerField(blank=True, null=True)
     degree_programme = models.CharField(max_length=256, blank=True, null=False)
-    stalm = models.BooleanField(default=False)
     dead = models.BooleanField(default=False)
     mobile_phone = models.CharField(max_length=20, blank=True, null=False, default="")
     phone = models.CharField(max_length=20, blank=True, null=False, default="")
@@ -110,3 +109,21 @@ class FunctionaryType(SuperClass):
 
     def __str__(self):
         return self.name
+
+class MemberType(SuperClass):
+    TYPES = (
+        ("PH","Phux"),
+        ("OM","Ordinarie Medlem"),
+        ("JS","JuniorStÄlM"),
+        ("ST","StÄlM"),
+        ("AA","Aktiv Alumn"),
+    )
+    member = models.ForeignKey("Member")
+    begin_date = models.DateField()
+    end_date = models.DateField(null=True)
+    type = models.CharField(max_length=2, choices=TYPES, default="PH")
+
+    def __str__(self):
+        return "{0}: {1} - {2}".format(self.get_type_display(), self.begin_date, self.end_date)
+
+

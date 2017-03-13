@@ -87,6 +87,10 @@ def member(request, member_id):
 	# Get groups
 	context['groups'] = GroupMembership.objects.filter(member__id=member_id)
 
+	# Get membertypes
+	context['membertypes'] = MemberType.objects.filter(member__id=member_id)
+	context['addmembertypeform'] = MemberTypeForm(initial={'member': member_id})
+
 	# load side list items
 	set_side_context(context, 'members')
 	return render(request, 'member.html', context)
