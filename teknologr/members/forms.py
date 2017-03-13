@@ -70,3 +70,4 @@ class GroupMembershipForm(BSModelForm):
 
     member = AutoCompleteSelectField('member', required=True, help_text=None)
     #member = AutoCompleteSelectMultipleField('member', required=True, help_text=None)
+    
