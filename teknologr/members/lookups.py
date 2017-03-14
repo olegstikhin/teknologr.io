@@ -9,31 +9,17 @@ class MemberLookup(LookupChannel):
     
     def get_query(self, q, request):
         from django.db.models import Q
-        '''Search queries are expected to be of type:
-        Surname 1st 2nd ...
-        where 1st,2nd are firstnames (need not be in that specific order)
-        '''
-        
-        split = q.split()
 
-        if not split:
-            #"Empty" search query (might have been only spaces)
-            return []
+        args = []
 
-        surname = split[0]
-        firstnames = split[1:]
+        for word in q.split():
+            args.append(Q(given_names__icontains=word) | Q(surname__icontains=word))
 
-        surnames = Member.objects.filter(surname__icontains=surname)
+        if not args:
+            return [] # No words in query (only spaces?)
 
-        if not firstnames:
-            return surnames
 
-        res = []
-
-        for name in firstnames:#Somehow fix this
-            res += surnames.filter(given_names__icontains=name).exclude(id__in=[x.id for x in res])
-
-        return res
+        return Member.objects.filter(*args)
 
     def get_result(self, obj):
         """ result is the simple text that is the completion of what the person typed """
