@@ -44,7 +44,7 @@
       </thead>
       <tbody>
       {% for subgroup in groups %}
-        <tr>
+        <tr {% if group.id == subgroup.id %} class="active" {% endif %}>
           <td>{{subgroup.begin_date}}</td>
           <td>{{subgroup.end_date}}</td>
           <td><a class="glyphicon glyphicon-edit text-info" href="/groups/{{grouptype.id}}/{{subgroup.id}}/"></a></td>
