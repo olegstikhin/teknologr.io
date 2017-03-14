@@ -21,9 +21,16 @@
 
 <div class="container-fluid">
 
-{% include "modals/decorationownership.html" with modalname="addDecoration" title="Lägg till innehavare av betygelse "|add:decoration.name adddecorationform=adddecorationform only %}
+  <ul class="list-inline">
+    <li><h3>Innehavare av betygelsen</h3></li>
+    <li>
+      <button class="btn btn-success" data-toggle="modal" data-target="#addDecoration">Lägg till ny</button>
+    </li>
+  </ul>
 
-<table class="table">
+  {% include "modals/decorationownership.html" with modalname="addDecoration" title="Lägg till innehavare av betygelse "|add:decoration.name adddecorationform=adddecorationform only %}
+
+<table class="table table-condensed">
   <thead>
     <tr>
     <th>Utdelat</th>
