@@ -3,6 +3,7 @@
 {% block modalcontent %}
 <form id="adddecorationform" autocomplete="off">
   {% csrf_token %}
+  {{ adddecorationform.media }}
   <div class="row form-group">
   <div class="col-md-12">
     <label for={{adddecorationform.member.id_for_label}}>Medlem</label>

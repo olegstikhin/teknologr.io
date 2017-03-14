@@ -38,6 +38,7 @@ class FunctionaryForm(BSModelForm):
         model = Functionary
         fields = '__all__'
 
+    member = AutoCompleteSelectField('member', required=True, help_text=None)
     begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
     end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
 
@@ -52,6 +53,7 @@ class DecorationOwnershipForm(BSModelForm):
         fields = '__all__'
 
     acquired = DateField(widget=DateInput(attrs={'type': 'date'}))
+    member = AutoCompleteSelectField('member', required=True, help_text=None)
 
 class GroupForm(BSModelForm):
     class Meta:
