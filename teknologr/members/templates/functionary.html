@@ -29,14 +29,26 @@
 
   {% include "modals/functionary.html" with modalname="addFunctionaryModal" title="Lägg till ny "|add:functionaryType.name addfunctionaryform=addfunctionaryform only %}
 
-  <ul>
+  <table class="table">
+    <thead>
+      <tr>
+      <th>Från</th>
+      <th>Till</th>
+      <th>Medlem</th>
+      <th>Radera</th>
+      </tr>
+    </thead>
+    <tbody>
     {% for functionary in functionaries %}
-      <li>
-      <span class="glyphicon glyphicon-remove text-danger removeFunctionary" role="button" data-id="{{ functionary.id }}" data-functionarytype_id="{{functionaryType.id}}"></span>
-      <a href="/members/{{functionary.member.id}}/">{{functionary.str_member}}</a>
-      </li>
+      <tr>
+        <td>{{functionary.begin_date}}</td>
+        <td>{{functionary.end_date}}</td>
+        <td><a href="/members/{{functionary.member.id}}/">{{functionary.member.full_name}}</a></td>
+        <td><span class="glyphicon glyphicon-remove text-danger removeFunctionary" role="button" data-id="{{ functionary.id }}" data-functionarytype_id="{{functionaryType.id}}"></span></td>
+      </tr>
     {% endfor %}
-  </ul>
+    </tbody>
+  </table>
 </div>
 </div>
 {% endblock %}

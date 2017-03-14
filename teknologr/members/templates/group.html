@@ -33,22 +33,35 @@
 
     {% include "modals/addgroup.html" with modalname="addGroupModal" title="Lägg till grupp" addgroupform=addgroupform grouptype=grouptype only %}
 
-    <ul>
+    <table class="table">
+      <thead>
+        <tr>
+        <th>Från</th>
+        <th>Till</th>
+        <th>Editera</th>
+        <th>Radera</th>
+        </tr>
+      </thead>
+      <tbody>
       {% for subgroup in groups %}
-      <li>
-        <span class="glyphicon glyphicon-remove text-danger removeGroup" role="button" data-id="{{ subgroup.id }}" data-grouptype_id="{{grouptype.id}}"></span>
-        <span class="glyphicon glyphicon-edit text-info editGroup" role="button" data-id="{{ subgroup.id }}" data-grouptype_id="{{grouptype.id}}"></span>
-        <a href="/groups/{{grouptype.id}}/{{subgroup.id}}/">{{subgroup}}</a>
-      </li>
+        <tr>
+          <td>{{subgroup.begin_date}}</td>
+          <td>{{subgroup.end_date}}</td>
+          <td><a class="glyphicon glyphicon-edit text-info" href="/groups/{{grouptype.id}}/{{subgroup.id}}/"></a></td>
+          <td><span class="glyphicon glyphicon-remove text-danger removeGroup" role="button" data-id="{{ subgroup.id }}" data-grouptype_id="{{grouptype.id}}"></span></td>
+        </tr>
       {% endfor %}
-      {% include "modals/modal.html" with modalname="editGroupModal" title="Editera grupp" only %}
-    </ul>
+      </tbody>
+    </table>
+    {% include "modals/modal.html" with modalname="editGroupModal" title="Editera grupp" only %}
+
+
   </div>
 
   <div class="col-md-6">
   {% if group %}
     <ul class="list-inline">
-      <h3> {{ group }} </h3>
+      <h3> {{ group.begin_date }} - {{ group.end_date }} <span class="glyphicon glyphicon-edit text-info editGroup" role="button" data-id="{{ group.id }}" data-grouptype_id="{{grouptype.id}}"></span></h3>
       <li><h4>Medlemmar i gruppen</h4></li>
       <li>
         <button class="btn btn-success" data-toggle="modal" data-target="#groupMembershipModal">Lägg till ny</button>
