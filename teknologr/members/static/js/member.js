@@ -59,5 +59,11 @@ $(document).ready(function() {
 		}
 	});
 
+	$('.editMemberType').click(function(){
+		var id = $(this).data('id');
+		$("#editMemberType .modal-body").load("/membertype/" + id + "/edit/", function() {
+			
+		});
+	});
 
 });
