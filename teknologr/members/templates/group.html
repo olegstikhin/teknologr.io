@@ -53,15 +53,14 @@
       {% endfor %}
       </tbody>
     </table>
-    {% include "modals/modal.html" with modalname="editGroupModal" title="Editera grupp" only %}
-
 
   </div>
 
   <div class="col-md-5">
   {% if group %}
+    <h3> {{ group.begin_date }} - {{ group.end_date }} <span class="glyphicon glyphicon-edit text-info" role="button" data-toggle="modal" data-target="#editGroupModal"></span></h3>
+    {% include "modals/group.html" with modalname="editGroupModal" title="Editera grupp" form=groupform groupid=group.id only %}
     <ul class="list-inline">
-      <h3> {{ group.begin_date }} - {{ group.end_date }} <span class="glyphicon glyphicon-edit text-info editGroup" role="button" data-id="{{ group.id }}" data-grouptype_id="{{grouptype.id}}"></span></h3>
       <li><h4>Medlemmar i gruppen</h4></li>
       <li>
         <button class="btn btn-success" data-toggle="modal" data-target="#groupMembershipModal">Lägg till ny</button>

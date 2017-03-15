@@ -118,18 +118,12 @@ def group(request, grouptype_id, group_id=None):
 	if group_id is not None:
 		group = get_object_or_404(Group, id=group_id)
 		context['group'] = group
+		context['groupform'] = GroupForm(instance=group)
 		context['groupmembershipform'] = GroupMembershipForm(initial={"group": group_id})
 		context['groupmembers'] = GroupMembership.objects.filter(group=group)
 
 	set_side_context(context, 'groups', grouptype.id)
 	return render(request, 'group.html', context)
-
-
-def editgroup(request, group_id):
-	context = {}
-	group = get_object_or_404(Group, id=group_id)
-	context['form'] = GroupForm(instance=group)
-	return render(request, 'editgroup.html', context)
 
 
 def functionary(request, functionarytype_id):

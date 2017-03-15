@@ -1,4 +1,7 @@
-<form id="editgroupform" autocomplete="off">
+{% extends "modals/modal.html" %}
+
+{% block modalcontent %}
+<form id="editgroupform" autocomplete="off" data-id="{{groupid}}">
   {% csrf_token %}
   <div class="row form-group">
     <div class="col-md-5">
@@ -16,3 +19,4 @@
   </div>
   {{ form.grouptype.as_hidden }}
 </form>
+{% endblock %}
