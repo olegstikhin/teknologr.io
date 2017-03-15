@@ -27,9 +27,10 @@ def home_view(request):
 	return render(request, 'base.html', context)
 
 
-def set_side_context(context, category):
+def set_side_context(context, category, active_obj=None):
 	side = {}
 	side['active'] = category
+	side['active_obj'] = active_obj
 	summary = []
 	if category == 'members':
 		side['sname'] = 'medlem'
@@ -92,7 +93,7 @@ def member(request, member_id):
 	context['addmembertypeform'] = MemberTypeForm(initial={'member': member_id})
 
 	# load side list items
-	set_side_context(context, 'members')
+	set_side_context(context, 'members', member.id)
 	return render(request, 'member.html', context)
 
 
@@ -120,7 +121,7 @@ def group(request, grouptype_id, group_id=None):
 		context['groupmembershipform'] = GroupMembershipForm(initial={"group": group_id})
 		context['groupmembers'] = GroupMembership.objects.filter(group=group)
 
-	set_side_context(context, 'groups')
+	set_side_context(context, 'groups', grouptype.id)
 	return render(request, 'group.html', context)
 
 
@@ -147,7 +148,7 @@ def functionary(request, functionarytype_id):
 			"end_date": getLastDayOfCurrentYear()
 		})
 
-	set_side_context(context, 'functionaries')
+	set_side_context(context, 'functionaries', functionarytype.id)
 	return render(request, 'functionary.html', context)
 
 
@@ -162,5 +163,5 @@ def decoration(request, decoration_id):
 	context['decorations'] = DecorationOwnership.objects.filter(decoration__id=decoration_id)
 	context['adddecorationform'] = DecorationOwnershipForm(initial={"decoration": decoration_id, 'acquired': getCurrentDate()})
 
-	set_side_context(context, 'decorations')
+	set_side_context(context, 'decorations', decoration.id)
 	return render(request, 'decoration.html', context)

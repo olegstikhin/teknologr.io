@@ -23,7 +23,7 @@
 
 <div class="container-fluid">
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-7">
     <ul class="list-inline">
       <li><h3>Undergrupper</h3></li>
       <li>
@@ -58,7 +58,7 @@
 
   </div>
 
-  <div class="col-md-6">
+  <div class="col-md-5">
   {% if group %}
     <ul class="list-inline">
       <h3> {{ group.begin_date }} - {{ group.end_date }} <span class="glyphicon glyphicon-edit text-info editGroup" role="button" data-id="{{ group.id }}" data-grouptype_id="{{grouptype.id}}"></span></h3>
@@ -70,15 +70,16 @@
 
     {% include "modals/groupmembership.html" with modalname="groupMembershipModal" title="Lägg till medlem i grupp" groupmembershipform=groupmembershipform only %}
 
-    <ul>
+    <table class="table table-condensed">
       {% for membership in groupmembers %}
-      <li>
+      <tr><td>
         <span class="glyphicon glyphicon-remove text-danger removeMembership" role="button" data-id="{{ membership.id }}"></span>
+      </td>
+      <td>
         <a href="/members/{{membership.member.id}}">{{membership.member.full_name}}</a>
-      </li>
+      </td></tr>
       {% endfor %}
-
-    </ul>
+    </table>
   {% endif %}
   </div>
 </div>

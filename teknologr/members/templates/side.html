@@ -1,26 +1,21 @@
-<div class="container-fluid">
-<div class="row">
-  <ul class="nav nav-pills">
-    <li {% if side.active == "members" %} class="active" {% endif %}><a href="/members/">Medlemmar</a></li>
-    <li {% if side.active == "groups" %} class="active" {% endif %}><a href="/groups/">Grupper</a></li>
-    <li {% if side.active == "functionaries" %} class="active" {% endif %}><a href="/functionaries/">Poster</a></li>
-    <li {% if side.active == "decorations" %} class="active" {% endif %}><a href="/decorations/">Betygelser</a></li>
-  </ul>
-</div>
+<ul class="nav nav-pills">
+  <li {% if side.active == "members" %} class="active" {% endif %}><a href="/members/">Medlemmar</a></li>
+  <li {% if side.active == "groups" %} class="active" {% endif %}><a href="/groups/">Grupper</a></li>
+  <li {% if side.active == "functionaries" %} class="active" {% endif %}><a href="/functionaries/">Poster</a></li>
+  <li {% if side.active == "decorations" %} class="active" {% endif %}><a href="/decorations/">Betygelser</a></li>
+</ul>
 <br>
-<div class="row">
-  <div class="col-md-7">
-    <input type="text" class="form-control" placeholder="Sök...">
-  </div>
-  <div class="col-md-4 col-md-offset-1">
+<ul class="list-inline">
+  <li>
+    <input id="side-search" type="text" class="form-control" placeholder="Sök...">
+  </li>
+  <li>
     <button class="btn btn-success" data-toggle="modal" data-target="#newModal">Ny {{ side.sname }}</button>
-  </div>
-
-</div>
+  </li>
+</ul>
 <br>
-<table>
+<div class="list-group">
   {% for obj in side.objects %}
-  <tr><td><a class="side-object" href="/{{side.active}}/{{obj.id}}/">{{obj.name|default:"Namnlös"}}</a></td></tr>
+  <a class="side-object list-group-item{% ifequal obj.id side.active_obj %} active {% endifequal %}" href="/{{side.active}}/{{obj.id}}/">{{obj.name|default:"Namnlös"}}</a>
   {% endfor %}
-</table>
 </div>

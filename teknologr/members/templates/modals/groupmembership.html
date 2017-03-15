@@ -4,7 +4,7 @@
 <form id="addgroupmemberform" action="" method="post">
 
   {% csrf_token %}
-  {{ groupmembershipform.media }} 
+  {{ groupmembershipform.media }}
   {{ groupmembershipform.group.as_hidden }}
 
   <label for="{{groupmembershipform.member.id_for_label}}">Medlem</label>
