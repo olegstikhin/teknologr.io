@@ -195,24 +195,46 @@
         <button disabled class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
       </li>
     </ul>
-    <ul>
+    <table class="table table-condensed">
+    <thead><tr>
+    	<th>Post</th>
+    	<th>Från</th>
+    	<th>Till</th>
+    </tr></thead>
     {% for functionary in functionaries %}
-    <li><a href="/functionaries/{{functionary.id}}/">{{functionary.str_type}}</a></li>
+    <tr>
+    	<td><a href="/functionaries/{{functionary.id}}/">{{functionary.functionarytype.name}}</a></td>
+    	<td>{{functionary.begin_date}}</td>
+    	<td>{{functionary.end_date}}</td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
     <ul class="list-inline">
       <li><h3>Grupper</h3></li>
       <li>
         <button disabled class="btn btn-success" data-toggle="modal" data-target="#">Lägg till ny</button>
       </li>
     </ul>
-    <ul>
+    <table class="table table-condensed">
+    <thead><tr>
+    <th>Grupp</th>
+    <th>Från</th>
+    <th>Till</th>
+    </tr></thead>
     {% for membership in groups %}
-    <li>
-      <a href="/groups/{{membership.group.grouptype.id}}/{{membership.group.id}}/">{{membership.group}}</a>
-    </li>
+    <tr>
+    <td>
+      <a href="/groups/{{membership.group.grouptype.id}}/{{membership.group.id}}/">{{membership.group.grouptype.name}}</a>
+    </td>
+    <td>
+      {{membership.group.begin_date}}
+    </td>
+    <td>
+      {{membership.group.end_date}}
+    </td>
+    </tr>
     {% endfor %}
-    </ul>
+    </table>
     <ul class="list-inline">
       <li><h3>Medlemstyper</h3></li>
       <li>
@@ -220,14 +242,29 @@
         {% include "modals/membertype.html" with modalname="addMemberType" title="Lägg till medlemstyp" form=addmembertypeform only %}
       </li>
     </ul>
-    <ul>
+    <table class="table table-condensed">
+    <thead><tr>
+      <th>&nbsp;</th>
+      <th>Typ</th>
+      <th>Från</th>
+      <th>Till</th>
+    </tr></thead>
     {% for type in membertypes %}
-    <li>
+    <tr><td>
+      <span class="glyphicon glyphicon-edit text-info editMemberType" role="button" data-id="{{ type.id }}"></span>
       <span class="glyphicon glyphicon-remove text-danger removeMemberType" role="button" data-id="{{ type.id }}"></span>
-      {{type}}
-    </li>
+      </td>
+      <td>
+      {{type.get_type_display}}
+      </td>
+      <td>
+      {{type.begin_date}}
+      </td>
+      <td>
+      {{type.end_date}}
+    </td></tr>
     {% endfor %}
-    </ul>
+    </table>
   </div>
   </div>
 </div>

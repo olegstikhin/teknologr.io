@@ -18,9 +18,9 @@
 
 </div>
 <br>
-<ul>
+<table>
   {% for obj in side.objects %}
-  <li><a class="side-object" href="/{{side.active}}/{{obj.id}}/">{{obj.name|default:"Namnlös"}}</a></li>
+  <tr><td><a class="side-object" href="/{{side.active}}/{{obj.id}}/">{{obj.name|default:"Namnlös"}}</a></td></tr>
   {% endfor %}
-</ul>
+</table>
 </div>
