@@ -1,6 +1,9 @@
 # teknologr.io
 Membership management system tailored for TF use
 
+Master: [![Build Status](https://travis-ci.org/Teknologforeningen/teknologr.io.svg?branch=master)](https://travis-ci.org/Teknologforeningen/teknologr.io)  
+Develop: [![Build Status](https://travis-ci.org/Teknologforeningen/teknologr.io.svg?branch=develop)](https://travis-ci.org/Teknologforeningen/teknologr.io)  
+
 ## Installation
 
 First make sure that you have Python 3 installed and virtualenv to go with it.
