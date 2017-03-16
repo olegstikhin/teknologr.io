@@ -239,12 +239,12 @@
       <li><h3>Medlemstyper</h3></li>
       <li>
         <button class="btn btn-success" data-toggle="modal" data-target="#addMemberType">Lägg till ny</button>
-        {% include "modals/membertype.html" with modalname="addMemberType" title="Lägg till medlemstyp" form=addmembertypeform only %}
+        {% include "modals/membertype.html" with modalname="addMemberType" title="Lägg till medlemstyp" form=addmembertypeform formid='addmembertypeform' only %}
       </li>
     </ul>
     <table class="table table-condensed">
     <thead><tr>
-      <th>&nbsp;</th>
+      <th></th>
       <th>Typ</th>
       <th>Från</th>
       <th>Till</th>
@@ -265,6 +265,7 @@
     </td></tr>
     {% endfor %}
     </table>
+    {% include "modals/modal.html" with modalname="editMemberTypeModal" title="Editera medlemstyp" only %}
   </div>
   </div>
 </div>

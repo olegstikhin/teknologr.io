@@ -97,6 +97,13 @@ def member(request, member_id):
 	return render(request, 'member.html', context)
 
 
+def membertype_form(request, membertype_id):
+	membertype = get_object_or_404(MemberType, id=membertype_id)
+	form = MemberTypeForm(instance=membertype)
+	context = {'form': form, 'formid':'editmembertypeform'}
+	return render(request, 'membertypeform.html', context)
+
+
 def group(request, grouptype_id, group_id=None):
 	context = {}
 
