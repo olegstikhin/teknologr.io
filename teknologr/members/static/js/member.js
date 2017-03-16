@@ -61,9 +61,25 @@ $(document).ready(function() {
 
 	$('.editMemberType').click(function(){
 		var id = $(this).data('id');
-		$("#editMemberType .modal-body").load("/membertype/" + id + "/edit/", function() {
-			
+		$("#editMemberTypeModal .modal-body").load("/membertype/" + id + "/form/", function() {
+			$("#editmembertypeform").submit(function(event){
+				var data = $(this).serialize();
+				var request = $.ajax({
+					url: "/api/memberTypes/" + id + "/",
+					method: "PUT",
+					data: data
+				});
+
+				request.done(function() {
+					location.reload();
+				});
+
+				request.fail(function( jqHXR, textStatus ){
+					alert( "Request failed: " + textStatus + ": " + jqHXR.responseText );
+				});
+				event.preventDefault();
+			});
+			$('#editMemberTypeModal').modal();
 		});
 	});
-
 });
