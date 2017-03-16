@@ -33,4 +33,16 @@ $(document).ready(function() {
 
 		event.preventDefault();
 	});
+
+	$('#side-search').keyup(function(event) {
+		var filter = $(this).val().toUpperCase();
+		$("#side-objects a").each(function(index){
+			if($(this).text().toUpperCase().indexOf(filter) > -1) {
+				$(this).css('display', '');
+			} else {
+				$(this).css('display', 'none');
+			}
+		});
+	});
+
 });

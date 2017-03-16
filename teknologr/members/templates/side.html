@@ -14,7 +14,7 @@
   </li>
 </ul>
 <br>
-<div class="list-group">
+<div id="side-objects" class="list-group">
   {% for obj in side.objects %}
   <a class="side-object list-group-item{% ifequal obj.id side.active_obj %} active {% endifequal %}" href="/{{side.active}}/{{obj.id}}/">{{obj.name|default:"Namnlös"}}</a>
   {% endfor %}
