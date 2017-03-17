@@ -31,28 +31,23 @@ def set_side_context(context, category, active_obj=None):
 	side = {}
 	side['active'] = category
 	side['active_obj'] = active_obj
-	summary = []
 	if category == 'members':
 		side['sname'] = 'medlem'
 		side['newForm'] = MemberForm(initial={'given_names':'', 'surname':''})
-		for obj in Member.objects.order_by('-modified')[:50]:
-			summary.append({'name': obj.full_name, 'id': obj.id})
+		side['objects'] = [Member.objects.get(pk=active_obj)] if active_obj else []
 	elif category == 'groups':
 		side['sname'] = 'grupp'
 		side['newForm'] = GroupTypeForm()
-		for obj in GroupType.objects.all():
-			summary.append({'name': obj.name, 'id': obj.id})
+		side['objects'] = GroupType.objects.all()
+			#summary.append({'name': obj.name, 'id': obj.id})
 	elif category == 'functionaries':
 		side['sname'] = 'post'
 		side['newForm'] = FunctionaryTypeForm()
-		for obj in FunctionaryType.objects.all():
-			summary.append({'name': obj.name, 'id': obj.id})
+		side['objects'] = FunctionaryType.objects.all()
 	elif category == 'decorations':
 		side['sname'] = 'betygelse'
 		side['newForm'] = DecorationForm()
-		for obj in Decoration.objects.all():
-			summary.append({'name': obj.name, 'id': obj.id})
-	side['objects'] = summary
+		side['objects'] = Decoration.objects.all()
 	context['side'] = side
 
 

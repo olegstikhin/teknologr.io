@@ -49,6 +49,7 @@ class Member(SuperClass):
         return "%s %s" % (self.preferred_name, self.surname)
 
     full_name = property(_get_full_name)
+    name = property(_get_full_name)
     full_preferred_name = property(_get_full_preferred_name)
 
     def __str__(self):
