@@ -2,3 +2,6 @@ Django==1.9.2
 django-countries==3.4.1
 djangorestframework
 django-ajax-selects
+django-dotenv
+django-getenv
+dj-database-url
