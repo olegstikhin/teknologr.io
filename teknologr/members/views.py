@@ -79,6 +79,7 @@ def member(request, member_id):
 
 	# Get functionary positions
 	context['functionaries'] = Functionary.objects.filter(member__id=member_id)
+	context['addfunctionaryform'] = FunctionaryForm(initial={'member': member_id})
 
 	# Get groups
 	context['groups'] = GroupMembership.objects.filter(member__id=member_id)
