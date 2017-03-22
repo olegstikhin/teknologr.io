@@ -83,6 +83,7 @@ def member(request, member_id):
 
 	# Get groups
 	context['groups'] = GroupMembership.objects.filter(member__id=member_id)
+	context['addgroupform'] = GroupMembershipForm(initial={'member': member_id})
 
 	# Get membertypes
 	context['membertypes'] = MemberType.objects.filter(member__id=member_id)
