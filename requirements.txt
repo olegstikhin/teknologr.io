@@ -5,3 +5,4 @@ django-ajax-selects
 django-dotenv
 django-getenv
 dj-database-url
+django-auth-ldap

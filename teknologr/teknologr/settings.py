@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 from getenv import env
 
+import ldap
+from django_auth_ldap.config import LDAPSearch, PosixGroupType
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -123,3 +126,56 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# LDAP stuff
+
+# Baseline configuration.
+AUTH_LDAP_SERVER_URI = env("AUTH_LDAP_SERVER_URI", "ldaps://localhost:45670")
+
+AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=People,dc=teknologforeningen,dc=fi"
+
+# Set up the basic group parameters.
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=Group,dc=teknologforeningen,dc=fi",
+    ldap.SCOPE_SUBTREE, "(objectClass=PosixGroupType)"
+)
+AUTH_LDAP_GROUP_TYPE = PosixGroupType(name_attr="cn")
+
+# Simple group restrictions
+# TODO: change group to something sane
+AUTH_LDAP_REQUIRE_GROUP = "cn=tfic,ou=Group,dc=teknologforeningen,dc=fi"
+
+# Populate the Django user from the LDAP directory.
+AUTH_LDAP_USER_ATTR_MAP = {
+    "username": "uid",
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail"
+}
+
+# TODO: again, something sane here
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_staff": "cn=tfic,ou=Group,dc=teknologforeningen,dc=fi",
+    "is_superuser": "cn=Manager,dc=teknologforeningen,dc=fi"
+}
+
+# This is the default, but I like to be explicit.
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+# Use LDAP group membership to calculate group permissions.
+AUTH_LDAP_FIND_GROUP_PERMS = True
+
+# Cache group memberships for an hour to minimize LDAP traffic
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
+
+
+# Keep ModelBackend around for per-user permissions and maybe a local
+# superuser.
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# TODO: some encryption please?
+AUTH_LDAP_START_TLS = False
