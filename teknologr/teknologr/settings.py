@@ -131,7 +131,7 @@ STATIC_URL = '/static/'
 # LDAP stuff
 
 # Baseline configuration.
-AUTH_LDAP_SERVER_URI = env("AUTH_LDAP_SERVER_URI", "ldaps://localhost:45670")
+AUTH_LDAP_SERVER_URI = env("AUTH_LDAP_SERVER_URI", "ldaps://localhost:45671")
 
 AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=People,dc=teknologforeningen,dc=fi"
 
@@ -140,10 +140,6 @@ AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=Group,dc=teknologforeningen,dc=fi",
     ldap.SCOPE_SUBTREE, "(objectClass=PosixGroupType)"
 )
 AUTH_LDAP_GROUP_TYPE = PosixGroupType(name_attr="cn")
-
-# Simple group restrictions
-# TODO: change group to something sane
-AUTH_LDAP_REQUIRE_GROUP = "cn=tfic,ou=Group,dc=teknologforeningen,dc=fi"
 
 # Populate the Django user from the LDAP directory.
 AUTH_LDAP_USER_ATTR_MAP = {
@@ -177,5 +173,12 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-# TODO: some encryption please?
-AUTH_LDAP_START_TLS = False
+AUTH_LDAP_GLOBAL_OPTIONS = {
+    ldap.OPT_X_TLS_REQUIRE_CERT: ldap.OPT_X_TLS_NEVER
+}
+
+import logging
+
+logger = logging.getLogger('django_auth_ldap')
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.DEBUG)
