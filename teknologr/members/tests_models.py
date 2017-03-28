@@ -71,3 +71,11 @@ class FunctionaryTest(TestCase):
     def test_str(self):
         func = Functionary.objects.get(pk=1)
         self.assertEqual(str(func), "Functionary Type: 2016-11-04 - 2016-11-06, Foo Bar Tester")
+
+class FunctionaryTypeTest(TestCase):
+    def setUp(self):
+        FunctionaryType.objects.create(name="Functionary Type")
+
+    def test_str(self):
+        func_type = FunctionaryType.objects.get(name="Functionary Type")
+        self.assertEqual(str(func_type), "Functionary Type")
