@@ -45,3 +45,11 @@ class GroupTest(TestCase):
     def test_str(self):
         group = Group.objects.get(pk=1)
         self.assertEqual(str(group), "Group Type: 2016-11-06 - 2016-11-08")
+
+class GroupTypeTest(TestCase):
+    def setUp(self):
+        GroupType.objects.create(name="Group Type")
+
+    def test_str(self):
+        group_type = GroupType.objects.get(name="Group Type")
+        self.assertEqual(str(group_type), "Group Type")
