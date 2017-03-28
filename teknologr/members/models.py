@@ -21,7 +21,7 @@ class Member(SuperClass):
     birth_date = models.DateField(blank=True, null=True)
     student_id = models.CharField(max_length=10, blank=True, null=False, default="")
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default="UN")
-    nationality = CountryField(blank_label="Välj land", blank=True, null=False, default="") # https://pypi.python.org/pypi/django-countries/1.0.1
+    nationality = CountryField(blank_label="Välj land", blank=True, null=False, default="")  # https://pypi.python.org/pypi/django-countries/1.0.1
     enrolment_year = models.IntegerField(blank=True, null=True)
     graduated = models.BooleanField(default=False)
     graduated_year = models.IntegerField(blank=True, null=True)
@@ -32,7 +32,7 @@ class Member(SuperClass):
     street_address = models.CharField(max_length=64, blank=True, null=False, default="")
     postal_code = models.CharField(max_length=64, blank=True, null=False, default="")
     city = models.CharField(max_length=64, blank=True, null=False, default="")
-    country = CountryField(blank_label="Välj land", blank=True, null=False, default="") # https://pypi.python.org/pypi/django-countries/1.0.1
+    country = CountryField(blank_label="Välj land", blank=True, null=False, default="")  # https://pypi.python.org/pypi/django-countries/1.0.1
     url = models.CharField(max_length=64, blank=True, null=False, default="")
     email = models.CharField(max_length=64, blank=True, null=False, default="")
 

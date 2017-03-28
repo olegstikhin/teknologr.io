@@ -17,7 +17,7 @@ class MemberLookup(LookupChannel):
             args.append(Q(given_names__icontains=word) | Q(surname__icontains=word))
 
         if not args:
-            return [] # No words in query (only spaces?)
+            return []  # No words in query (only spaces?)
 
 
         return Member.objects.filter(*args).order_by('surname', 'given_names')[:10]
