@@ -19,7 +19,6 @@ class MemberLookup(LookupChannel):
         if not args:
             return []  # No words in query (only spaces?)
 
-
         return Member.objects.filter(*args).order_by('surname', 'given_names')[:10]
 
     def get_result(self, obj):
