@@ -16,6 +16,12 @@ from getenv import env
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+PROJECT_DIR = os.path.dirname(__file__)
+TEST_PEP8_DIRS = [os.path.dirname(PROJECT_DIR), ]
+
+# PEP8
+TEST_PEP8_EXCLUDE = ['migrations', ]  # Exclude this paths from tests
+TEST_PEP8_IGNORE = ['E501', ]  # Ignore this tests (E501 is line length)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -38,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'test_pep8',
     'rest_framework',
     'ajax_select',
     'members',
