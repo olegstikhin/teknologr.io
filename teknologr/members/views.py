@@ -43,7 +43,7 @@ def set_side_context(context, category, active_obj=None):
         side['sname'] = 'grupp'
         side['newForm'] = GroupTypeForm()
         side['objects'] = GroupType.objects.all()
-            # summary.append({'name': obj.name, 'id': obj.id})
+        # summary.append({'name': obj.name, 'id': obj.id})
     elif category == 'functionaries':
         side['sname'] = 'post'
         side['newForm'] = FunctionaryTypeForm()
