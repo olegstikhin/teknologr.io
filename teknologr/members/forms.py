@@ -3,11 +3,13 @@ from django.forms import ModelForm, DateField, ChoiceField
 from django.forms.widgets import CheckboxInput, DateInput, HiddenInput
 from ajax_select.fields import AutoCompleteSelectField,AutoCompleteSelectMultipleField
 
+
 class BSModelForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(BSModelForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
 
 class MemberForm(ModelForm):
     class Meta:
@@ -23,15 +25,18 @@ class MemberForm(ModelForm):
               field.widget.attrs['class'] = 'form-control'
     birth_date = DateField(widget=DateInput(attrs={'type': 'date'}), required=False)
 
+
 class GroupTypeForm(BSModelForm):
     class Meta:
         model = GroupType
         fields = '__all__'
 
+
 class FunctionaryTypeForm(BSModelForm):
     class Meta:
         model = FunctionaryType
         fields = '__all__'
+
 
 class FunctionaryForm(BSModelForm):
     class Meta:
@@ -42,10 +47,12 @@ class FunctionaryForm(BSModelForm):
     begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
     end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
 
+
 class DecorationForm(BSModelForm):
     class Meta:
         model = Decoration
         fields = '__all__'
+
 
 class DecorationOwnershipForm(BSModelForm):
     class Meta:
@@ -55,6 +62,7 @@ class DecorationOwnershipForm(BSModelForm):
     acquired = DateField(widget=DateInput(attrs={'type': 'date'}))
     member = AutoCompleteSelectField('member', required=True, help_text=None)
 
+
 class GroupForm(BSModelForm):
     class Meta:
         model = Group
@@ -62,6 +70,7 @@ class GroupForm(BSModelForm):
 
     begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
     end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+
 
 class GroupMembershipForm(BSModelForm):
 
@@ -72,6 +81,7 @@ class GroupMembershipForm(BSModelForm):
     member = AutoCompleteSelectField('member', required=True, help_text=None)
     #member = AutoCompleteSelectMultipleField('member', required=True, help_text=None)
     
+
 class MemberTypeForm(BSModelForm):
     class Meta:
         model = MemberType

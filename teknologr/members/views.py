@@ -10,16 +10,20 @@ import datetime
 def getCurrentYear():
     return datetime.date.today().year
 
+
 def getFirstDayOfCurrentYear():
     return datetime.date(getCurrentYear(), 1, 1)
 
+
 def getLastDayOfCurrentYear():
     return datetime.date(getCurrentYear(), 12, 31)
+
 
 def getCurrentDate():
     return datetime.datetime.now()
 
 # Create your views here
+
 
 def home_view(request):
 

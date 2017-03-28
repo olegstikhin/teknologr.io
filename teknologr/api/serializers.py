@@ -13,6 +13,7 @@ class SerializableCountryField(serializers.ChoiceField):
 
 # Members
 
+
 class MemberSerializer(serializers.ModelSerializer):
     country = SerializableCountryField(allow_blank=True, choices=Countries(), required=False)
     nationality = SerializableCountryField(allow_blank=True, choices=Countries(), required=False)
@@ -28,10 +29,12 @@ class GroupSerializer(serializers.ModelSerializer):
         model = Group
         fields = '__all__'
 
+
 class GroupTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupType
         fields = '__all__'
+
 
 class GroupMembershipSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,6 +49,7 @@ class FunctionarySerializer(serializers.ModelSerializer):
         model = Functionary
         fields = '__all__'
 
+
 class FunctionaryTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = FunctionaryType
@@ -58,6 +62,7 @@ class DecorationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Decoration
         fields = '__all__'
+
 
 class DecorationOwnershipSerializer(serializers.ModelSerializer):
     class Meta:

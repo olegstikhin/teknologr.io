@@ -2,6 +2,7 @@ from ajax_select import register, LookupChannel
 from members.models import *
 from django.utils.html import escape
 
+
 @register('member')
 class MemberLookup(LookupChannel):
 
