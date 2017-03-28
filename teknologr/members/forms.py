@@ -1,7 +1,7 @@
 from members.models import *
 from django.forms import ModelForm, DateField, ChoiceField
 from django.forms.widgets import CheckboxInput, DateInput, HiddenInput
-from ajax_select.fields import AutoCompleteSelectField,AutoCompleteSelectMultipleField
+from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
 
 
 class BSModelForm(ModelForm):

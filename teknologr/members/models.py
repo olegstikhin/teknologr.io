@@ -12,7 +12,7 @@ class SuperClass(models.Model):
 
 
 class Member(SuperClass):
-    GENDER_CHOICES = (("UN","Okänd"), ("M", "Man"),("F", "Kvinna"))
+    GENDER_CHOICES = (("UN", "Okänd"), ("M", "Man"), ("F", "Kvinna"))
     given_names = models.CharField(max_length=64, blank=False, null=False, default="UNKNOWN")
     preferred_name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
     surname = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
@@ -122,11 +122,11 @@ class FunctionaryType(SuperClass):
 
 class MemberType(SuperClass):
     TYPES = (
-        ("PH","Phux"),
-        ("OM","Ordinarie Medlem"),
-        ("JS","JuniorStÄlM"),
-        ("ST","StÄlM"),
-        ("AA","Aktiv Alumn"),
+        ("PH", "Phux"),
+        ("OM", "Ordinarie Medlem"),
+        ("JS", "JuniorStÄlM"),
+        ("ST", "StÄlM"),
+        ("AA", "Aktiv Alumn"),
     )
     member = models.ForeignKey("Member")
     begin_date = models.DateField()

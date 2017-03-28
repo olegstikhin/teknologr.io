@@ -37,7 +37,7 @@ def set_side_context(context, category, active_obj=None):
     side['active_obj'] = active_obj
     if category == 'members':
         side['sname'] = 'medlem'
-        side['newForm'] = MemberForm(initial={'given_names':'', 'surname':''})
+        side['newForm'] = MemberForm(initial={'given_names': '', 'surname': ''})
         side['objects'] = [Member.objects.get(pk=active_obj)] if active_obj else []
     elif category == 'groups':
         side['sname'] = 'grupp'
@@ -101,7 +101,7 @@ def member(request, member_id):
 def membertype_form(request, membertype_id):
     membertype = get_object_or_404(MemberType, id=membertype_id)
     form = MemberTypeForm(instance=membertype)
-    context = {'form': form, 'formid':'editmembertypeform'}
+    context = {'form': form, 'formid': 'editmembertypeform'}
     return render(request, 'membertypeform.html', context)
 
 
