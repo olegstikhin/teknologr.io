@@ -53,3 +53,21 @@ class GroupTypeTest(TestCase):
     def test_str(self):
         group_type = GroupType.objects.get(name="Group Type")
         self.assertEqual(str(group_type), "Group Type")
+
+class FunctionaryTest(TestCase):
+    def setUp(self):
+        func_type = FunctionaryType.objects.create(name="Functionary Type")
+        member = Member.objects.create(given_names="Foo Bar", preferred_name="Foo", surname="Tester")
+        Functionary.objects.create(functionarytype=func_type, member=member, begin_date=datetime.date(2016,11,4), end_date=datetime.date(2016,11,6))
+
+    def test_get_str_member(self):
+        func = Functionary.objects.get(pk=1)
+        self.assertEqual(func._get_str_member(), "2016-11-04 - 2016-11-06: Foo Bar Tester")
+
+    def test_get_str_type(self):
+        func = Functionary.objects.get(pk=1)
+        self.assertEqual(func._get_str_type(), "Functionary Type: 2016-11-04 - 2016-11-06")
+
+    def test_str(self):
+        func = Functionary.objects.get(pk=1)
+        self.assertEqual(str(func), "Functionary Type: 2016-11-04 - 2016-11-06, Foo Bar Tester")
