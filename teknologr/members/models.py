@@ -103,7 +103,7 @@ class Functionary(SuperClass):
     str_type = property(_get_str_type)
 
     def __str__(self):
-    	return "{0}: {1} - {2}, {3}".format(self.functionarytype, self.begin_date, self.end_date, self.member)
+        return "{0}: {1} - {2}, {3}".format(self.functionarytype, self.begin_date, self.end_date, self.member)
 
 class FunctionaryType(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
@@ -126,5 +126,3 @@ class MemberType(SuperClass):
 
     def __str__(self):
         return "{0}: {1} - {2}".format(self.get_type_display(), self.begin_date, self.end_date)
-
-
