@@ -35,6 +35,6 @@ class MemberLookup(LookupChannel):
         return obj._get_full_name()
 
     def check_auth(self, request):
-        #TODO: Actual authentication?
-        #The whole request can be denied earlier, this just limits the AJAX lookup channel? Not sure tough
+        # TODO: Actual authentication?
+        # The whole request can be denied earlier, this just limits the AJAX lookup channel? Not sure tough
         return True
