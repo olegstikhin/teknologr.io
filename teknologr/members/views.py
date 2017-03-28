@@ -74,7 +74,7 @@ def member(request, member_id):
             context['result'] = 'success'
         else:
             context['result'] = 'failure'
-    else: 
+    else:
         form = MemberForm(instance=member)
 
     context['programmes'] = DEGREE_PROGRAMME_CHOICES
