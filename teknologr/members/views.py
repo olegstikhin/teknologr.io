@@ -118,10 +118,10 @@ def group(request, grouptype_id, group_id=None):
     context['groupTypeForm'] = form
 
     context['addgroupform'] = GroupForm(initial={
-            "grouptype": grouptype_id,
-            "begin_date": getFirstDayOfCurrentYear(),
-            "end_date": getLastDayOfCurrentYear()
-        })
+        "grouptype": grouptype_id,
+        "begin_date": getFirstDayOfCurrentYear(),
+        "end_date": getLastDayOfCurrentYear()
+    })
 
     if group_id is not None:
         group = get_object_or_404(Group, id=group_id)
@@ -145,10 +145,10 @@ def functionary(request, functionarytype_id):
     context['functionaries'] = Functionary.objects.filter(functionarytype__id=functionarytype_id)
     context['functionaryTypeForm'] = form
     context['addfunctionaryform'] = FunctionaryForm(initial={
-            "functionarytype": functionarytype_id,
-            "begin_date": getFirstDayOfCurrentYear(),
-            "end_date": getLastDayOfCurrentYear()
-        })
+        "functionarytype": functionarytype_id,
+        "begin_date": getFirstDayOfCurrentYear(),
+        "end_date": getLastDayOfCurrentYear()
+    })
 
     set_side_context(context, 'functionaries', functionarytype.id)
     return render(request, 'functionary.html', context)
