@@ -42,12 +42,12 @@ class FunctionaryTypeViewSet(viewsets.ModelViewSet):
 # Decorations
 
 class DecorationViewSet(viewsets.ModelViewSet):
-	queryset = Decoration.objects.all()
-	serializer_class = DecorationSerializer
+    queryset = Decoration.objects.all()
+    serializer_class = DecorationSerializer
 
 class DecorationOwnershipViewSet(viewsets.ModelViewSet):
-	queryset = DecorationOwnership.objects.all()
-	serializer_class = DecorationOwnershipSerializer
+    queryset = DecorationOwnership.objects.all()
+    serializer_class = DecorationOwnershipSerializer
 
 
 # MemberTypes
