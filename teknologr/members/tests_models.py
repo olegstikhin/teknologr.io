@@ -28,3 +28,11 @@ class DecorationOwnerShipTest(TestCase):
     def test_str(self):
         dec_ownership = DecorationOwnership.objects.get(pk=1)
         self.assertEqual(str(dec_ownership), "Test Decoration - Foo Bar Tester")
+
+class DecorationTest(TestCase):
+    def setUp(self):
+        Decoration.objects.create(name="Test Decoration")
+
+    def test_str(self):
+        decoration = Decoration.objects.get(pk=1)
+        self.assertEqual(str(decoration), "Test Decoration")
