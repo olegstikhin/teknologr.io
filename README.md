@@ -14,3 +14,4 @@ First make sure that you have Python 3 installed and virtualenv to go with it.
 
 ## Code style
 pep8 check will be done when doing `python manage.py test`.
+Linting only can be run with `python manage.py test test_pep8`.
