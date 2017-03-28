@@ -126,5 +126,3 @@ class MemberType(SuperClass):
 
     def __str__(self):
         return "{0}: {1} - {2}".format(self.get_type_display(), self.begin_date, self.end_date)
-
-
