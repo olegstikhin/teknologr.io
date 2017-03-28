@@ -163,7 +163,8 @@ def decoration(request, decoration_id):
 
     # Get groups of group type
     context['decorations'] = DecorationOwnership.objects.filter(decoration__id=decoration_id)
-    context['adddecorationform'] = DecorationOwnershipForm(initial={"decoration": decoration_id, 'acquired': getCurrentDate()})
+    context['adddecorationform'] = DecorationOwnershipForm(
+        initial={"decoration": decoration_id, 'acquired': getCurrentDate()})
 
     set_side_context(context, 'decorations', decoration.id)
     return render(request, 'decoration.html', context)
