@@ -21,7 +21,10 @@ TEST_PEP8_DIRS = [os.path.dirname(PROJECT_DIR), ]
 
 # PEP8
 TEST_PEP8_EXCLUDE = ['migrations', ]  # Exclude this paths from tests
-TEST_PEP8_IGNORE = ['E501', ]  # Ignore this tests (E501 is line length)
+TEST_PEP8_IGNORE = []  # Ignore this tests (E501 is line length)
+TEST_PEP8_CONFIG_FILE = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    'setup.cfg')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
