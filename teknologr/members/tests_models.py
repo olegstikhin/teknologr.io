@@ -36,3 +36,12 @@ class DecorationTest(TestCase):
     def test_str(self):
         decoration = Decoration.objects.get(pk=1)
         self.assertEqual(str(decoration), "Test Decoration")
+
+class GroupTest(TestCase):
+    def setUp(self):
+        group_type = GroupType.objects.create(name="Group Type")
+        Group.objects.create(grouptype=group_type, begin_date=datetime.date(2016, 11, 6), end_date=datetime.date(2016, 11, 8))
+
+    def test_str(self):
+        group = Group.objects.get(pk=1)
+        self.assertEqual(str(group), "Group Type: 2016-11-06 - 2016-11-08")
