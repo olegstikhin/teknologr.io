@@ -20,9 +20,9 @@ class MemberForm(ModelForm):
         super(MemberForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
             if type(field.widget) is CheckboxInput:
-              field.widget.attrs['class'] = 'form-check-input'
+                field.widget.attrs['class'] = 'form-check-input'
             else:
-              field.widget.attrs['class'] = 'form-control'
+                field.widget.attrs['class'] = 'form-control'
     birth_date = DateField(widget=DateInput(attrs={'type': 'date'}), required=False)
 
 
@@ -80,7 +80,7 @@ class GroupMembershipForm(BSModelForm):
 
     member = AutoCompleteSelectField('member', required=True, help_text=None)
     #member = AutoCompleteSelectMultipleField('member', required=True, help_text=None)
-    
+
 
 class MemberTypeForm(BSModelForm):
     class Meta:

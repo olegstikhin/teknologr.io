@@ -7,7 +7,7 @@ from django.utils.html import escape
 class MemberLookup(LookupChannel):
 
     model = Member
-    
+
     def get_query(self, q, request):
         from django.db.models import Q
 
