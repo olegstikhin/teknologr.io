@@ -3,6 +3,7 @@ import datetime
 from django.test import TestCase
 from members.models import *
 
+
 class MemberTest(TestCase):
     def setUp(self):
         Member.objects.create(given_names="Foo Bar", preferred_name="Foo", surname="Tester")
@@ -19,6 +20,7 @@ class MemberTest(TestCase):
         foobar = Member.objects.get(given_names="Foo Bar", surname="Tester")
         self.assertEqual(str(foobar), "Foo Bar Tester")
 
+
 class DecorationOwnerShipTest(TestCase):
     def setUp(self):
         member = Member.objects.create(given_names="Foo Bar", preferred_name="Foo", surname="Tester")
@@ -29,6 +31,7 @@ class DecorationOwnerShipTest(TestCase):
         dec_ownership = DecorationOwnership.objects.get(pk=1)
         self.assertEqual(str(dec_ownership), "Test Decoration - Foo Bar Tester")
 
+
 class DecorationTest(TestCase):
     def setUp(self):
         Decoration.objects.create(name="Test Decoration")
@@ -37,14 +40,17 @@ class DecorationTest(TestCase):
         decoration = Decoration.objects.get(pk=1)
         self.assertEqual(str(decoration), "Test Decoration")
 
+
 class GroupTest(TestCase):
     def setUp(self):
         group_type = GroupType.objects.create(name="Group Type")
-        Group.objects.create(grouptype=group_type, begin_date=datetime.date(2016, 11, 6), end_date=datetime.date(2016, 11, 8))
+        Group.objects.create(grouptype=group_type,
+                             begin_date=datetime.date(2016, 11, 6), end_date=datetime.date(2016, 11, 8))
 
     def test_str(self):
         group = Group.objects.get(pk=1)
         self.assertEqual(str(group), "Group Type: 2016-11-06 - 2016-11-08")
+
 
 class GroupTypeTest(TestCase):
     def setUp(self):
@@ -54,11 +60,14 @@ class GroupTypeTest(TestCase):
         group_type = GroupType.objects.get(name="Group Type")
         self.assertEqual(str(group_type), "Group Type")
 
+
 class FunctionaryTest(TestCase):
     def setUp(self):
         func_type = FunctionaryType.objects.create(name="Functionary Type")
         member = Member.objects.create(given_names="Foo Bar", preferred_name="Foo", surname="Tester")
-        Functionary.objects.create(functionarytype=func_type, member=member, begin_date=datetime.date(2016,11,4), end_date=datetime.date(2016,11,6))
+        Functionary.objects.create(functionarytype=func_type,
+                                   member=member, begin_date=datetime.date(2016, 11, 4),
+                                   end_date=datetime.date(2016, 11, 6))
 
     def test_get_str_member(self):
         func = Functionary.objects.get(pk=1)
@@ -71,6 +80,7 @@ class FunctionaryTest(TestCase):
     def test_str(self):
         func = Functionary.objects.get(pk=1)
         self.assertEqual(str(func), "Functionary Type: 2016-11-04 - 2016-11-06, Foo Bar Tester")
+
 
 class FunctionaryTypeTest(TestCase):
     def setUp(self):
