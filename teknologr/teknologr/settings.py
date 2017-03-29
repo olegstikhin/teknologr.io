@@ -138,6 +138,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/members/'
 
 # LDAP stuff
 
@@ -162,7 +163,7 @@ AUTH_LDAP_USER_ATTR_MAP = {
 
 # TODO: again, something sane here
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-    "is_staff": "cn=tfic,ou=Group,dc=teknologforeningen,dc=fi",
+    "is_staff": "cn=teknologr,ou=Group,dc=teknologforeningen,dc=fi",
     "is_superuser": "cn=Manager,dc=teknologforeningen,dc=fi"
 }
 
@@ -187,9 +188,3 @@ AUTHENTICATION_BACKENDS = (
 AUTH_LDAP_GLOBAL_OPTIONS = {
     ldap.OPT_X_TLS_REQUIRE_CERT: ldap.OPT_X_TLS_NEVER
 }
-
-import logging
-
-logger = logging.getLogger('django_auth_ldap')
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.DEBUG)
