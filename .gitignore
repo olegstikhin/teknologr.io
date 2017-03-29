@@ -79,3 +79,6 @@ db.sqlite3
 
 #Webstorm
 .idea/
+
+#VS Code
+.vscode/

@@ -10,8 +10,9 @@ class SuperClass(models.Model):
     class Meta:
         abstract = True
 
+
 class Member(SuperClass):
-    GENDER_CHOICES = (("UN","Okänd"), ("M", "Man"),("F", "Kvinna"))
+    GENDER_CHOICES = (("UN", "Okänd"), ("M", "Man"), ("F", "Kvinna"))
     given_names = models.CharField(max_length=64, blank=False, null=False, default="UNKNOWN")
     preferred_name = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
     surname = models.CharField(max_length=32, blank=False, null=False, default="UNKNOWN")
@@ -20,7 +21,8 @@ class Member(SuperClass):
     birth_date = models.DateField(blank=True, null=True)
     student_id = models.CharField(max_length=10, blank=True, null=False, default="")
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default="UN")
-    nationality = CountryField(blank_label="Välj land", blank=True, null=False, default="") # https://pypi.python.org/pypi/django-countries/1.0.1
+    # https://pypi.python.org/pypi/django-countries/1.0.1
+    nationality = CountryField(blank_label="Välj land", blank=True, null=False, default="")
     enrolment_year = models.IntegerField(blank=True, null=True)
     graduated = models.BooleanField(default=False)
     graduated_year = models.IntegerField(blank=True, null=True)
@@ -31,7 +33,8 @@ class Member(SuperClass):
     street_address = models.CharField(max_length=64, blank=True, null=False, default="")
     postal_code = models.CharField(max_length=64, blank=True, null=False, default="")
     city = models.CharField(max_length=64, blank=True, null=False, default="")
-    country = CountryField(blank_label="Välj land", blank=True, null=False, default="") # https://pypi.python.org/pypi/django-countries/1.0.1
+    # https://pypi.python.org/pypi/django-countries/1.0.1
+    country = CountryField(blank_label="Välj land", blank=True, null=False, default="")
     url = models.CharField(max_length=64, blank=True, null=False, default="")
     email = models.CharField(max_length=64, blank=True, null=False, default="")
 
@@ -55,6 +58,7 @@ class Member(SuperClass):
     def __str__(self):
         return self.full_name
 
+
 class DecorationOwnership(SuperClass):
     member = models.ForeignKey("Member")
     decoration = models.ForeignKey("Decoration")
@@ -63,15 +67,18 @@ class DecorationOwnership(SuperClass):
     def __str__(self):
         return "%s - %s" % (self.decoration.name, self.member.full_name)
 
+
 class Decoration(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
     def __str__(self):
         return self.name
 
+
 class GroupMembership(SuperClass):
     member = models.ForeignKey("Member")
     group = models.ForeignKey("Group")
+
 
 class Group(SuperClass):
     grouptype = models.ForeignKey("GroupType")
@@ -81,11 +88,13 @@ class Group(SuperClass):
     def __str__(self):
         return "{0}: {1} - {2}".format(self.grouptype.name, self.begin_date, self.end_date)
 
+
 class GroupType(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
 
     def __str__(self):
         return self.name
+
 
 class Functionary(SuperClass):
     member = models.ForeignKey("Member")
@@ -103,7 +112,8 @@ class Functionary(SuperClass):
     str_type = property(_get_str_type)
 
     def __str__(self):
-    	return "{0}: {1} - {2}, {3}".format(self.functionarytype, self.begin_date, self.end_date, self.member)
+        return "{0}: {1} - {2}, {3}".format(self.functionarytype, self.begin_date, self.end_date, self.member)
+
 
 class FunctionaryType(SuperClass):
     name = models.CharField(max_length=64, blank=False, null=False, unique=True)
@@ -111,13 +121,14 @@ class FunctionaryType(SuperClass):
     def __str__(self):
         return self.name
 
+
 class MemberType(SuperClass):
     TYPES = (
-        ("PH","Phux"),
-        ("OM","Ordinarie Medlem"),
-        ("JS","JuniorStÄlM"),
-        ("ST","StÄlM"),
-        ("AA","Aktiv Alumn"),
+        ("PH", "Phux"),
+        ("OM", "Ordinarie Medlem"),
+        ("JS", "JuniorStÄlM"),
+        ("ST", "StÄlM"),
+        ("AA", "Aktiv Alumn"),
     )
     member = models.ForeignKey("Member")
     begin_date = models.DateField()
@@ -126,5 +137,3 @@ class MemberType(SuperClass):
 
     def __str__(self):
         return "{0}: {1} - {2}".format(self.get_type_display(), self.begin_date, self.end_date)
-
-

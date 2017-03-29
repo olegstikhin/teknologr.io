@@ -2,11 +2,12 @@ from ajax_select import register, LookupChannel
 from members.models import *
 from django.utils.html import escape
 
+
 @register('member')
 class MemberLookup(LookupChannel):
 
     model = Member
-    
+
     def get_query(self, q, request):
         from django.db.models import Q
 
@@ -16,8 +17,7 @@ class MemberLookup(LookupChannel):
             args.append(Q(given_names__icontains=word) | Q(surname__icontains=word))
 
         if not args:
-            return [] # No words in query (only spaces?)
-
+            return []  # No words in query (only spaces?)
 
         return Member.objects.filter(*args).order_by('surname', 'given_names')[:10]
 
@@ -34,6 +34,6 @@ class MemberLookup(LookupChannel):
         return obj._get_full_name()
 
     def check_auth(self, request):
-        #TODO: Actual authentication?
-        #The whole request can be denied earlier, this just limits the AJAX lookup channel? Not sure tough
+        # TODO: Actual authentication?
+        # The whole request can be denied earlier, this just limits the AJAX lookup channel? Not sure tough
         return True

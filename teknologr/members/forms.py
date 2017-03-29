@@ -1,7 +1,7 @@
 from members.models import *
 from django.forms import ModelForm, DateField, ChoiceField, CharField
 from django.forms.widgets import CheckboxInput, DateInput, HiddenInput, TextInput, PasswordInput
-from ajax_select.fields import AutoCompleteSelectField,AutoCompleteSelectMultipleField
+from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
 from django.contrib.auth.forms import AuthenticationForm
 
 
@@ -10,6 +10,7 @@ class BSModelForm(ModelForm):
         super(BSModelForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
+
 
 class MemberForm(ModelForm):
     class Meta:
@@ -20,20 +21,23 @@ class MemberForm(ModelForm):
         super(MemberForm, self).__init__(*args, **kwargs)
         for name, field in self.fields.items():
             if type(field.widget) is CheckboxInput:
-              field.widget.attrs['class'] = 'form-check-input'
+                field.widget.attrs['class'] = 'form-check-input'
             else:
-              field.widget.attrs['class'] = 'form-control'
+                field.widget.attrs['class'] = 'form-control'
     birth_date = DateField(widget=DateInput(attrs={'type': 'date'}), required=False)
+
 
 class GroupTypeForm(BSModelForm):
     class Meta:
         model = GroupType
         fields = '__all__'
 
+
 class FunctionaryTypeForm(BSModelForm):
     class Meta:
         model = FunctionaryType
         fields = '__all__'
+
 
 class FunctionaryForm(BSModelForm):
     class Meta:
@@ -44,10 +48,12 @@ class FunctionaryForm(BSModelForm):
     begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
     end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
 
+
 class DecorationForm(BSModelForm):
     class Meta:
         model = Decoration
         fields = '__all__'
+
 
 class DecorationOwnershipForm(BSModelForm):
     class Meta:
@@ -57,6 +63,7 @@ class DecorationOwnershipForm(BSModelForm):
     acquired = DateField(widget=DateInput(attrs={'type': 'date'}))
     member = AutoCompleteSelectField('member', required=True, help_text=None)
 
+
 class GroupForm(BSModelForm):
     class Meta:
         model = Group
@@ -65,6 +72,7 @@ class GroupForm(BSModelForm):
     begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
     end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
 
+
 class GroupMembershipForm(BSModelForm):
 
     class Meta:
@@ -72,8 +80,9 @@ class GroupMembershipForm(BSModelForm):
         fields = '__all__'
 
     member = AutoCompleteSelectField('member', required=True, help_text=None)
-    #member = AutoCompleteSelectMultipleField('member', required=True, help_text=None)
-    
+    # member = AutoCompleteSelectMultipleField('member', required=True, help_text=None)
+
+
 class MemberTypeForm(BSModelForm):
     class Meta:
         model = MemberType
