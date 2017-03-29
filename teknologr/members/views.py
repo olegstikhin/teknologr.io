@@ -10,16 +10,20 @@ import datetime
 def getCurrentYear():
     return datetime.date.today().year
 
+
 def getFirstDayOfCurrentYear():
     return datetime.date(getCurrentYear(), 1, 1)
 
+
 def getLastDayOfCurrentYear():
     return datetime.date(getCurrentYear(), 12, 31)
+
 
 def getCurrentDate():
     return datetime.datetime.now()
 
 # Create your views here
+
 
 def home_view(request):
 
@@ -33,13 +37,13 @@ def set_side_context(context, category, active_obj=None):
     side['active_obj'] = active_obj
     if category == 'members':
         side['sname'] = 'medlem'
-        side['newForm'] = MemberForm(initial={'given_names':'', 'surname':''})
+        side['newForm'] = MemberForm(initial={'given_names': '', 'surname': ''})
         side['objects'] = [Member.objects.get(pk=active_obj)] if active_obj else []
     elif category == 'groups':
         side['sname'] = 'grupp'
         side['newForm'] = GroupTypeForm()
         side['objects'] = GroupType.objects.all()
-            #summary.append({'name': obj.name, 'id': obj.id})
+        # summary.append({'name': obj.name, 'id': obj.id})
     elif category == 'functionaries':
         side['sname'] = 'post'
         side['newForm'] = FunctionaryTypeForm()
@@ -70,7 +74,7 @@ def member(request, member_id):
             context['result'] = 'success'
         else:
             context['result'] = 'failure'
-    else: 
+    else:
         form = MemberForm(instance=member)
 
     context['programmes'] = DEGREE_PROGRAMME_CHOICES
@@ -97,7 +101,7 @@ def member(request, member_id):
 def membertype_form(request, membertype_id):
     membertype = get_object_or_404(MemberType, id=membertype_id)
     form = MemberTypeForm(instance=membertype)
-    context = {'form': form, 'formid':'editmembertypeform'}
+    context = {'form': form, 'formid': 'editmembertypeform'}
     return render(request, 'membertypeform.html', context)
 
 
@@ -114,10 +118,10 @@ def group(request, grouptype_id, group_id=None):
     context['groupTypeForm'] = form
 
     context['addgroupform'] = GroupForm(initial={
-            "grouptype": grouptype_id,
-            "begin_date": getFirstDayOfCurrentYear(),
-            "end_date": getLastDayOfCurrentYear()
-        })
+        "grouptype": grouptype_id,
+        "begin_date": getFirstDayOfCurrentYear(),
+        "end_date": getLastDayOfCurrentYear()
+    })
 
     if group_id is not None:
         group = get_object_or_404(Group, id=group_id)
@@ -141,10 +145,10 @@ def functionary(request, functionarytype_id):
     context['functionaries'] = Functionary.objects.filter(functionarytype__id=functionarytype_id)
     context['functionaryTypeForm'] = form
     context['addfunctionaryform'] = FunctionaryForm(initial={
-            "functionarytype": functionarytype_id,
-            "begin_date": getFirstDayOfCurrentYear(),
-            "end_date": getLastDayOfCurrentYear()
-        })
+        "functionarytype": functionarytype_id,
+        "begin_date": getFirstDayOfCurrentYear(),
+        "end_date": getLastDayOfCurrentYear()
+    })
 
     set_side_context(context, 'functionaries', functionarytype.id)
     return render(request, 'functionary.html', context)
@@ -159,7 +163,8 @@ def decoration(request, decoration_id):
 
     # Get groups of group type
     context['decorations'] = DecorationOwnership.objects.filter(decoration__id=decoration_id)
-    context['adddecorationform'] = DecorationOwnershipForm(initial={"decoration": decoration_id, 'acquired': getCurrentDate()})
+    context['adddecorationform'] = DecorationOwnershipForm(
+        initial={"decoration": decoration_id, 'acquired': getCurrentDate()})
 
     set_side_context(context, 'decorations', decoration.id)
     return render(request, 'decoration.html', context)
