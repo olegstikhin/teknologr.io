@@ -8,6 +8,7 @@ from api.serializers import *
 
 # Members
 
+
 class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
     serializer_class = MemberSerializer
@@ -19,9 +20,11 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
+
 class GroupTypeViewSet(viewsets.ModelViewSet):
     queryset = GroupType.objects.all()
     serializer_class = GroupTypeSerializer
+
 
 class GroupMembershipViewSet(viewsets.ModelViewSet):
     queryset = GroupMembership.objects.all()
@@ -34,6 +37,7 @@ class FunctionaryViewSet(viewsets.ModelViewSet):
     queryset = Functionary.objects.all()
     serializer_class = FunctionarySerializer
 
+
 class FunctionaryTypeViewSet(viewsets.ModelViewSet):
     queryset = FunctionaryType.objects.all()
     serializer_class = FunctionaryTypeSerializer
@@ -42,12 +46,13 @@ class FunctionaryTypeViewSet(viewsets.ModelViewSet):
 # Decorations
 
 class DecorationViewSet(viewsets.ModelViewSet):
-	queryset = Decoration.objects.all()
-	serializer_class = DecorationSerializer
+    queryset = Decoration.objects.all()
+    serializer_class = DecorationSerializer
+
 
 class DecorationOwnershipViewSet(viewsets.ModelViewSet):
-	queryset = DecorationOwnership.objects.all()
-	serializer_class = DecorationOwnershipSerializer
+    queryset = DecorationOwnership.objects.all()
+    serializer_class = DecorationOwnershipSerializer
 
 
 # MemberTypes
