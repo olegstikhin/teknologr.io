@@ -1,6 +1,6 @@
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 
 from members.models import *
 from members.forms import *
@@ -49,13 +49,13 @@ def set_side_context(context, category, active_obj=None):
     context['side'] = side
 
 
-@login_required
+@user_passes_test(lambda u:u.is_staff, login_url='/login/')
 def empty(request, category):
     context = {}
     set_side_context(context, category)
     return render(request, 'base.html', context)
 
-@login_required
+@user_passes_test(lambda u:u.is_staff, login_url='/login/')
 def member(request, member_id):
     context = {}
 
@@ -93,7 +93,7 @@ def member(request, member_id):
     return render(request, 'member.html', context)
 
 
-@login_required
+@user_passes_test(lambda u:u.is_staff, login_url='/login/')
 def membertype_form(request, membertype_id):
     membertype = get_object_or_404(MemberType, id=membertype_id)
     form = MemberTypeForm(instance=membertype)
@@ -101,7 +101,7 @@ def membertype_form(request, membertype_id):
     return render(request, 'membertypeform.html', context)
 
 
-@login_required
+@user_passes_test(lambda u:u.is_staff, login_url='/login/')
 def group(request, grouptype_id, group_id=None):
     context = {}
 
@@ -131,7 +131,7 @@ def group(request, grouptype_id, group_id=None):
     return render(request, 'group.html', context)
 
 
-@login_required
+@user_passes_test(lambda u:u.is_staff, login_url='/login/')
 def functionary(request, functionarytype_id):
     context = {}
 
@@ -152,7 +152,7 @@ def functionary(request, functionarytype_id):
     return render(request, 'functionary.html', context)
 
 
-@login_required
+@user_passes_test(lambda u:u.is_staff, login_url='/login/')
 def decoration(request, decoration_id):
     context = {}
 

@@ -20,10 +20,10 @@
 
         {% if next %}
             {% if user.is_authenticated %}
-            <p>Your account doesn't have access to this page. To proceed,
-            please login with an account that has access.</p>
+            <div class="alert alert-danger">Ditt användarkonto har inte rätt till denna sida. 
+            Logga in med ett konto som har rättigheter.</div>
             {% else %}
-            <p>Please login to see this page.</p>
+            <div class="alert alert-info">Logga in för att se sidan</div>
             {% endif %}
         {% endif %}
 
