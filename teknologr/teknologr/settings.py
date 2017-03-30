@@ -172,7 +172,8 @@ AUTH_LDAP_USER_ATTR_MAP = {
     "email": "mail"
 }
 
-# TODO: again, something sane here
+# Map LDAP group to is_staff property in Member model
+# this restricts all is_staff required views to those that are members of the "teknologr" LDAP group
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {
     "is_staff": "cn=teknologr,ou=Group,dc=teknologforeningen,dc=fi",
     "is_superuser": "cn=Manager,dc=teknologforeningen,dc=fi"
