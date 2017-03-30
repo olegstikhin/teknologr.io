@@ -140,6 +140,17 @@ STATIC_URL = '/static/'
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/members/'
 
+# REST Framework settings
+# TODO: provide GET access to certain users for non-admins
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAdminUser',
+    ),
+}
+
 # LDAP stuff
 
 # Baseline configuration.
