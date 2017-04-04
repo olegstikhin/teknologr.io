@@ -18,7 +18,7 @@ class MemberTest(TestCase):
 
     def test_str(self):
         foobar = Member.objects.get(given_names="Foo Bar", surname="Tester")
-        self.assertEqual(str(foobar), "Foo Bar Tester")
+        self.assertIn("Tester", str(foobar))
 
 
 class DecorationOwnerShipTest(TestCase):
@@ -29,7 +29,8 @@ class DecorationOwnerShipTest(TestCase):
 
     def test_str(self):
         dec_ownership = DecorationOwnership.objects.get(pk=1)
-        self.assertEqual(str(dec_ownership), "Test Decoration - Foo Bar Tester")
+        self.assertIn("Test Decoration", str(dec_ownership))
+        self.assertIn("Tester", str(dec_ownership))
 
 
 class DecorationTest(TestCase):
@@ -38,7 +39,7 @@ class DecorationTest(TestCase):
 
     def test_str(self):
         decoration = Decoration.objects.get(pk=1)
-        self.assertEqual(str(decoration), "Test Decoration")
+        self.assertIn("Test Decoration", str(decoration))
 
 
 class GroupTest(TestCase):
@@ -49,7 +50,7 @@ class GroupTest(TestCase):
 
     def test_str(self):
         group = Group.objects.get(pk=1)
-        self.assertEqual(str(group), "Group Type: 2016-11-06 - 2016-11-08")
+        self.assertIn("Group Type", str(group))
 
 
 class GroupTypeTest(TestCase):
@@ -58,7 +59,7 @@ class GroupTypeTest(TestCase):
 
     def test_str(self):
         group_type = GroupType.objects.get(name="Group Type")
-        self.assertEqual(str(group_type), "Group Type")
+        self.assertIn("Group Type", str(group_type))
 
 
 class FunctionaryTest(TestCase):
@@ -71,15 +72,16 @@ class FunctionaryTest(TestCase):
 
     def test_get_str_member(self):
         func = Functionary.objects.get(pk=1)
-        self.assertEqual(func._get_str_member(), "2016-11-04 - 2016-11-06: Foo Bar Tester")
+        self.assertIn("Tester", func._get_str_member())
 
     def test_get_str_type(self):
         func = Functionary.objects.get(pk=1)
-        self.assertEqual(func._get_str_type(), "Functionary Type: 2016-11-04 - 2016-11-06")
+        self.assertIn("Functionary Type", func._get_str_type())
 
     def test_str(self):
         func = Functionary.objects.get(pk=1)
-        self.assertEqual(str(func), "Functionary Type: 2016-11-04 - 2016-11-06, Foo Bar Tester")
+        self.assertIn("Tester", str(func))
+        self.assertIn("Functionary Type", str(func))
 
 
 class FunctionaryTypeTest(TestCase):
@@ -88,4 +90,4 @@ class FunctionaryTypeTest(TestCase):
 
     def test_str(self):
         func_type = FunctionaryType.objects.get(name="Functionary Type")
-        self.assertEqual(str(func_type), "Functionary Type")
+        self.assertIn("Functionary Type", str(func_type))
