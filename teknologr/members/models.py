@@ -106,7 +106,7 @@ class Functionary(SuperClass):
         return "{0} - {1}: {2}".format(self.begin_date, self.end_date, self.member)
 
     def _get_str_type(self):
-        return "{0}: {1} - {2}".format(self.functionarytype, self.begin_date, self.end_date)
+        return "{0}: {1} - {2}".format(self.functionarytype, self.begin_date, self.end_date)
 
     str_member = property(_get_str_member)
     str_type = property(_get_str_type)
