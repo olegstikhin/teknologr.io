@@ -2,7 +2,7 @@
 Membership management system tailored for TF use
 
 [![Build Status](https://travis-ci.org/Teknologforeningen/teknologr.io.svg?branch=develop)](https://travis-ci.org/Teknologforeningen/teknologr.io) 
-[![Coverage Status](https://coveralls.io/repos/github/Teknologforeningen/teknologr.io/badge.svg)](https://coveralls.io/github/Teknologforeningen/teknologr.io)
+[![Coverage Status](https://coveralls.io/repos/github/Teknologforeningen/teknologr.io/badge.svg?branch=develop)](https://coveralls.io/github/Teknologforeningen/teknologr.io?branch=develop)
 
 ## Installation
 
