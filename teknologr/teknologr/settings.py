@@ -159,8 +159,10 @@ AUTH_LDAP_SERVER_URI = env("AUTH_LDAP_SERVER_URI", "ldaps://localhost:45671")
 AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=People,dc=teknologforeningen,dc=fi"
 
 # Set up the basic group parameters.
-AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=Group,dc=teknologforeningen,dc=fi",
-    ldap.SCOPE_SUBTREE, "(objectClass=PosixGroupType)"
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+    "ou=Group,dc=teknologforeningen,dc=fi",
+    ldap.SCOPE_SUBTREE,
+    "(objectClass=PosixGroupType)"
 )
 AUTH_LDAP_GROUP_TYPE = PosixGroupType(name_attr="cn")
 

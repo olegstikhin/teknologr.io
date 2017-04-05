@@ -7,8 +7,8 @@ from ajax_select import urls as ajax_select_urls
 
 
 urlpatterns = [
-	url(r'^login/$', auth_views.login, {'template_name': 'login.html', 'authentication_form':BSAuthForm}),
-	url(r'^logout/$', auth_views.logout, {'next_page': '/login/'}),
+    url(r'^login/$', auth_views.login, {'template_name': 'login.html', 'authentication_form': BSAuthForm}),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/login/'}),
     url(r'^$', RedirectView.as_view(url='/members/')),
     url(r'^(members|groups|functionaries|decorations)/$', views.empty),
     url(r'^members/(\d+)/$', views.member),

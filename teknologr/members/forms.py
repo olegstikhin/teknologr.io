@@ -93,5 +93,5 @@ class MemberTypeForm(BSModelForm):
 
 
 class BSAuthForm(AuthenticationForm):
-    username = CharField(widget=TextInput(attrs={'class': 'form-control','placeholder': 'Användarnamn'}))
-    password = CharField(widget=PasswordInput(attrs={'class': 'form-control','placeholder':'Lösenord'}))
+    username = CharField(widget=TextInput(attrs={'class': 'form-control', 'placeholder': 'Användarnamn'}))
+    password = CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Lösenord'}))
