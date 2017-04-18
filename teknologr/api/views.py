@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from api.serializers import *
+from rest_framework.decorators import api_view
 
 # Create your views here.
 
@@ -30,6 +31,21 @@ class GroupMembershipViewSet(viewsets.ModelViewSet):
     queryset = GroupMembership.objects.all()
     serializer_class = GroupMembershipSerializer
 
+@api_view(['POST'])
+def memberListSave(request):
+    from members.models import GroupMembership, Member, Group
+    from rest_framework.response import Response
+    
+    # [0] is key, [1] is values
+    gid = request.data.get('group')
+    members = request.data.get('member').strip("|").split("|")
+
+    for mid in members:
+        member = Member.objects.get(pk=int(mid))
+        group = Group.objects.get(pk=int(gid))
+        GroupMembership.objects.create(member = member,group = group)
+
+    return Response(status=200)
 
 # Functionaries
 

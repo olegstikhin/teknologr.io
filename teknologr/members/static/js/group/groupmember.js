@@ -3,7 +3,7 @@ $(document).ready(function() {
 	$("#addgroupmemberform").submit(function(event){
 		var data = $(this).serialize();
 		var request = $.ajax({
-			url: "/api/groupMembership/",
+			url: "/api/multiGroupMembership/",
 			method: "POST",
 			data: data
 		});
