@@ -36,14 +36,16 @@ def memberListSave(request):
     from members.models import GroupMembership, Member, Group
     from rest_framework.response import Response
     
-    # [0] is key, [1] is values
     gid = request.data.get('group')
     members = request.data.get('member').strip("|").split("|")
 
     for mid in members:
         member = Member.objects.get(pk=int(mid))
         group = Group.objects.get(pk=int(gid))
-        GroupMembership.objects.create(member = member,group = group)
+
+        #get_or_create is used to ignore duplicates
+        GroupMembership.objects.get_or_create(member = member,group = group)
+
 
     return Response(status=200)
 
