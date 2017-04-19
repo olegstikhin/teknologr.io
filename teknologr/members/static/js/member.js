@@ -1,3 +1,5 @@
+var changed = false;
+
 $(document).ready(function() {
 
 	$("#addmembertypeform").submit(function(event){
@@ -137,7 +139,7 @@ $(document).ready(function() {
 				alert( "Request failed: " + textStatus + ": " + jqHXR.responseText );
 			});	
 		}
-	})
+	});
 
 	$('.removeGroup').click(function(){
 		if(confirm("Vill du radera detta gruppmedlemskap?")) {
@@ -155,5 +157,20 @@ $(document).ready(function() {
 				alert( "Request failed: " + textStatus + ": " + jqHXR.responseText );
 			});	
 		}
-	})
+	});
+
+	$('#memberform').change(function(){
+		changed = true;
+	});
+
+	$('#memberform').submit(function(){
+		changed = false;
+	});
+});
+
+
+$(window).on('beforeunload', function(){
+	if(changed) {
+		return "Changes not saved";
+	}
 });
