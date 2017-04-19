@@ -15,7 +15,7 @@
   {% endif %}
 <div class="row form-group">
   <div class="col-md-8">
-    <form autocomplete="off" role ="form" action="/members/{{member.id}}/" method="post">
+    <form id="memberform" autocomplete="off" role ="form" action="/members/{{member.id}}/" method="post">
     {% csrf_token %}
     <div class="row form-group">
       <div class="col-md-4">
