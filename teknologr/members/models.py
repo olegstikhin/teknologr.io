@@ -78,6 +78,7 @@ class Decoration(SuperClass):
 class GroupMembership(SuperClass):
     member = models.ForeignKey("Member")
     group = models.ForeignKey("Group")
+
     class Meta:
         unique_together = (("member", "group"),)
 

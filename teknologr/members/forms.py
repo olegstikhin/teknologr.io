@@ -78,7 +78,7 @@ class GroupMembershipForm(BSModelForm):
         model = GroupMembership
         fields = '__all__'
 
-    #member = AutoCompleteSelectField('member', required=True, help_text=None)
+    # member = AutoCompleteSelectField('member', required=True, help_text=None)
     member = AutoCompleteSelectMultipleField('member', required=True, help_text=None)
 
 

@@ -31,11 +31,12 @@ class GroupMembershipViewSet(viewsets.ModelViewSet):
     queryset = GroupMembership.objects.all()
     serializer_class = GroupMembershipSerializer
 
+
 @api_view(['POST'])
 def memberListSave(request):
     from members.models import GroupMembership, Member, Group
     from rest_framework.response import Response
-    
+
     gid = request.data.get('group')
     members = request.data.get('member').strip("|").split("|")
 
@@ -43,11 +44,11 @@ def memberListSave(request):
         member = Member.objects.get(pk=int(mid))
         group = Group.objects.get(pk=int(gid))
 
-        #get_or_create is used to ignore duplicates
-        GroupMembership.objects.get_or_create(member = member,group = group)
-
+        # get_or_create is used to ignore duplicates
+        GroupMembership.objects.get_or_create(member=member, group=group)
 
     return Response(status=200)
+
 
 # Functionaries
 
