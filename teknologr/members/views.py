@@ -38,12 +38,17 @@ def set_side_context(context, category, active_obj=None):
     if category == 'members':
         side['sname'] = 'medlem'
         side['newForm'] = MemberForm(initial={'given_names': '', 'surname': ''})
-        side['objects'] = [Member.objects.get(pk=active_obj)] if active_obj else []
+        objects = Member.objects.order_by('-modified')[:20]
+        if active_obj:
+            active = Member.objects.get(pk=active_obj)
+            if active not in objects:
+                from itertools import chain
+                objects = list(chain([active], objects))
+        side['objects'] = objects
     elif category == 'groups':
         side['sname'] = 'grupp'
         side['newForm'] = GroupTypeForm()
         side['objects'] = GroupType.objects.all()
-        # summary.append({'name': obj.name, 'id': obj.id})
     elif category == 'functionaries':
         side['sname'] = 'post'
         side['newForm'] = FunctionaryTypeForm()
