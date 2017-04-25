@@ -41,11 +41,8 @@ def memberListSave(request):
     members = request.data.get('member').strip("|").split("|")
 
     for mid in members:
-        member = Member.objects.get(pk=int(mid))
-        group = Group.objects.get(pk=int(gid))
-
         # get_or_create is used to ignore duplicates
-        GroupMembership.objects.get_or_create(member=member, group=group)
+        GroupMembership.objects.get_or_create(member_id=int(mid), group_id=int(gid))
 
     return Response(status=200)
 
