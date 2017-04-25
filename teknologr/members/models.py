@@ -79,6 +79,9 @@ class GroupMembership(SuperClass):
     member = models.ForeignKey("Member")
     group = models.ForeignKey("Group")
 
+    class Meta:
+        unique_together = (("member", "group"),)
+
 
 class Group(SuperClass):
     grouptype = models.ForeignKey("GroupType")
