@@ -15,7 +15,7 @@
   {% endif %}
 <div class="row form-group">
   <div class="col-md-8">
-    <form autocomplete="off" role ="form" action="/members/{{member.id}}/" method="post">
+    <form id="memberform" autocomplete="off" role ="form" action="/members/{{member.id}}/" method="post">
     {% csrf_token %}
     <div class="row form-group">
       <div class="col-md-4">
@@ -179,13 +179,13 @@
       {{form.comment}}
       </div>
     </div>
+    <br>
     <div class = "row">
-      <div class = "col-md-2"><button type="submit" class="btn btn-success">Spara</button></div>
+      <div class = "col-md-1"><button type="submit" class="btn btn-success">Spara</button></div>
+      <div class = "col-md-1"><button id="deletemember" class="btn btn-danger" data-id={{member.id}}>Radera</button></div>
     </div>
 
   </form>
-  <br>
-  <button id="deletemember" type="submit" class="btn btn-danger" data-id={{member.id}}>Radera</button>
   </div>
 
   <!-- Right Column -->
