@@ -16,10 +16,12 @@ from getenv import env
 import ldap
 from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 PROJECT_DIR = os.path.dirname(__file__)
+
 TEST_PEP8_DIRS = [os.path.dirname(PROJECT_DIR), ]
 
 # PEP8
