@@ -156,11 +156,11 @@ REST_FRAMEWORK = {
 # Baseline configuration.
 AUTH_LDAP_SERVER_URI = env("AUTH_LDAP_SERVER_URI", "ldaps://localhost:45671")
 
-AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=People,dc=teknologforeningen,dc=fi"
+AUTH_LDAP_USER_DN_TEMPLATE = env("LDAP_USER_DN_TEMPLATE", "uid=%(user)s,dc=example,dc=com")
 
 # Set up the basic group parameters.
 AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
-    "ou=Group,dc=teknologforeningen,dc=fi",
+    env("LDAP_GROUP_DN", "ou=group,dc=example,dc=com"),
     ldap.SCOPE_SUBTREE,
     "(objectClass=PosixGroupType)"
 )
@@ -175,10 +175,9 @@ AUTH_LDAP_USER_ATTR_MAP = {
 }
 
 # Map LDAP group to is_staff property in Member model
-# this restricts all is_staff required views to those that are members of the "teknologr" LDAP group
+# this restricts all is_staff required views to those that are members of the specified LDAP group
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {
-    "is_staff": "cn=teknologr,ou=Group,dc=teknologforeningen,dc=fi",
-    "is_superuser": "cn=Manager,dc=teknologforeningen,dc=fi"
+    "is_staff": env("LDAP_STAFF_GROUP_DN", "cn=admin,ou=group,dc=example,dc=com"),
 }
 
 # This is the default, but I like to be explicit.
