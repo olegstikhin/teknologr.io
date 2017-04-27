@@ -49,7 +49,8 @@ class Member(SuperClass):
         return "%s %s" % (self.given_names, self.surname)
 
     def _get_full_preferred_name(self):
-        return "%s %s" % (self.preferred_name, self.surname)
+        first_name = self.preferred_name if self.preferred_name != "UNKNOWN" else given_names.split()[0]
+        return "%s %s" % (first_name, self.surname)
 
     full_name = property(_get_full_name)
     name = property(_get_full_name)
