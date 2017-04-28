@@ -25,6 +25,7 @@ class LDAPAccountManager:
         self.ldap.unbind_s()
 
     def add_account(self, member, password):
+        # TODO exception if no username?
         dn = env("LDAP_USER_DN_TEMPLATE") % {'user': member.username}
 
         uidnumber = self.get_next_uidnumber()
@@ -33,39 +34,49 @@ class LDAPAccountManager:
                 hashlib.new('md4', password.encode('utf-16le')).digest(),
                 'hex_codec'
             ).decode('utf-8').upper()
-        attrs = {
-            'uid': member.username,
-            'cn': member.full_preferred_name,
-            'homeDirectory': '/rhome/%s' % member.username,
-            'uidNumber': uidnumber,
-            'mailHost': 'smtp.ayy.fi',
-            'gidNumber': 1000,
-            'sn': member.surname,
-            'givenName': member.preferred_name,
-            'loginShell': '/bin/bash',
-            'objectClass': 'kerberosSecurityObject',
-            'objectClass': 'inetOrgPerson',
-            'objectClass': 'posixAccount',
-            'objectClass': 'shadowAccount',
-            'objectClass': 'inetLocalMailRecipient',
-            'objectClass': 'top',
-            'objectClass': 'person',
-            'objectClass': 'organizationalPerson',
-            'objectClass': 'billAccount',
-            'krbName': member.username,
-            'mail': member.email,
-            'userPassword': password,
-            'objectClass': 'sambaSamAccount',
-            'sambaSID': "S-1-0-0-%s" % str(uidnumber*2+1000),
-            'sambaNTPassword': nt_pw,
-            'sambaPwdLastSet': int(time.time()),
-        }
+        # Everything has to be byte string because why the fuck not?
+        attrs = {}
+        attrs['uid'] = [member.username.encode('utf-8')]
+        attrs['cn'] = [member.full_preferred_name.encode('utf-8')]
+        homedir = '/rhome/%s' % member.username
+        attrs['homeDirectory'] = [homedir.encode('utf-8')]
+        attrs['uidNumber'] = [str(uidnumber).encode('utf-8')]
+        attrs['mailHost'] = [b'smtp.ayy.fi']
+        attrs['gidNumber'] = [b'1000']
+        attrs['sn'] = [member.surname.encode('utf-8')]
+        attrs['givenName'] = [member.preferred_name.encode('utf-8')]
+        attrs['loginShell'] = [b'/bin/bash']
+        attrs['objectClass'] = [
+            b'kerberosSecurityObject',
+            b'inetOrgPerson',
+            b'posixAccount',
+            b'shadowAccount',
+            b'inetLocalMailRecipient',
+            b'top',
+            b'person',
+            b'organizationalPerson',
+            b'billAccount',
+            b'sambaSamAccount'
+        ]
+        attrs['krbName'] = [member.username.encode('utf-8')]
+        attrs['mail'] = [member.email.encode('utf-8')]
+        attrs['userPassword'] = [password.encode('utf-8')]
+        sambasid = "S-1-0-0-%s" % str(uidnumber*2+1000)
+        attrs['sambaSID'] = [sambasid.encode('utf-8')]
+        attrs['sambaNTPassword'] = [nt_pw.encode('utf-8')]
+        attrs['sambaPwdLastSet'] = [str(int(time.time())).encode('utf-8')]
 
         ldif = modlist.addModlist(attrs)
-        # TODO handle errors
-        self.ldap.add_s(dn, ldif)
+        # TODO handle errors, what if account exists?
+        try:
+            self.ldap.add_s(dn, ldif)
+        except ldap.ALREADY_EXISTS as e:
+            return "fail"
+
+        return "success"
 
         # TODO add user to group
+        # TODO password set workaround?
         # TODO return something
 
     def get_next_uidnumber(self):

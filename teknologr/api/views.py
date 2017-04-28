@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from api.serializers import *
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from members.models import GroupMembership, Member, Group
+
 
 # Create your views here.
 
@@ -34,9 +37,6 @@ class GroupMembershipViewSet(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def memberListSave(request):
-    from members.models import GroupMembership, Member, Group
-    from rest_framework.response import Response
-
     gid = request.data.get('group')
     members = request.data.get('member').strip("|").split("|")
 
@@ -76,3 +76,25 @@ class DecorationOwnershipViewSet(viewsets.ModelViewSet):
 class MemberTypeViewSet(viewsets.ModelViewSet):
     queryset = MemberType.objects.all()
     serializer_class = MemberTypeSerializer
+
+
+# LDAP accounts
+
+@api_view(['POST'])
+def create_accounts(request):
+    '''Create LDAP and BILL accounts for given user'''
+    from api.ldap import LDAPAccountManager
+    member_id = request.data.get('member_id')
+    member = get_object_or_404(Member, id=member_id)
+    password = request.data.get('password')
+    with LDAPAccountManager() as lm:
+        asd = lm.add_account(member, password)
+
+    return Response(asd, status=200)
+
+
+@api_view(['GET'])
+def testldap(request):
+    from api.ldap import LDAPAccountManager
+    with LDAPAccountManager() as l:
+        return Response("number: " + str(l.get_next_uidnumber()), status=200)
