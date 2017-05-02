@@ -65,16 +65,16 @@ class LDAPAccountManager:
         attrs['sambaNTPassword'] = [nt_pw.encode('utf-8')]
         attrs['sambaPwdLastSet'] = [str(int(time.time())).encode('utf-8')]
 
-        ldif = modlist.addModlist(attrs)
-
-        # Add the user to LDAP
         try:
+            # Add the user to LDAP
+            ldif = modlist.addModlist(attrs)
             self.ldap.add_s(dn, ldif)
+
+            # Add user to Members group
+            group_dn = env("LDAP_MEMBER_GROUP_DN")
+            self.ldap.modify_s(group_dn, [(ldap.MOD_ADD, 'memberUid', username.encode('utf-8'))])
         except ldap.LDAPError as e:
             return str(e)
-
-        # TODO add user to group
-        # TODO password set workaround?
 
         return None  # All good, no error to return
 
