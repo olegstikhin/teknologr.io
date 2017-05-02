@@ -41,6 +41,8 @@ class Member(SuperClass):
     subscribed_to_modulen = models.BooleanField(default=False)
     allow_publish_info = models.BooleanField(default=True)
 
+    username = models.CharField(max_length=32, blank=False, null=True, editable=False)
+    bill_code = models.CharField(max_length=8, blank=False, null=True, editable=False)
     crm_id = models.CharField(max_length=32, blank=True, null=False, default="")
     comment = models.TextField(blank=True, null=True)
 
@@ -140,9 +142,3 @@ class MemberType(SuperClass):
 
     def __str__(self):
         return "{0}: {1} - {2}".format(self.get_type_display(), self.begin_date, self.end_date)
-
-
-class UserAccountData(SuperClass):
-    member = models.ForeignKey("Member")
-    ldap_username = models.CharField(max_length=32, unique=True, blank=True, null=False, default="")
-    bill_code = models.CharField(max_length=6, unique=True, blank=True, null=False, default="")
