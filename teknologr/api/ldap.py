@@ -24,9 +24,8 @@ class LDAPAccountManager:
     def __exit__(self, exc_type, exc_value, traceback):
         self.ldap.unbind_s()
 
-    def add_account(self, member, password):
-        # TODO exception if no username?
-        dn = env("LDAP_USER_DN_TEMPLATE") % {'user': member.username}
+    def add_account(self, member, username, password):
+        dn = env("LDAP_USER_DN_TEMPLATE") % {'user': username}
 
         uidnumber = self.get_next_uidnumber()
         # The password needs to be stored in a different format for samba
@@ -36,9 +35,9 @@ class LDAPAccountManager:
             ).decode('utf-8').upper()
         # Everything has to be byte string because why the fuck not?
         attrs = {}
-        attrs['uid'] = [member.username.encode('utf-8')]
+        attrs['uid'] = [username.encode('utf-8')]
         attrs['cn'] = [member.full_preferred_name.encode('utf-8')]
-        homedir = '/rhome/%s' % member.username
+        homedir = '/rhome/%s' % username
         attrs['homeDirectory'] = [homedir.encode('utf-8')]
         attrs['uidNumber'] = [str(uidnumber).encode('utf-8')]
         attrs['mailHost'] = [b'smtp.ayy.fi']
@@ -58,7 +57,7 @@ class LDAPAccountManager:
             b'billAccount',
             b'sambaSamAccount'
         ]
-        attrs['krbName'] = [member.username.encode('utf-8')]
+        attrs['krbName'] = [username.encode('utf-8')]
         attrs['mail'] = [member.email.encode('utf-8')]
         attrs['userPassword'] = [password.encode('utf-8')]
         sambasid = "S-1-0-0-%s" % str(uidnumber*2+1000)
@@ -67,17 +66,15 @@ class LDAPAccountManager:
         attrs['sambaPwdLastSet'] = [str(int(time.time())).encode('utf-8')]
 
         ldif = modlist.addModlist(attrs)
-        # TODO handle errors, what if account exists?
         try:
             self.ldap.add_s(dn, ldif)
-        except ldap.ALREADY_EXISTS as e:
-            return "fail"
-
-        return "success"
+        except ldap.LDAPError as e:
+            return str(e)
 
         # TODO add user to group
         # TODO password set workaround?
-        # TODO return something
+
+        return None  # All good, no error to return
 
     def get_next_uidnumber(self):
         """Returns the next free uidnumber greater than 1000"""

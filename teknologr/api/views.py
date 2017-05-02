@@ -86,15 +86,15 @@ def create_accounts(request):
     from api.ldap import LDAPAccountManager
     member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
+    username = request.data.get('username')
     password = request.data.get('password')
+    error = None
     with LDAPAccountManager() as lm:
-        asd = lm.add_account(member, password)
+        error = lm.add_account(member, username, password)
 
-    return Response(asd, status=200)
+    if error:
+        return Response({"LDAP": error}, status=400)
 
+    # TODO create BILL account
 
-@api_view(['GET'])
-def testldap(request):
-    from api.ldap import LDAPAccountManager
-    with LDAPAccountManager() as l:
-        return Response("number: " + str(l.get_next_uidnumber()), status=200)
+    return Response(status=200)
