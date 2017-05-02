@@ -66,6 +66,8 @@ class LDAPAccountManager:
         attrs['sambaPwdLastSet'] = [str(int(time.time())).encode('utf-8')]
 
         ldif = modlist.addModlist(attrs)
+
+        # Add the user to LDAP
         try:
             self.ldap.add_s(dn, ldif)
         except ldap.LDAPError as e:

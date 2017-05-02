@@ -96,5 +96,6 @@ def create_accounts(request):
         return Response({"LDAP": error}, status=400)
 
     # TODO create BILL account
+    # TODO create UserAccountData entry
 
     return Response(status=200)
