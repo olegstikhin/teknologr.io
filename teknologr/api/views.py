@@ -78,7 +78,7 @@ class MemberTypeViewSet(viewsets.ModelViewSet):
     serializer_class = MemberTypeSerializer
 
 
-# LDAP accounts
+# User accounts
 
 @api_view(['POST'])
 def create_accounts(request):
@@ -96,6 +96,45 @@ def create_accounts(request):
         return Response({"LDAP": error}, status=400)
 
     # TODO create BILL account
-    # TODO create UserAccountData entry
+    bill_code = None
 
+    # Store account details
+    member.username = username
+    member.bill_code = bill_code
+    member.save()
+
+    return Response(status=200)
+
+
+@api_view(['POST'])
+def delete_accounts(request):
+    from api.ldap import LDAPAccountManager
+    member_id = request.data.get('member_id')
+    member = get_object_or_404(Member, id=member_id)
+
+    with LDAPAccountManager() as lm:
+        error = lm.delete_account(member.username)
+
+    # TODO: delete BILL account
+    member.username = None
+    member.bill_code = None
+    member.save()
+
+    if error:
+        return Response(error, status=400)
+    return Response(status=200)
+
+
+@api_view(['POST'])
+def change_password(request):
+    from api.ldap import LDAPAccountManager
+    member_id = request.data.get('member_id')
+    member = get_object_or_404(Member, id=member_id)
+    password = request.data.get('password')
+
+    with LDAPAccountManager() as lm:
+        error = lm.change_password(member.username, password)
+
+    if error:
+        return Response(error, status=400)
     return Response(status=200)

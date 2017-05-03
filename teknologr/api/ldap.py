@@ -2,8 +2,6 @@ import ldap
 import ldap.modlist as modlist
 from getenv import env
 
-import codecs
-import hashlib
 import time
 
 
@@ -25,14 +23,12 @@ class LDAPAccountManager:
         self.ldap.unbind_s()
 
     def add_account(self, member, username, password):
+        # Adds new account for the given member with the given username and password
         dn = env("LDAP_USER_DN_TEMPLATE") % {'user': username}
 
         uidnumber = self.get_next_uidnumber()
-        # The password needs to be stored in a different format for samba
-        nt_pw = codecs.encode(
-                hashlib.new('md4', password.encode('utf-16le')).digest(),
-                'hex_codec'
-            ).decode('utf-8').upper()
+        nt_pw = self.get_samba_password(password)
+
         # Everything has to be byte string because why the fuck not?
         attrs = {}
         attrs['uid'] = [username.encode('utf-8')]
@@ -73,13 +69,14 @@ class LDAPAccountManager:
             # Add user to Members group
             group_dn = env("LDAP_MEMBER_GROUP_DN")
             self.ldap.modify_s(group_dn, [(ldap.MOD_ADD, 'memberUid', username.encode('utf-8'))])
+
         except ldap.LDAPError as e:
             return str(e)
 
         return None  # All good, no error to return
 
     def get_next_uidnumber(self):
-        """Returns the next free uidnumber greater than 1000"""
+        # Returns the next free uidnumber greater than 1000
         output = self.ldap.search_s(env("LDAP_USER_DN"), ldap.SCOPE_ONELEVEL, attrlist=['uidNumber'])
         uidnumbers = [int(user[1]['uidNumber'][0]) for user in output]
         uidnumbers.sort()
@@ -91,3 +88,40 @@ class LDAPAccountManager:
                 break
             last = uid
         return last + 1
+
+    def delete_account(self, username):
+        try:
+            # Remove user from members group
+            group_dn = env("LDAP_MEMBER_GROUP_DN")
+            self.ldap.modify_s(group_dn, [(ldap.MOD_DELETE, 'memberUid', username.encode('utf-8'))])
+
+            # Remove user
+            dn = env("LDAP_USER_DN_TEMPLATE") % {'user': username}
+            self.ldap.delete_s(dn)
+        except ldap.LDAPError as e:
+            return str(e)
+
+        return None
+
+    def change_password(self, username, password):
+        # Changes both the user password and the samba password
+        dn = env("LDAP_USER_DN_TEMPLATE") % {'user': username}
+        nt_pw = self.get_samba_password(password)
+        try:
+            mod_attrs = [
+                (ldap.MOD_REPLACE, 'userPassword', password.encode('utf-8')),
+                (ldap.MOD_REPLACE, 'sambaNTPassword', nt_pw.encode('utf-8'))
+            ]
+            self.ldap.modify_s(dn, mod_attrs)
+        except ldap.LDAPError as e:
+            return str(e)
+
+        return None
+
+    def get_samba_password(self, password):
+        # The password needs to be stored in a different format for samba
+        import codecs
+        import hashlib
+        return codecs.encode(
+                hashlib.new('md4', password.encode('utf-16le')).digest(), 'hex_codec'
+            ).decode('utf-8').upper()

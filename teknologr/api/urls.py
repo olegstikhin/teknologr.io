@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^multiGroupMembership/$', memberListSave),
     url(r'^accounts/add$', create_accounts),
+    url(r'^accounts/delete$', delete_accounts),
+    url(r'^accounts/change_pw$', change_password),
 ]
