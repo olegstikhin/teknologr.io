@@ -1,7 +1,7 @@
 from django.db.models import Q
 from members.models import Member
 
-def findMembers(query, count):
+def findMembers(query, count=10):
 
     args = []
 

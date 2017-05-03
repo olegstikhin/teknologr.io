@@ -36,7 +36,6 @@ class GroupMembershipViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def memberListSave(request):
     from members.models import GroupMembership, Member, Group
-    from rest_framework.response import Response
 
     gid = request.data.get('group')
     members = request.data.get('member').strip("|").split("|")

@@ -10,9 +10,8 @@ class MemberLookup(LookupChannel):
     model = Member
 
     def get_query(self, q, request):
-        from django.db.models import Q
 
-        members = findMembers(q, 10)
+        members = findMembers(q)
 
         return members
 
