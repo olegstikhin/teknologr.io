@@ -82,13 +82,15 @@ class MemberTypeViewSet(viewsets.ModelViewSet):
 # JSON API:s
 
 @api_view(['GET'])
-def memberTypesForMember(request, query):
+def memberTypesForMember(request, mode, query):
 
-    member = findMembers(query, 1).first()
+    if mode == 'username':
+        member = findMembers(query, 1).first()
+    else:#mode == 'studynumber'
+        member = Member.objects.filter(student_id=query).first()
 
     if not member:
         return Response(status=404)
-
 
     membertypes = []
 
