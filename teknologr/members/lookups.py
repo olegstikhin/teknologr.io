@@ -1,6 +1,7 @@
 from ajax_select import register, LookupChannel
 from members.models import *
 from django.utils.html import escape
+from api.utils import findMembers
 
 
 @register('member')
@@ -11,15 +12,9 @@ class MemberLookup(LookupChannel):
     def get_query(self, q, request):
         from django.db.models import Q
 
-        args = []
+        members = findMembers(q, 10)
 
-        for word in q.split():
-            args.append(Q(given_names__icontains=word) | Q(surname__icontains=word))
-
-        if not args:
-            return []  # No words in query (only spaces?)
-
-        return Member.objects.filter(*args).order_by('surname', 'given_names')[:10]
+        return members
 
     def get_result(self, obj):
         """ result is the simple text that is the completion of what the person typed """
