@@ -3,7 +3,6 @@ from rest_framework import viewsets
 from api.serializers import *
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from api.utils import *
 import json
 
 # Create your views here.
@@ -86,9 +85,11 @@ class MemberTypeViewSet(viewsets.ModelViewSet):
 def memberTypesForMember(request, mode, query):
 
     if mode == 'username':
-        member = findMembers(query, 1).first()
-    else:  # mode == 'studynumber'
-        member = Member.objects.filter(student_id=query).first()
+        member = Member.objects.get(username=query)
+    elif mode == 'studynumber':
+        member = Member.objects.get(student_id=query)
+    else:
+        return Response(stauts=400)
 
     if not member:
         return Response(status=404)
@@ -97,6 +98,7 @@ def memberTypesForMember(request, mode, query):
 
     for e in MemberType.objects.filter(member=member):
         membertypes.append((e.type, str(e.begin_date), str(e.end_date)))
+
     data = json.dumps({
         "given_names": member.given_names.split(),
         "surname": member.surname,
