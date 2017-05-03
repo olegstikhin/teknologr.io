@@ -73,7 +73,7 @@ class LDAPAccountManager:
         except ldap.LDAPError as e:
             return str(e)
 
-        return None  # All good, no error to return
+        return None  # TODO: errors rather as exceptions? Need to wrap?
 
     def get_next_uidnumber(self):
         # Returns the next free uidnumber greater than 1000

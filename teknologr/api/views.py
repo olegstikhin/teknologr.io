@@ -4,7 +4,8 @@ from api.serializers import *
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from members.models import GroupMembership, Member, Group
-
+from api.ldap import LDAPAccountManager
+from api.bill import BILLAccountManager, BILLException
 
 # Create your views here.
 
@@ -82,8 +83,7 @@ class MemberTypeViewSet(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def create_accounts(request):
-    '''Create LDAP and BILL accounts for given user'''
-    from api.ldap import LDAPAccountManager
+    # Create LDAP and BILL accounts for given user
     member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
     username = request.data.get('username')
@@ -91,43 +91,51 @@ def create_accounts(request):
     error = None
     with LDAPAccountManager() as lm:
         error = lm.add_account(member, username, password)
+        if error:
+            return Response({"LDAP": error}, status=400)
 
-    if error:
-        return Response({"LDAP": error}, status=400)
-
-    # TODO create BILL account
-    bill_code = None
+    with BILLAccountManager() as bm:
+        try:
+            bill_code = bm.create_bill_account(username)
+        except BILLException as e:
+            return Response({"BILL": e.message}, status=400)
 
     # Store account details
     member.username = username
     member.bill_code = bill_code
     member.save()
 
+    # TODO: Send mail to user to notify about new accounts?
+
     return Response(status=200)
 
 
 @api_view(['POST'])
 def delete_accounts(request):
-    from api.ldap import LDAPAccountManager
+    # Delete BILL and LDAP accounts for a given user
     member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
 
     with LDAPAccountManager() as lm:
         error = lm.delete_account(member.username)
+        if error:
+            return Response(error, status=400)
 
-    # TODO: delete BILL account
+    with BILLAccountManager() as bm:
+        try:
+            bm.delete_bill_account(member.bill_code)
+        except BILLException as e:
+            return Response({"BILL": e.message}, status=400)
+
     member.username = None
     member.bill_code = None
     member.save()
 
-    if error:
-        return Response(error, status=400)
     return Response(status=200)
 
 
 @api_view(['POST'])
 def change_password(request):
-    from api.ldap import LDAPAccountManager
     member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
     password = request.data.get('password')
