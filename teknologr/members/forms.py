@@ -1,6 +1,6 @@
 from members.models import *
-from django.forms import ModelForm, DateField, ChoiceField
-from django.forms.widgets import CheckboxInput, DateInput, HiddenInput
+from django.forms import ModelForm, DateField, ChoiceField, CharField, Form
+from django.forms.widgets import CheckboxInput, DateInput, HiddenInput, PasswordInput
 from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
 
 
@@ -89,3 +89,14 @@ class MemberTypeForm(BSModelForm):
 
     begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
     end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+
+
+class LDAPForm(Form):
+    def __init__(self, *args, **kwargs):
+        super(LDAPForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
+    username = CharField(max_length=32)
+    password = CharField(widget=PasswordInput())
+    password_repeat = CharField(widget=PasswordInput())

@@ -1,0 +1,26 @@
+{% extends "modals/modal.html" %}
+
+{% block modalcontent %}
+<form id="addldapform" autocomplete="new-password" data-id="{{ member.id }}">
+    {% csrf_token %}
+    <div class="row form-group">
+    <div class="col-md-12">
+      <label for="{{ form.username.id_for_label}}">Användarnamn</label>
+      {{ form.username }}
+    </div>
+    </div>
+    <div class="row form-group">
+    <div class="col-md-12">
+      <label for="{{ form.password.id_for_label}}">Lösenord</label>
+      {{ form.password }}
+    </div>
+    </div>
+    <div class="row form-group">
+    <div class="col-md-12">
+      <label for="{{ form.password_repeat.id_for_label}}">Repetera lösenord</label>
+      {{ form.password_repeat }}
+    </div>
+    </div>
+    <button type="submit" class="btn btn-success">Skicka</button>
+</form>
+{% endblock %}

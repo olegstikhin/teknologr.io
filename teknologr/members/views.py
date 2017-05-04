@@ -108,6 +108,9 @@ def member(request, member_id):
                 context['LDAP'] = {'groups': lm.get_ldap_groups(member.username)}
             except LDAPError:
                 context['LDAP'] = "error"
+    else:
+        context['ldapform'] = LDAPForm()
+
     if member.bill_code:
         bm = BILLAccountManager()
         try:

@@ -202,7 +202,8 @@
           </ul>
         {% endif %}
       {% else %}
-        <button id="addldap" class="btn btn-primary">Skapa LDAP konto</button>
+        <button id="addldap" class="btn btn-primary" data-toggle="modal" data-target="#addLDAP">Skapa LDAP konto</button>
+        {% include "modals/addldap.html" with modalname="addLDAP" title="Skapa LDAP konto" form=ldapform only %}
       {% endif %}
     </div>
     <div class="col-md-6">
