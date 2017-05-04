@@ -84,42 +84,41 @@ class MemberTypeViewSet(viewsets.ModelViewSet):
 # User accounts
 
 @api_view(['POST'])
-def create_accounts(request):
+def create_ldap_account(request):
     # Create LDAP and BILL accounts for given user
     member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
     username = request.data.get('username')
     password = request.data.get('password')
-    error = None
+
+    if member.username:
+        return Response("Member already has LDAP account", status=400)
+
     with LDAPAccountManager() as lm:
         try:
             lm.add_account(member, username, password)
-
         except LDAPError as e:
-            # TODO: if LDAP account already exists, try to create BILL acc?
-            return Response({"LDAP": str(e)}, status=400)
-
-    with BILLAccountManager() as bm:
-        try:
-            bill_code = bm.create_bill_account(username)
-        except BILLException as e:
-            return Response({"BILL": str(e)}, status=400)
+            return Response(str(e), status=400)
 
     # Store account details
     member.username = username
-    member.bill_code = bill_code
     member.save()
 
-    # TODO: Send mail to user to notify about new accounts?
+    # TODO: Send mail to user to notify about new account?
 
     return Response(status=200)
 
 
 @api_view(['POST'])
-def delete_accounts(request):
+def delete_ldap_account(request):
     # Delete BILL and LDAP accounts for a given user
     member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
+
+    if not member.username:
+        return Response("Member has no LDAP account", status=400)
+    if member.bill_code:
+        return Response("BILL account must be deleted first", status=400)
 
     with LDAPAccountManager() as lm:
         try:
@@ -127,22 +126,15 @@ def delete_accounts(request):
         except LDAPError as e:
             return Response(str(e), status=400)
 
-    bm = BILLAccountManager()
-    try:
-        bm.delete_bill_account(member.bill_code)
-    except BILLException as e:
-        return Response({"BILL": str(e)}, status=400)
-
     # Delete account information from user in db
     member.username = None
-    member.bill_code = None
     member.save()
 
     return Response(status=200)
 
 
 @api_view(['POST'])
-def change_password(request):
+def change_ldap_password(request):
     member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
     password = request.data.get('password')
@@ -157,17 +149,70 @@ def change_password(request):
 
 
 @api_view(['GET'])
-def get_account_info(request, member_id):
+def get_ldap_info(request, member_id):
     member = get_object_or_404(Member, id=member_id)
     result = {}
     with LDAPAccountManager() as lm:
         try:
-            result['LDAP'] = {'username': member.username, 'groups': lm.get_ldap_groups(member.username)}
+            result = {'username': member.username, 'groups': lm.get_ldap_groups(member.username)}
         except LDAPError as e:
             return Response(str(e), status=400)
+
+    return Response(result, status=200)
+
+
+@api_view(['POST'])
+def create_bill_account(request):
+    member_id = request.data.get('member_id')
+    member = get_object_or_404(Member, id=member_id)
+
+    if member.bill_code:
+        return Response("BILL account already exists", status=400)
+    if not member.username:
+        return Response("LDAP account missing", status=400)
+
     bm = BILLAccountManager()
     try:
-        result['BILL'] = bm.get_bill_info(member.bill_code)
+        bill_code = bm.create_bill_account(member.username)
+    except BILLException as e:
+        return Response(str(e), status=400)
+
+    member.bill_code = bill_code
+    member.save()
+
+    return Response(status=200)
+
+
+@api_view(['POST'])
+def delete_bill_account(request):
+    member_id = request.data.get('member_id')
+    member = get_object_or_404(Member, id=member_id)
+
+    if not member.bill_code:
+        return Response("Member has no BILL account", status=400)
+
+    bm = BILLAccountManager()
+    try:
+        bm.delete_bill_account(member.bill_code)
+    except BILLException as e:
+        return Response(str(e), status=400)
+
+    member.bill_code = None
+    member.save()
+
+    return Response(status=200)
+
+
+@api_view(['GET'])
+def get_bill_info(request, member_id):
+    member = get_object_or_404(Member, id=member_id)
+
+    if not member.bill_code:
+        return Response("Member has no BILL account", status=400)
+
+    bm = BILLAccountManager()
+    try:
+        result = bm.get_bill_info(member.bill_code)
     except BILLException as e:
         return Response(str(e), status=400)
 
@@ -175,7 +220,6 @@ def get_account_info(request, member_id):
 
 
 # JSON API:s
-
 
 @api_view(['GET'])
 def memberTypesForMember(request, mode, query):

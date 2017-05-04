@@ -15,6 +15,8 @@ class BILLAccountManager:
 
     def create_bill_account(self, username):
         r = requests.post(self.api_url + "add?type=user&id=%s" % username, auth=(self.user, self.password))
+        if r.status_code != 200:
+            raise BILLException("BILL returned status: %d" % r.status_code)
         try:
             number = int(r.text)
         except ValueError:
@@ -26,6 +28,8 @@ class BILLAccountManager:
 
     def delete_bill_account(self, bill_code):
         r = requests.post(self.api_url + "del?type=user&acc=%s" % bill_code, auth=(self.user, self.password))
+        if r.status_code != 200:
+            raise BILLException("BILL returned status: %d" % r.status_code)
         try:
             number = int(r.text)
         except ValueError:
@@ -39,6 +43,8 @@ class BILLAccountManager:
     def get_bill_info(self, bill_code):
         import json
         r = requests.get(self.api_url + "get?type=user&acc=%s" % bill_code, auth=(self.user, self.password))
+        if r.status_code != 200:
+            raise BILLException("BILL returned status: %d" % r.status_code)
         # BILL API does not use proper http status codes
         try:
             error = int(r.text)

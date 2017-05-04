@@ -184,8 +184,43 @@
       <div class = "col-md-1"><button type="submit" class="btn btn-success">Spara</button></div>
       <div class = "col-md-1"><button id="deletemember" class="btn btn-danger" data-id={{member.id}}>Radera</button></div>
     </div>
-
   </form>
+
+  <div class="row">
+    <h2>Användarkonton</h2>
+    <div class="col-md-6">
+      <h3>LDAP</h3>
+      {% if LDAP %}
+        {% if LDAP.error %}
+        Kunde inte få svar av LDAP: {{ LDAP.error }}
+        {% else %}
+          <h4>LDAP Grupper</h4>
+          <ul>
+          {% for group in LDAP.groups %}
+          <li>{{group}}</li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% else %}
+        <button id="addldap" class="btn btn-primary">Skapa LDAP konto</button>
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <h3>BILL</h3>
+      {% if BILL %}
+        {% if BILL.error %}
+        <div class="alert alert-danger">Kunde inte få svar av BILL: {{ BILL.error }}</div>
+        {% else %}
+          <b>BILL kod:</b> {{ BILL.acc }}
+          <br>
+          <b>BILL saldo:</b> {{ BILL.balance }}€
+        {% endif %}
+      {% else %}
+        
+        <button id="addbill" class="btn btn-primary" {% if not LDAP %} disabled title="Skapa LDAP konto först"{% endif %}>Skapa BILL konto</button>
+      {% endif %}
+    </div>
+  </div>
   </div>
 
   <!-- Right Column -->
