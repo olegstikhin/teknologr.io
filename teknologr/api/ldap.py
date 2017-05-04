@@ -4,9 +4,11 @@ from getenv import env
 
 import time
 
+'''All methods here can throw ldap.LDAPError'''
+
 
 class LDAPAccountManager:
-    def __init__(self, dry_run=False):  # TODO: dry run used?
+    def __init__(self):
         # Don't require certificates
         ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
         # Attempts not connection, simply initializes the object.
@@ -61,19 +63,13 @@ class LDAPAccountManager:
         attrs['sambaNTPassword'] = [nt_pw.encode('utf-8')]
         attrs['sambaPwdLastSet'] = [str(int(time.time())).encode('utf-8')]
 
-        try:
-            # Add the user to LDAP
-            ldif = modlist.addModlist(attrs)
-            self.ldap.add_s(dn, ldif)
+        # Add the user to LDAP
+        ldif = modlist.addModlist(attrs)
+        self.ldap.add_s(dn, ldif)
 
-            # Add user to Members group
-            group_dn = env("LDAP_MEMBER_GROUP_DN")
-            self.ldap.modify_s(group_dn, [(ldap.MOD_ADD, 'memberUid', username.encode('utf-8'))])
-
-        except ldap.LDAPError as e:
-            return str(e)
-
-        return None  # TODO: errors rather as exceptions? Need to wrap?
+        # Add user to Members group
+        group_dn = env("LDAP_MEMBER_GROUP_DN")
+        self.ldap.modify_s(group_dn, [(ldap.MOD_ADD, 'memberUid', username.encode('utf-8'))])
 
     def get_next_uidnumber(self):
         # Returns the next free uidnumber greater than 1000
@@ -90,33 +86,23 @@ class LDAPAccountManager:
         return last + 1
 
     def delete_account(self, username):
-        try:
-            # Remove user from members group
-            group_dn = env("LDAP_MEMBER_GROUP_DN")
-            self.ldap.modify_s(group_dn, [(ldap.MOD_DELETE, 'memberUid', username.encode('utf-8'))])
+        # Remove user from members group
+        group_dn = env("LDAP_MEMBER_GROUP_DN")
+        self.ldap.modify_s(group_dn, [(ldap.MOD_DELETE, 'memberUid', username.encode('utf-8'))])
 
-            # Remove user
-            dn = env("LDAP_USER_DN_TEMPLATE") % {'user': username}
-            self.ldap.delete_s(dn)
-        except ldap.LDAPError as e:
-            return str(e)
-
-        return None
+        # Remove user
+        dn = env("LDAP_USER_DN_TEMPLATE") % {'user': username}
+        self.ldap.delete_s(dn)
 
     def change_password(self, username, password):
         # Changes both the user password and the samba password
         dn = env("LDAP_USER_DN_TEMPLATE") % {'user': username}
         nt_pw = self.get_samba_password(password)
-        try:
-            mod_attrs = [
-                (ldap.MOD_REPLACE, 'userPassword', password.encode('utf-8')),
-                (ldap.MOD_REPLACE, 'sambaNTPassword', nt_pw.encode('utf-8'))
-            ]
-            self.ldap.modify_s(dn, mod_attrs)
-        except ldap.LDAPError as e:
-            return str(e)
-
-        return None
+        mod_attrs = [
+            (ldap.MOD_REPLACE, 'userPassword', password.encode('utf-8')),
+            (ldap.MOD_REPLACE, 'sambaNTPassword', nt_pw.encode('utf-8'))
+        ]
+        self.ldap.modify_s(dn, mod_attrs)
 
     def get_samba_password(self, password):
         # The password needs to be stored in a different format for samba
@@ -125,3 +111,9 @@ class LDAPAccountManager:
         return codecs.encode(
                 hashlib.new('md4', password.encode('utf-16le')).digest(), 'hex_codec'
             ).decode('utf-8').upper()
+
+    def get_ldap_groups(self, username):
+        dn = env("LDAP_GROUP_DN")
+        query = "(&(objectClass=posixGroup)(memberUid=%s))" % username
+        output = self.ldap.search_s(dn, ldap.SCOPE_SUBTREE, query, ['cn', ])
+        return [group[1]['cn'][0] for group in output]

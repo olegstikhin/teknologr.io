@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from members.models import GroupMembership, Member, Group
 from api.ldap import LDAPAccountManager
+from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
 
 # Create your views here.
@@ -90,15 +91,18 @@ def create_accounts(request):
     password = request.data.get('password')
     error = None
     with LDAPAccountManager() as lm:
-        error = lm.add_account(member, username, password)
-        if error:
-            return Response({"LDAP": error}, status=400)
+        try:
+            lm.add_account(member, username, password)
+
+        except LDAPError as e:
+            # TODO: if LDAP account already exists, try to create BILL acc?
+            return Response({"LDAP": str(e)}, status=400)
 
     with BILLAccountManager() as bm:
         try:
             bill_code = bm.create_bill_account(username)
         except BILLException as e:
-            return Response({"BILL": e.message}, status=400)
+            return Response({"BILL": str(e)}, status=400)
 
     # Store account details
     member.username = username
@@ -117,16 +121,18 @@ def delete_accounts(request):
     member = get_object_or_404(Member, id=member_id)
 
     with LDAPAccountManager() as lm:
-        error = lm.delete_account(member.username)
-        if error:
-            return Response(error, status=400)
-
-    with BILLAccountManager() as bm:
         try:
-            bm.delete_bill_account(member.bill_code)
-        except BILLException as e:
-            return Response({"BILL": e.message}, status=400)
+            lm.delete_account(member.username)
+        except LDAPError as e:
+            return Response(str(e), status=400)
 
+    bm = BILLAccountManager()
+    try:
+        bm.delete_bill_account(member.bill_code)
+    except BILLException as e:
+        return Response({"BILL": str(e)}, status=400)
+
+    # Delete account information from user in db
     member.username = None
     member.bill_code = None
     member.save()
@@ -141,8 +147,27 @@ def change_password(request):
     password = request.data.get('password')
 
     with LDAPAccountManager() as lm:
-        error = lm.change_password(member.username, password)
+        try:
+            lm.change_password(member.username, password)
+        except LDAPError as e:
+            return Response(str(e), status=400)
 
-    if error:
-        return Response(error, status=400)
     return Response(status=200)
+
+
+@api_view(['GET'])
+def get_account_info(request, member_id):
+    member = get_object_or_404(Member, id=member_id)
+    result = {}
+    with LDAPAccountManager() as lm:
+        try:
+            result['LDAP'] = {'username': member.username, 'groups': lm.get_ldap_groups(member.username)}
+        except LDAPError as e:
+            return Response(str(e), status=400)
+    bm = BILLAccountManager()
+    try:
+        result['BILL'] = bm.get_bill_info(member.bill_code)
+    except BILLException as e:
+        return Response(str(e), status=400)
+
+    return Response(result, status=200)

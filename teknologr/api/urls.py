@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^accounts/add$', create_accounts),
     url(r'^accounts/delete$', delete_accounts),
     url(r'^accounts/change_pw$', change_password),
+    url(r'^accounts/info/(\d+)/$', get_account_info),
 ]
