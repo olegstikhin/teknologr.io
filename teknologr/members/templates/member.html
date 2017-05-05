@@ -204,11 +204,13 @@
           {% endfor %}
           </ul>
           <br/>
+          <button id="changepw" class="btn btn-primary" data-toggle="modal" data-target="#changepw_modal">Ändra lösenord</button>
+          {% include "modals/changeldappw.html" with modalname="changepw_modal" title="Ändra LDAP lösenord" member_id=member.id only %}
           <button id="delldap" class="btn btn-danger" data-id="{{ member.id }}">Ta bort LDAP konto</button>
         {% endif %}
       {% else %}
-        <button id="addldap" class="btn btn-primary" data-toggle="modal" data-target="#addLDAP">Skapa LDAP konto</button>
-        {% include "modals/addldap.html" with modalname="addLDAP" title="Skapa LDAP konto" member_id=member.id only %}
+        <button id="addldap" class="btn btn-primary" data-toggle="modal" data-target="#addldap_modal">Skapa LDAP konto</button>
+        {% include "modals/addldap.html" with modalname="addldap_modal" title="Skapa LDAP konto" member_id=member.id only %}
       {% endif %}
     </div>
     <div class="col-md-6">

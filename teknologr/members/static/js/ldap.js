@@ -34,6 +34,24 @@ $(document).ready(function() {
     });
   });
 
+  $('#changeldappwform').submit(function(event){
+    event.preventDefault();
+    var data = $(this).serialize();
+    var request = $.ajax({
+      url: "/api/accounts/ldap/change_pw",
+      method: "POST",
+      data: data
+    });
+
+    request.done(function() {
+      location.reload();
+    });
+
+    request.fail(function(jqHXR, textStatus ) {
+      alert( "Request failed (" + textStatus + "): " + jqHXR.responseText );
+    });
+  });
+
   $('#confirm_password').keyup(validatePassword);
   $('#ldap_password').change(validatePassword)
 
