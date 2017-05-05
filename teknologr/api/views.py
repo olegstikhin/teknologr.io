@@ -90,6 +90,8 @@ def create_ldap_account(request):
     member = get_object_or_404(Member, id=member_id)
     username = request.data.get('username')
     password = request.data.get('password')
+    if not username or not password:
+        return Response("username or password field missing", status=400)
 
     if member.username:
         return Response("Member already has LDAP account", status=400)
@@ -138,6 +140,8 @@ def change_ldap_password(request):
     member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
     password = request.data.get('password')
+    if not password:
+        return Response("password field missing", status=400)
 
     with LDAPAccountManager() as lm:
         try:

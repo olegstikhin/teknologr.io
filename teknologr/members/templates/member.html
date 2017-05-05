@@ -203,7 +203,7 @@
         {% endif %}
       {% else %}
         <button id="addldap" class="btn btn-primary" data-toggle="modal" data-target="#addLDAP">Skapa LDAP konto</button>
-        {% include "modals/addldap.html" with modalname="addLDAP" title="Skapa LDAP konto" form=ldapform only %}
+        {% include "modals/addldap.html" with modalname="addLDAP" title="Skapa LDAP konto" member_id=member.id only %}
       {% endif %}
     </div>
     <div class="col-md-6">
@@ -323,4 +323,7 @@
   {{ block.super }}
   <script src="{% static "js/member.js" %}"></script>
   <script> $('#{{form.degree_programme.id_for_label}}').editableSelect({ effects: 'slide' }); </script>
+  {% if not LDAP %}
+  <script src="{% static "js/ldap.js" %}"></script>
+  {% endif %}
 {% endblock %}

@@ -117,7 +117,7 @@ $(document).ready(function() {
 		});
 
 		request.fail(function( jqHXR, textStatus ){
-			alert( "Request failed: " + textStatus + ": " + jqHXR.responseText );
+			alert( "Request failed (" + textStatus + ") " + jqHXR.responseText );
 		});
 
 		event.preventDefault();
