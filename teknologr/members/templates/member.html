@@ -200,6 +200,8 @@
           <li>{{group}}</li>
           {% endfor %}
           </ul>
+          <br/>
+          <button id="delldap" class="btn btn-danger" data-id="{{ member.id }}">Ta bort LDAP konto</button>
         {% endif %}
       {% else %}
         <button id="addldap" class="btn btn-primary" data-toggle="modal" data-target="#addLDAP">Skapa LDAP konto</button>
@@ -323,7 +325,5 @@
   {{ block.super }}
   <script src="{% static "js/member.js" %}"></script>
   <script> $('#{{form.degree_programme.id_for_label}}').editableSelect({ effects: 'slide' }); </script>
-  {% if not LDAP %}
   <script src="{% static "js/ldap.js" %}"></script>
-  {% endif %}
 {% endblock %}

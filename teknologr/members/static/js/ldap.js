@@ -36,4 +36,23 @@ $(document).ready(function() {
 
   $('#confirm_password').keyup(validatePassword);
   $('#ldap_password').change(validatePassword)
+
+  $('#delldap').click(function() {
+    if(confirm("Vill du ta bort detta LDAP konto?")){
+      var id = $(this).data('id');
+      var request = $.ajax({
+        url: "/api/accounts/ldap/delete",
+        method: "POST",
+        data: {"member_id": id}
+      })
+
+      request.done(function() {
+        location.reload();
+      });
+
+      request.fail(function(jqHXR, textStatus ) {
+        alert( "Request failed (" + textStatus + "): " + jqHXR.responseText );
+      });
+    }
+  });
 });
