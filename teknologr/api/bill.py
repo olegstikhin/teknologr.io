@@ -14,7 +14,10 @@ class BILLAccountManager:
         self.password = env("BILL_API_PW")
 
     def create_bill_account(self, username):
-        r = requests.post(self.api_url + "add?type=user&id=%s" % username, auth=(self.user, self.password))
+        try:
+            r = requests.post(self.api_url + "add?type=user&id=%s" % username, auth=(self.user, self.password))
+        except:
+            raise BILLException("Could not connect to BILL server")
         if r.status_code != 200:
             raise BILLException("BILL returned status: %d" % r.status_code)
         try:
@@ -27,7 +30,10 @@ class BILLAccountManager:
         return number
 
     def delete_bill_account(self, bill_code):
-        r = requests.post(self.api_url + "del?type=user&acc=%s" % bill_code, auth=(self.user, self.password))
+        try:
+            r = requests.post(self.api_url + "del?type=user&acc=%s" % bill_code, auth=(self.user, self.password))
+        except:
+            raise BILLException("Could not connect to BILL server")
         if r.status_code != 200:
             raise BILLException("BILL returned status: %d" % r.status_code)
         try:
@@ -42,7 +48,10 @@ class BILLAccountManager:
 
     def get_bill_info(self, bill_code):
         import json
-        r = requests.get(self.api_url + "get?type=user&acc=%s" % bill_code, auth=(self.user, self.password))
+        try:
+            r = requests.get(self.api_url + "get?type=user&acc=%s" % bill_code, auth=(self.user, self.password))
+        except:
+            raise BILLException("Could not connect to BILL server")
         if r.status_code != 200:
             raise BILLException("BILL returned status: %d" % r.status_code)
         # BILL API does not use proper http status codes
