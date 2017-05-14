@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from api.serializers import *
+from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from members.models import GroupMembership, Member, Group
@@ -83,54 +84,63 @@ class MemberTypeViewSet(viewsets.ModelViewSet):
 
 # User accounts
 
-@api_view(['POST'])
-def create_ldap_account(request, member_id):
-    # Create LDAP and BILL accounts for given user
-    member = get_object_or_404(Member, id=member_id)
-    username = request.data.get('username')
-    password = request.data.get('password')
-    if not username or not password:
-        return Response("username or password field missing", status=400)
+class LDAPAccountView(APIView):
+    def get(self, request, member_id):
+        member = get_object_or_404(Member, id=member_id)
+        result = {}
+        with LDAPAccountManager() as lm:
+            try:
+                result = {'username': member.username, 'groups': lm.get_ldap_groups(member.username)}
+            except LDAPError as e:
+                return Response(str(e), status=400)
 
-    if member.username:
-        return Response("Member already has LDAP account", status=400)
+        return Response(result, status=200)
 
-    with LDAPAccountManager() as lm:
-        try:
-            lm.add_account(member, username, password)
-        except LDAPError as e:
-            return Response(str(e), status=400)
+    def post(self, request, member_id):
+        # Create LDAP and BILL accounts for given user
+        member = get_object_or_404(Member, id=member_id)
+        username = request.data.get('username')
+        password = request.data.get('password')
+        if not username or not password:
+            return Response("username or password field missing", status=400)
 
-    # Store account details
-    member.username = username
-    member.save()
+        if member.username:
+            return Response("Member already has LDAP account", status=400)
 
-    # TODO: Send mail to user to notify about new account?
+        with LDAPAccountManager() as lm:
+            try:
+                lm.add_account(member, username, password)
+            except LDAPError as e:
+                return Response(str(e), status=400)
 
-    return Response(status=200)
+        # Store account details
+        member.username = username
+        member.save()
 
+        # TODO: Send mail to user to notify about new account?
 
-@api_view(['DELETE'])
-def delete_ldap_account(request, member_id):
-    # Delete BILL and LDAP accounts for a given user
-    member = get_object_or_404(Member, id=member_id)
+        return Response(status=200)
 
-    if not member.username:
-        return Response("Member has no LDAP account", status=400)
-    if member.bill_code:
-        return Response("BILL account must be deleted first", status=400)
+    def delete(self, request, member_id):
+        # Delete LDAP account for a given user
+        member = get_object_or_404(Member, id=member_id)
 
-    with LDAPAccountManager() as lm:
-        try:
-            lm.delete_account(member.username)
-        except LDAPError as e:
-            return Response(str(e), status=400)
+        if not member.username:
+            return Response("Member has no LDAP account", status=400)
+        if member.bill_code:
+            return Response("BILL account must be deleted first", status=400)
 
-    # Delete account information from user in db
-    member.username = None
-    member.save()
+        with LDAPAccountManager() as lm:
+            try:
+                lm.delete_account(member.username)
+            except LDAPError as e:
+                return Response(str(e), status=400)
 
-    return Response(status=200)
+        # Delete account information from user in db
+        member.username = None
+        member.save()
+
+        return Response(status=200)
 
 
 @api_view(['POST'])
@@ -149,73 +159,56 @@ def change_ldap_password(request, member_id):
     return Response(status=200)
 
 
-@api_view(['GET'])
-def get_ldap_info(request, member_id):
-    member = get_object_or_404(Member, id=member_id)
-    result = {}
-    with LDAPAccountManager() as lm:
+class BILLAccountView(APIView):
+    def get(self, request, member_id):
+        member = get_object_or_404(Member, id=member_id)
+
+        if not member.bill_code:
+            return Response("Member has no BILL account", status=400)
+
+        bm = BILLAccountManager()
         try:
-            result = {'username': member.username, 'groups': lm.get_ldap_groups(member.username)}
-        except LDAPError as e:
+            result = bm.get_bill_info(member.bill_code)
+        except BILLException as e:
             return Response(str(e), status=400)
 
-    return Response(result, status=200)
+        return Response(result, status=200)
 
+    def post(self, request, member_id):
+        member = get_object_or_404(Member, id=member_id)
 
-@api_view(['POST'])
-def create_bill_account(request, member_id):
-    member = get_object_or_404(Member, id=member_id)
+        if member.bill_code:
+            return Response("BILL account already exists", status=400)
+        if not member.username:
+            return Response("LDAP account missing", status=400)
 
-    if member.bill_code:
-        return Response("BILL account already exists", status=400)
-    if not member.username:
-        return Response("LDAP account missing", status=400)
+        bm = BILLAccountManager()
+        try:
+            bill_code = bm.create_bill_account(member.username)
+        except BILLException as e:
+            return Response(str(e), status=400)
 
-    bm = BILLAccountManager()
-    try:
-        bill_code = bm.create_bill_account(member.username)
-    except BILLException as e:
-        return Response(str(e), status=400)
+        member.bill_code = bill_code
+        member.save()
 
-    member.bill_code = bill_code
-    member.save()
+        return Response(status=200)
 
-    return Response(status=200)
+    def delete(self, request, member_id):
+        member = get_object_or_404(Member, id=member_id)
 
+        if not member.bill_code:
+            return Response("Member has no BILL account", status=400)
 
-@api_view(['DELETE'])
-def delete_bill_account(request, member_id):
-    member = get_object_or_404(Member, id=member_id)
+        bm = BILLAccountManager()
+        try:
+            bm.delete_bill_account(member.bill_code)
+        except BILLException as e:
+            return Response(str(e), status=400)
 
-    if not member.bill_code:
-        return Response("Member has no BILL account", status=400)
+        member.bill_code = None
+        member.save()
 
-    bm = BILLAccountManager()
-    try:
-        bm.delete_bill_account(member.bill_code)
-    except BILLException as e:
-        return Response(str(e), status=400)
-
-    member.bill_code = None
-    member.save()
-
-    return Response(status=200)
-
-
-@api_view(['GET'])
-def get_bill_info(request, member_id):
-    member = get_object_or_404(Member, id=member_id)
-
-    if not member.bill_code:
-        return Response("Member has no BILL account", status=400)
-
-    bm = BILLAccountManager()
-    try:
-        result = bm.get_bill_info(member.bill_code)
-    except BILLException as e:
-        return Response(str(e), status=400)
-
-    return Response(result, status=200)
+        return Response(status=200)
 
 
 # JSON API:s

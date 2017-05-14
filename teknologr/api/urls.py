@@ -21,11 +21,7 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^multiGroupMembership/$', memberListSave),
     url(r'^memberTypesForMember/(?P<mode>username|studynumber)/(?P<query>[A-Za-z0-9]+)/$', memberTypesForMember),
-    url(r'^accounts/ldap/add/(\d+)/$', create_ldap_account),
-    url(r'^accounts/ldap/delete/(\d+)/$', delete_ldap_account),
+    url(r'^accounts/ldap/(\d+)/$', LDAPAccountView.as_view()),
     url(r'^accounts/ldap/change_pw/(\d+)/$', change_ldap_password),
-    url(r'^accounts/ldap/info/(\d+)/$', get_ldap_info),
-    url(r'^accounts/bill/add/(\d+)/$', create_bill_account),
-    url(r'^accounts/bill/delete/(\d+)/$', delete_bill_account),
-    url(r'^accounts/bill/info/(\d+)/$', get_bill_info),
+    url(r'^accounts/bill/(\d+)/$', BILLAccountView.as_view()),
 ]

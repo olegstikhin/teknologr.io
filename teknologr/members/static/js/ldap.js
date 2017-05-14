@@ -21,7 +21,7 @@ $(document).ready(function() {
     var data = $(this).serialize();
     var id = $(this).data('id')
     var request = $.ajax({
-      url: "/api/accounts/ldap/add/" + id + "/",
+      url: "/api/accounts/ldap/" + id + "/",
       method: "POST",
       data: data
     });
@@ -61,7 +61,7 @@ $(document).ready(function() {
     if(confirm("Vill du ta bort detta LDAP konto?")){
       var id = $(this).data('id');
       var request = $.ajax({
-        url: "/api/accounts/ldap/delete/" + id + "/",
+        url: "/api/accounts/ldap/" + id + "/",
         method: "DELETE",
       })
 
@@ -78,7 +78,7 @@ $(document).ready(function() {
   $('#addbill').click(function() {
     var id = $(this).data('id');
     var request = $.ajax({
-      url: "/api/accounts/bill/add/" + id + "/",
+      url: "/api/accounts/bill/" + id + "/",
       method: "POST",
       data: {"member_id": id}
     })
@@ -96,7 +96,7 @@ $(document).ready(function() {
     if(confirm("Vill du ta bort detta BILL konto?")){
       var id = $(this).data('id');
       var request = $.ajax({
-        url: "/api/accounts/bill/delete/" + id + "/",
+        url: "/api/accounts/bill/" + id + "/",
         method: "DELETE",
       })
 
