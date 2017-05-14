@@ -19,8 +19,9 @@ $(document).ready(function() {
   $('#addldapform').submit(function(event){
     event.preventDefault();
     var data = $(this).serialize();
+    var id = $(this).data('id')
     var request = $.ajax({
-      url: "/api/accounts/ldap/add",
+      url: "/api/accounts/ldap/add/" + id + "/",
       method: "POST",
       data: data
     });
@@ -32,13 +33,14 @@ $(document).ready(function() {
     request.fail(function(jqHXR, textStatus ) {
       alert( "Request failed (" + textStatus + "): " + jqHXR.responseText );
     });
-  });
+  }); 
 
   $('#changeldappwform').submit(function(event){
     event.preventDefault();
     var data = $(this).serialize();
+    var id = $(this).data('id')
     var request = $.ajax({
-      url: "/api/accounts/ldap/change_pw",
+      url: "/api/accounts/ldap/change_pw/" + id + "/",
       method: "POST",
       data: data
     });
@@ -59,9 +61,43 @@ $(document).ready(function() {
     if(confirm("Vill du ta bort detta LDAP konto?")){
       var id = $(this).data('id');
       var request = $.ajax({
-        url: "/api/accounts/ldap/delete",
-        method: "POST",
-        data: {"member_id": id}
+        url: "/api/accounts/ldap/delete/" + id + "/",
+        method: "DELETE",
+      })
+
+      request.done(function() {
+        location.reload();
+      });
+
+      request.fail(function(jqHXR, textStatus ) {
+        alert( "Request failed (" + textStatus + "): " + jqHXR.responseText );
+      });
+    }
+  });
+
+  $('#addbill').click(function() {
+    var id = $(this).data('id');
+    var request = $.ajax({
+      url: "/api/accounts/bill/add/" + id + "/",
+      method: "POST",
+      data: {"member_id": id}
+    })
+
+    request.done(function() {
+      location.reload();
+    });
+
+    request.fail(function(jqHXR, textStatus ) {
+      alert( "Request failed (" + textStatus + "): " + jqHXR.responseText );
+      });
+  });
+
+  $('#delbill').click(function() {
+    if(confirm("Vill du ta bort detta BILL konto?")){
+      var id = $(this).data('id');
+      var request = $.ajax({
+        url: "/api/accounts/bill/delete/" + id + "/",
+        method: "DELETE",
       })
 
       request.done(function() {

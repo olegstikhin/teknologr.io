@@ -84,9 +84,8 @@ class MemberTypeViewSet(viewsets.ModelViewSet):
 # User accounts
 
 @api_view(['POST'])
-def create_ldap_account(request):
+def create_ldap_account(request, member_id):
     # Create LDAP and BILL accounts for given user
-    member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
     username = request.data.get('username')
     password = request.data.get('password')
@@ -111,10 +110,9 @@ def create_ldap_account(request):
     return Response(status=200)
 
 
-@api_view(['POST'])
-def delete_ldap_account(request):
+@api_view(['DELETE'])
+def delete_ldap_account(request, member_id):
     # Delete BILL and LDAP accounts for a given user
-    member_id = request.data.get('member_id')
     member = get_object_or_404(Member, id=member_id)
 
     if not member.username:
@@ -136,8 +134,7 @@ def delete_ldap_account(request):
 
 
 @api_view(['POST'])
-def change_ldap_password(request):
-    member_id = request.data.get('member_id')
+def change_ldap_password(request, member_id):
     member = get_object_or_404(Member, id=member_id)
     password = request.data.get('password')
     if not password:
@@ -166,8 +163,7 @@ def get_ldap_info(request, member_id):
 
 
 @api_view(['POST'])
-def create_bill_account(request):
-    member_id = request.data.get('member_id')
+def create_bill_account(request, member_id):
     member = get_object_or_404(Member, id=member_id)
 
     if member.bill_code:
@@ -187,9 +183,8 @@ def create_bill_account(request):
     return Response(status=200)
 
 
-@api_view(['POST'])
-def delete_bill_account(request):
-    member_id = request.data.get('member_id')
+@api_view(['DELETE'])
+def delete_bill_account(request, member_id):
     member = get_object_or_404(Member, id=member_id)
 
     if not member.bill_code:
