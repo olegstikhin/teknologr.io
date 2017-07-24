@@ -72,7 +72,11 @@ target/
 .env
 
 # virtualenv
-venv/
+bin/
+include/
+share/
+pip-*
+
 
 # SQLite db
 db.sqlite3
