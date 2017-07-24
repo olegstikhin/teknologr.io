@@ -1,0 +1,14 @@
+{% extends "modals/modal.html" %}
+
+{% block modalcontent %}
+<form id="addgroupmemberform" action="" method="post">
+
+  {% csrf_token %}
+  {{ groupmembershipform.media }}
+  {{ groupmembershipform.group.as_hidden }}
+
+  <label for="{{groupmembershipform.member.id_for_label}}">Medlem</label>
+  {{ groupmembershipform.member }}
+  <button type="submit" class="btn btn-success">Spara</button>
+</form>
+{% endblock %}

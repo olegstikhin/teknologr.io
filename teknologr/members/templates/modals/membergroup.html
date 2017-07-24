@@ -1,0 +1,13 @@
+{% extends "modals/modal.html" %}
+
+{% block modalcontent %}
+<form id="addgroupform" autocomplete="off" class="form-inline">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for={{form.group.id_for_label}}>Grupp</label>
+    {{ form.group }}
+    <button type="submit" class="btn btn-success">Spara</button>
+  </div>
+  {{ form.member.as_hidden }}
+</form>
+{% endblock %}

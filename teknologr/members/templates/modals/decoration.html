@@ -1,0 +1,12 @@
+{% extends "modals/modal.html" %}
+
+{% block modalcontent %}
+<form id="decorationform" autocomplete="off" data-id="{{ decoration.id }}" class="form-inline">
+  {% csrf_token %}
+  <div class="form-group">
+    <label for="{{decorationform.name.id_for_label}}">Namn</label>
+    {{ decorationform.name }}
+    <button type="submit" class="btn btn-success">Spara</button>
+  </div>
+</form>
+{% endblock %}

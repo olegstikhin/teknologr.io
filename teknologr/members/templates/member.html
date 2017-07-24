@@ -1,0 +1,335 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block main %}
+<div class="container-fluid">
+<h1 class="page-header">{{member.full_name}}&nbsp;<a href="/api/members/{{member.id}}/"><font size=5>API länk</font></a></h1>
+  {% if result %}
+	<div class="row">
+    {% if result == 'success' %}
+    <div class="col-md-12 alert alert-success" role="alert"> <strong>Ändringarna sparade</strong> </div>
+    {% else %}
+    <div class="col-md-12 alert alert-danger" role="alert"> <strong>Ett fel uppstod, kontrollera fälten</strong> </div>
+    {% endif %}
+    </div>
+  {% endif %}
+<div class="row form-group">
+  <div class="col-md-8">
+    <form id="memberform" autocomplete="off" role ="form" action="/members/{{member.id}}/" method="post">
+    {% csrf_token %}
+    <div class="row form-group">
+      <div class="col-md-4">
+        <label for="{{form.surname.id_for_label}}">Efternamn</label>
+        {{form.surname.errors}}
+        {{form.surname}}
+      </div>
+      <div class="col-md-5">
+        <label for="{{form.given_names.id_for_label}}">Förnamn</label>
+        {{form.given_names.errors}}
+        {{form.given_names}}
+      </div>
+      <div class="col-md-3">
+        <label for="{{form.preferred_name.id_for_label}}">Tilltalsnamn</label>
+        {{form.preferred_name.errors}}
+        {{form.preferred_name}}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-4">
+        <label for="{{form.nickname.id_for_label}}">Smeknamn</label>
+        {{form.nickname.errors}}
+        {{form.nickname}}
+      </div>
+      <div class="col-md-5">
+        <label for="{{form.maiden_name.id_for_label}}">Tidigare efternamn</label>
+        {{form.maiden_name.errors}}
+        {{form.maiden_name}}
+      </div>
+      <div class="col-md-3">
+        <label for="{{form.gender.id_for_label}}">Kön</label>
+        {{form.gender.errors}}
+        {{form.gender}}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-7">
+        <label for="{{form.street_address.id_for_label}}">Gatuadress</label>
+        {{form.street_address.errors}}
+        {{form.street_address}}
+      </div>
+      <div class="col-md-2">
+        <label for="{{form.postal_code.id_for_label}}">Postnummer</label>
+        {{form.postal_code.errors}}
+        {{form.postal_code}}
+      </div>
+      <div class="col-md-3">
+        <label for="{{form.city.id_for_label}}">Postanstalt</label>
+        {{form.city.errors}}
+        {{form.city}}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-6">
+        <label for="{{form.country.id_for_label}}">Land</label>
+        {{form.country.errors}}
+        {{form.country}}
+      </div>
+      <div class="col-md-6">
+        <label for="{{form.nationality.id_for_label}}">Nationalitet</label>
+        {{form.nationality.errors}}
+        {{form.nationality}}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-5">
+        <label for="{{form.mobile_phone.id_for_label}}">Telefonnummer</label>
+        {{form.mobile_phone.errors}}
+        {{form.mobile_phone}}
+      </div>
+      <div class="col-md-7">
+        <label for="{{form.email.id_for_label}}">E-postadress</label>
+        {{form.email.errors}}
+        {{form.email}}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3">
+        <label for="{{form.student_id.id_for_label}}">Studienummer</label>
+        {{form.student_id.errors}}
+        {{form.student_id}}
+      </div>
+      <div class="col-md-4">
+        <label for="{{form.birth_date.id_for_label}}">Födelsedatum</label>
+        {{form.birth_date.errors}}
+        {{form.birth_date}}
+      </div>
+      <div class="col-md-5">
+        <label for="{{form.enrolment_year.id_for_label}}">Inskrivningsår vid Aalto</label>
+        {{form.enrolment_year.errors}}
+        {{form.enrolment_year}}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-6">
+        <label for="{{form.degree_programme.id_for_label}}">Studieinriktning</label>
+        <a href="https://wiki.teknologforeningen.fi/itwiki/index.php/Medlemsregister#Studieprogramslistan" target="_blank" class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-original-title="Välj alltid om möjligt ett alternativ från listan. Om listan behöver ändras, klicka på denna ikon för att se instruktioner till det."></a>
+        {{form.degree_programme.errors}}
+        <select id="{{form.degree_programme.auto_id}}" autocomplete="off" class="form-control es-input" name="{{form.degree_programme.html_name}}">
+          {% for option in programmes %}
+          <option{% if option == form.degree_programme.value %} selected {% endif %}>{{option}}</option>
+          {% endfor %}
+          {% if form.degree_programme.value not in programmes %}
+          <option selected>{{form.degree_programme.value}}</option>
+          {% endif %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-check-label" for="{{form.graduated.id_for_label}}">
+          {{form.graduated.errors}}
+          {{form.graduated}} Utexaminerad
+        </label>
+      </div>
+      <div class="col-md-3">
+        <label for="{{form.graduated_year.id_for_label}}">År Utexaminerad</label>
+        {{form.graduated_year.errors}}
+        {{form.graduated_year}}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-4">
+        <label class="form-check-label" for="{{form.subscribed_to_modulen.id_for_label}}">
+          {{form.subscribed_to_modulen.errors}}
+          {{form.subscribed_to_modulen}} Vill ha modulen hemskickad
+        </label>
+      </div>
+      <div class="col-md-4 form-check">
+        <label class="form-check-label" for="{{form.allow_publish_info.id_for_label}}">
+          {{form.allow_publish_info.errors}}
+          {{form.allow_publish_info}} Tillåter utlämning av uppgifter
+        </label>
+      </div>
+      <div class="col-md-4 form-check">
+        <label class="form-check-label" for="{{form.dead.id_for_label}}">
+          {{form.dead.errors}}
+          {{form.dead}} Avliden
+        </label>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class ="col-md-6">
+        <label for="{{form.url.id_for_label}}">Hemsida</label>
+        {{form.url.errors}}
+        {{form.url}}
+      </div>
+      <div class ="col-md-3">
+        <label for="{{form.username.id_for_label}}">Användarnamn</label>
+        {{form.username.errors}}
+        {{form.username}}
+      </div>
+      <div class ="col-md-3">
+        <label for="{{form.crm_id.id_for_label}}">CRM id</label>
+        {{form.crm_id.errors}}
+        {{form.crm_id}}
+      </div>
+    </div>
+    <div class = "row">
+      <div class ="col-md-12">
+      <label for="{{form.comment.id_for_label}}">Kommentar</label>
+      {{form.comment.errors}}
+      {{form.comment}}
+      </div>
+    </div>
+    <br>
+    <div class = "row">
+      <div class = "col-md-12">
+      <button type="submit" class="btn btn-success">Spara</button>
+      &nbsp;&nbsp;&nbsp;
+      <button id="deletemember" class="btn btn-danger" data-id={{member.id}}>Radera</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="row">
+    <h2>Användarkonton</h2>
+    <div class="col-md-6">
+      <h3>LDAP</h3>
+      {% if LDAP %}
+        {% if LDAP.error %}
+        Kunde inte få svar av LDAP: {{ LDAP.error }}
+        {% else %}
+          <h4>LDAP Grupper</h4>
+          <ul>
+          {% for group in LDAP.groups %}
+          <li>{{group}}</li>
+          {% endfor %}
+          </ul>
+          <br/>
+          <button id="changepw" class="btn btn-primary" data-toggle="modal" data-target="#changepw_modal">Ändra lösenord</button>
+          {% include "modals/changeldappw.html" with modalname="changepw_modal" title="Ändra LDAP lösenord" member_id=member.id only %}
+          <button id="delldap" class="btn btn-danger" data-id="{{ member.id }}">Ta bort LDAP konto</button>
+        {% endif %}
+      {% else %}
+        <button id="addldap" class="btn btn-primary" data-toggle="modal" data-target="#addldap_modal">Skapa LDAP konto</button>
+        {% include "modals/addldap.html" with modalname="addldap_modal" title="Skapa LDAP konto" member_id=member.id only %}
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <h3>BILL</h3>
+      {% if BILL %}
+        {% if BILL.error %}
+        <div class="alert alert-danger">Kunde inte få svar av BILL: {{ BILL.error }}</div>
+        {% else %}
+          <b>BILL kod:</b> {{ BILL.acc }}
+          <br>
+          <b>BILL saldo:</b> {{ BILL.balance }}€
+          <button id="delbill" class="btn btn-danger" data-id="{{ member.id }}">Ta bort BILL konto</button>
+        {% endif %}
+      {% else %}
+        
+        <button id="addbill" class="btn btn-primary" {% if not LDAP %} disabled title="Skapa LDAP konto först"{% endif %}>Skapa BILL konto</button>
+      {% endif %}
+    </div>
+  </div>
+  </div>
+
+  <!-- Right Column -->
+
+  <div class="col-md-4">
+    <ul class="list-inline">
+      <li><h3>Poster</h3></li>
+      <li>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addFunctionary">Lägg till ny</button>
+        {% include "modals/memberfunctionary.html" with modalname="addFunctionary" title="Lägg till funktionärspost" form=addfunctionaryform only %}
+      </li>
+    </ul>
+    <table class="table table-condensed">
+    <thead><tr>
+      <th></th>
+    	<th>Post</th>
+    	<th>Från</th>
+    	<th>Till</th>
+    </tr></thead>
+    {% for functionary in functionaries %}
+    <tr>
+      <td>
+        <span class="glyphicon glyphicon-remove text-danger removeFunctionary" role="button" data-id="{{ functionary.id }}"></span>
+      </td>
+    	<td><a href="/functionaries/{{functionary.id}}/">{{functionary.functionarytype.name}}</a></td>
+    	<td>{{functionary.begin_date}}</td>
+    	<td>{{functionary.end_date}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    <ul class="list-inline">
+      <li><h3>Grupper</h3></li>
+      <li>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addGroup">Lägg till ny</button>
+        {% include "modals/membergroup.html" with modalname="addGroup" title="Lägg till grupp" form=addgroupform only %}
+      </li>
+    </ul>
+    <table class="table table-condensed">
+    <thead><tr>
+    <th></th>
+    <th>Grupp</th>
+    <th>Från</th>
+    <th>Till</th>
+    </tr></thead>
+    {% for membership in groups %}
+    <tr>
+      <td>
+        <span class="glyphicon glyphicon-remove text-danger removeGroup" role="button" data-id="{{ membership.id }}"></span>
+      </td>
+    <td>
+      <a href="/groups/{{membership.group.grouptype.id}}/{{membership.group.id}}/">{{membership.group.grouptype.name}}</a>
+    </td>
+    <td>
+      {{membership.group.begin_date}}
+    </td>
+    <td>
+      {{membership.group.end_date}}
+    </td>
+    </tr>
+    {% endfor %}
+    </table>
+    <ul class="list-inline">
+      <li><h3>Medlemstyper</h3></li>
+      <li>
+        <button class="btn btn-success" data-toggle="modal" data-target="#addMemberType">Lägg till ny</button>
+        {% include "modals/membertype.html" with modalname="addMemberType" title="Lägg till medlemstyp" form=addmembertypeform only %}
+      </li>
+    </ul>
+    <table class="table table-condensed">
+    <thead><tr>
+      <th></th>
+      <th>Typ</th>
+      <th>Från</th>
+      <th>Till</th>
+    </tr></thead>
+    {% for type in membertypes %}
+    <tr><td>
+      <span class="glyphicon glyphicon-edit text-info editMemberType" role="button" data-id="{{ type.id }}"></span>
+      <span class="glyphicon glyphicon-remove text-danger removeMemberType" role="button" data-id="{{ type.id }}"></span>
+      </td>
+      <td>
+      {{type.get_type_display}}
+      </td>
+      <td>
+      {{type.begin_date}}
+      </td>
+      <td>
+      {{type.end_date}}
+    </td></tr>
+    {% endfor %}
+    </table>
+    {% include "modals/modal.html" with modalname="editMemberTypeModal" title="Editera medlemstyp" only %}
+  </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static "js/member.js" %}"></script>
+  <script> $('#{{form.degree_programme.id_for_label}}').editableSelect({ effects: 'slide' }); </script>
+  <script src="{% static "js/ldap.js" %}"></script>
+{% endblock %}

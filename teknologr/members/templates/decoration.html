@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block main %}
+<div class="container-fluid">
+<h1 class="page-header">
+<ul class="list-inline">
+  <li>
+    {{decoration.name}}
+  </li>
+  <li>
+  <button class="btn btn-success" data-toggle="modal" data-target="#decorationModal">Ändra</button>
+  </li>
+  <li>
+    <button id="deleteDecoration" class="btn btn-danger" data-id="{{ decoration.id }}">Radera</button>
+  </li>
+</ul>
+</h1>
+
+{% include "modals/decoration.html" with modalname="decorationModal" title="Editera Betygelse" decorationform=decorationform decoration=decoration only %}
+</div>
+<div class="container-fluid">
+
+  <ul class="list-inline">
+    <li><h3>Innehavare av betygelsen</h3></li>
+    <li>
+      <button class="btn btn-success" data-toggle="modal" data-target="#addDecoration">Lägg till ny</button>
+    </li>
+  </ul>
+
+  {% include "modals/decorationownership.html" with modalname="addDecoration" title="Lägg till innehavare av betygelse "|add:decoration.name adddecorationform=adddecorationform only %}
+
+<table class="table table-condensed">
+  <thead>
+    <tr>
+    <th>Utdelat</th>
+    <th>Medlem</th>
+    <th>Radera</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for ownership in decorations %}
+    <tr>
+      <td>{{ownership.acquired}}</td>
+      <td><a href="/members/{{ownership.member.id}}/">{{ownership.member.full_name}}</a></td>
+      <td><span class="glyphicon glyphicon-remove text-danger removeDecoration" role="button" data-id="{{ ownership.id }}" data-decoration_id="{{decoration.id}}"></span></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {{ block.super }}
+  <script src="{% static "js/decoration.js" %}"></script>
+{% endblock %}
