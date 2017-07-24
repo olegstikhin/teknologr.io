@@ -95,6 +95,24 @@ def member(request, member_id):
     context['membertypes'] = MemberType.objects.filter(member__id=member_id)
     context['addmembertypeform'] = MemberTypeForm(initial={'member': member_id})
 
+    # Get user account info
+    from api.ldap import LDAPAccountManager
+    from api.bill import BILLAccountManager, BILLException
+    from ldap import LDAPError
+    if member.username:
+        with LDAPAccountManager() as lm:
+            try:
+                context['LDAP'] = {'groups': lm.get_ldap_groups(member.username)}
+            except LDAPError:
+                context['LDAP'] = "error"
+
+    if member.bill_code:
+        bm = BILLAccountManager()
+        try:
+            context['BILL'] = bm.get_bill_info(member.bill_code)
+        except BILLException as e:
+            context['BILL'] = {"error": str(e)}
+
     # load side list items
     set_side_context(context, 'members', member.id)
     return render(request, 'member.html', context)

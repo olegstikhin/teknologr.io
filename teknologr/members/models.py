@@ -41,7 +41,8 @@ class Member(SuperClass):
     subscribed_to_modulen = models.BooleanField(default=False)
     allow_publish_info = models.BooleanField(default=True)
 
-    username = models.CharField(max_length=32, blank=True, null=False, default="")
+    username = models.CharField(max_length=32, blank=False, null=True, editable=False)
+    bill_code = models.CharField(max_length=8, blank=False, null=True, editable=False)
     crm_id = models.CharField(max_length=32, blank=True, null=False, default="")
     comment = models.TextField(blank=True, null=True)
 
@@ -49,7 +50,8 @@ class Member(SuperClass):
         return "%s %s" % (self.given_names, self.surname)
 
     def _get_full_preferred_name(self):
-        return "%s %s" % (self.preferred_name, self.surname)
+        first_name = self.preferred_name if self.preferred_name != "UNKNOWN" else self.given_names.split()[0]
+        return "%s %s" % (first_name, self.surname)
 
     full_name = property(_get_full_name)
     name = property(_get_full_name)

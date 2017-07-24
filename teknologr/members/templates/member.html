@@ -181,11 +181,55 @@
     </div>
     <br>
     <div class = "row">
-      <div class = "col-md-1"><button type="submit" class="btn btn-success">Spara</button></div>
-      <div class = "col-md-1"><button id="deletemember" class="btn btn-danger" data-id={{member.id}}>Radera</button></div>
+      <div class = "col-md-12">
+      <button type="submit" class="btn btn-success">Spara</button>
+      &nbsp;&nbsp;&nbsp;
+      <button id="deletemember" class="btn btn-danger" data-id={{member.id}}>Radera</button>
+      </div>
     </div>
-
   </form>
+
+  <div class="row">
+    <h2>Användarkonton</h2>
+    <div class="col-md-6">
+      <h3>LDAP</h3>
+      {% if LDAP %}
+        {% if LDAP.error %}
+        Kunde inte få svar av LDAP: {{ LDAP.error }}
+        {% else %}
+          <h4>LDAP Grupper</h4>
+          <ul>
+          {% for group in LDAP.groups %}
+          <li>{{group}}</li>
+          {% endfor %}
+          </ul>
+          <br/>
+          <button id="changepw" class="btn btn-primary" data-toggle="modal" data-target="#changepw_modal">Ändra lösenord</button>
+          {% include "modals/changeldappw.html" with modalname="changepw_modal" title="Ändra LDAP lösenord" member_id=member.id only %}
+          <button id="delldap" class="btn btn-danger" data-id="{{ member.id }}">Ta bort LDAP konto</button>
+        {% endif %}
+      {% else %}
+        <button id="addldap" class="btn btn-primary" data-toggle="modal" data-target="#addldap_modal">Skapa LDAP konto</button>
+        {% include "modals/addldap.html" with modalname="addldap_modal" title="Skapa LDAP konto" member_id=member.id only %}
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <h3>BILL</h3>
+      {% if BILL %}
+        {% if BILL.error %}
+        <div class="alert alert-danger">Kunde inte få svar av BILL: {{ BILL.error }}</div>
+        {% else %}
+          <b>BILL kod:</b> {{ BILL.acc }}
+          <br>
+          <b>BILL saldo:</b> {{ BILL.balance }}€
+          <button id="delbill" class="btn btn-danger" data-id="{{ member.id }}">Ta bort BILL konto</button>
+        {% endif %}
+      {% else %}
+        
+        <button id="addbill" class="btn btn-primary" {% if not LDAP %} disabled title="Skapa LDAP konto först"{% endif %}>Skapa BILL konto</button>
+      {% endif %}
+    </div>
+  </div>
   </div>
 
   <!-- Right Column -->
@@ -287,4 +331,5 @@
   {{ block.super }}
   <script src="{% static "js/member.js" %}"></script>
   <script> $('#{{form.degree_programme.id_for_label}}').editableSelect({ effects: 'slide' }); </script>
+  <script src="{% static "js/ldap.js" %}"></script>
 {% endblock %}
