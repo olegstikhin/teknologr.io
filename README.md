@@ -4,6 +4,7 @@ Membership management system tailored for TF use
 ## Installation
 
 Install prerequisites:
+
     sudo apt install libsasl2-dev python3-dev libldap2-dev libssl-dev
 
 Make sure that you have Python 3 installed and virtualenv to go with it.
