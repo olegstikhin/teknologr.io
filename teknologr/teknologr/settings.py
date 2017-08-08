@@ -88,7 +88,6 @@ WSGI_APPLICATION = 'teknologr.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-print(env('DATABASE', 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')))
 DATABASES = {
     'default': dj_database_url.parse(env('DATABASE', 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')))
     #{
