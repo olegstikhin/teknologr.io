@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 DEGREE_PROGRAMME_CHOICES = (
     'Arkitektur',
     'Bildkonstpedagogik',
