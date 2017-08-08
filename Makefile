@@ -11,8 +11,7 @@ serve: bin/python
 	bin/python teknologr/manage.py runserver 8888
 
 deploy: bin/python
-	bin/python teknologr/manage.py collectstatic --clear --noinput
-	touch teknologr/wsgi.py
+	touch teknologr/teknologr/wsgi.py
 
 clean:
 	rm -rf bin/ lib/ build/ dist/ *.egg-info/ include/ local/

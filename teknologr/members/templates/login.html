@@ -1,0 +1,45 @@
+{% load staticfiles %}
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "assets/css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <link href="{% static "css/login.css" %}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+    <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+    <section class="login-form">
+        <h1>teknologr.io</h1>
+        <h3>Logga in</h3>
+        {% if form.errors %}
+        <div class="alert alert-danger">Ditt användarnamn och lösenord matchade inte. Försök igen</div>
+        {% endif %}
+
+        {% if next %}
+            {% if user.is_authenticated %}
+            <div class="alert alert-danger">Ditt användarkonto har inte rätt till denna sida. 
+            Logga in med ett konto som har rättigheter.</div>
+            {% else %}
+            <div class="alert alert-info">Logga in för att se sidan</div>
+            {% endif %}
+        {% endif %}
+
+        <form method="post" role="login">
+        {% csrf_token %}
+        {{ form.username }}
+        {{ form.password }}
+
+        <input class="btn btn-primary btn-block " type="submit" value="Logga in" />
+        <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+    </section>
+    </div>
+    </div>
+    </div>
+    <script src="{% static "assets/js/vendor/jquery.min.js" %}"></script>
+    <script src="{% static "assets/js/bootstrap.min.js" %}"></script>
+</body>
+</html>

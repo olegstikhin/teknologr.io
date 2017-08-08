@@ -1,5 +1,6 @@
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import user_passes_test
 
 from members.models import *
 from members.forms import *
@@ -22,14 +23,8 @@ def getLastDayOfCurrentYear():
 def getCurrentDate():
     return datetime.datetime.now()
 
+
 # Create your views here
-
-
-def home_view(request):
-
-    context = {}
-    return render(request, 'base.html', context)
-
 
 def set_side_context(context, category, active_obj=None):
     side = {}
@@ -60,12 +55,14 @@ def set_side_context(context, category, active_obj=None):
     context['side'] = side
 
 
+@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def empty(request, category):
     context = {}
     set_side_context(context, category)
     return render(request, 'base.html', context)
 
 
+@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def member(request, member_id):
     context = {}
 
@@ -121,6 +118,7 @@ def member(request, member_id):
     return render(request, 'member.html', context)
 
 
+@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def membertype_form(request, membertype_id):
     membertype = get_object_or_404(MemberType, id=membertype_id)
     form = MemberTypeForm(instance=membertype)
@@ -128,6 +126,7 @@ def membertype_form(request, membertype_id):
     return render(request, 'membertypeform.html', context)
 
 
+@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def group(request, grouptype_id, group_id=None):
     context = {}
 
@@ -157,6 +156,7 @@ def group(request, grouptype_id, group_id=None):
     return render(request, 'group.html', context)
 
 
+@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def functionary(request, functionarytype_id):
     context = {}
 
@@ -177,6 +177,7 @@ def functionary(request, functionarytype_id):
     return render(request, 'functionary.html', context)
 
 
+@user_passes_test(lambda u: u.is_staff, login_url='/login/')
 def decoration(request, decoration_id):
     context = {}
 

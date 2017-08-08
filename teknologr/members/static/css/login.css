@@ -1,0 +1,30 @@
+body {
+    background-color: #516d86;
+}
+
+.login-form {
+	margin-top: 60px;
+	color: #5d5d5d;
+	background: #f2f2f2;
+	padding: 26px;
+	border-radius: 10px;
+}
+
+form img {
+	display: block;
+	margin: 0 auto;
+	margin-bottom: 35px;
+}
+form input,
+form button {
+	font-size: 18px;
+	margin: 16px 0;
+}
+form > div {
+	text-align: center;
+}
+
+h1 {
+	text-align: center;
+	margin-top: 0;
+}

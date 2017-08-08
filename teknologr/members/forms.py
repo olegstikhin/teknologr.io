@@ -1,7 +1,8 @@
 from members.models import *
-from django.forms import ModelForm, DateField, ChoiceField
-from django.forms.widgets import CheckboxInput, DateInput, HiddenInput
+from django.forms import ModelForm, DateField, ChoiceField, CharField
+from django.forms.widgets import CheckboxInput, DateInput, HiddenInput, TextInput, PasswordInput
 from ajax_select.fields import AutoCompleteSelectField, AutoCompleteSelectMultipleField
+from django.contrib.auth.forms import AuthenticationForm
 
 
 class BSModelForm(ModelForm):
@@ -89,3 +90,8 @@ class MemberTypeForm(BSModelForm):
 
     begin_date = DateField(widget=DateInput(attrs={'type': 'date'}))
     end_date = DateField(widget=DateInput(attrs={'type': 'date'}))
+
+
+class BSAuthForm(AuthenticationForm):
+    username = CharField(widget=TextInput(attrs={'class': 'form-control', 'placeholder': 'Användarnamn'}))
+    password = CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Lösenord'}))
