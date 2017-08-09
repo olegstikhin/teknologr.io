@@ -174,7 +174,7 @@ REST_FRAMEWORK = {
 # LDAP stuff
 
 # Baseline configuration.
-AUTH_LDAP_SERVER_URI = env("AUTH_LDAP_SERVER_URI", "ldaps://localhost:45671")
+AUTH_LDAP_SERVER_URI = env("LDAP_SERVER_URI", "ldaps://localhost:45671")
 
 AUTH_LDAP_USER_DN_TEMPLATE = env("LDAP_USER_DN_TEMPLATE", "uid=%(user)s,dc=example,dc=com")
 
