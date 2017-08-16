@@ -41,7 +41,7 @@ class Member(SuperClass):
     email = models.CharField(max_length=64, blank=True, null=False, default="")
 
     subscribed_to_modulen = models.BooleanField(default=False)
-    allow_publish_info = models.BooleanField(default=True)
+    allow_publish_info = models.BooleanField(default=False)
 
     username = models.CharField(max_length=32, blank=False, null=True, editable=False)
     bill_code = models.CharField(max_length=8, blank=False, null=True, editable=False)

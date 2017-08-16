@@ -100,11 +100,11 @@ def member(request, member_id):
     from api.bill import BILLAccountManager, BILLException
     from ldap import LDAPError
     if member.username:
-        with LDAPAccountManager() as lm:
-            try:
+        try:
+            with LDAPAccountManager() as lm:
                 context['LDAP'] = {'groups': lm.get_ldap_groups(member.username)}
-            except LDAPError:
-                context['LDAP'] = "error"
+        except Exception:
+            context['LDAP'] = "error"
 
     if member.bill_code:
         bm = BILLAccountManager()

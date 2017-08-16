@@ -11,13 +11,13 @@ class LDAPAccountManager:
     def __init__(self):
         # Don't require certificates
         ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
-        # Attempts not connection, simply initializes the object.
-        self.ldap = ldap.initialize(env("LDAP_SERVER_URI"))
+        # Attempts no connection, simply initializes the object.
+        self.ldap = ldap.initialize(env("LDAP_SERVER_URI", "ldaps://localhost:45671"))
 
     def __enter__(self):
         self.ldap.simple_bind_s(
-            env("LDAP_ADMIN_BIND_DN"),
-            env("LDAP_ADMIN_PW")
+            env("LDAP_ADMIN_BIND_DN", "admin"),
+            env("LDAP_ADMIN_PW", "hunter2")
         )
         return self
 
