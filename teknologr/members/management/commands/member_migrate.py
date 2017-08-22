@@ -3,6 +3,8 @@
 import csv
 from django.core.management.base import NoArgsCommand
 from members.models import *
+from datetime import date
+from django.db import IntegrityError
 
 
 def get_date(datestr):
@@ -133,3 +135,27 @@ class Command(NoArgsCommand):
                 # member.crm_id = data[""]
                 member.comment = data["notes_fld"]
                 member.save()
+
+                # Groups
+                groups = data['grupper'].split(",")
+                groups.remove("")
+                for group in groups:
+                    name, year = group.rsplit(" ", 1)
+                    year = int(year)
+                    if name == "Abikommittén":
+                        name = "TF Rekry"
+                    elif name == "InfoK / CyberK":
+                        name = "CyberK"
+                    gt, vask = GroupType.objects.get_or_create(name=name)
+                    begin = date(year, 1, 1)
+                    end = date(year, 12, 31)
+                    group_model, vask = Group.objects.get_or_create(grouptype=gt, begin_date=begin, end_date=end)
+                    try:
+                        GroupMembership.objects.create(member=member, group=group_model)
+                    except IntegrityError as e:
+
+                        if 'unique constraint' in e.args[0].lower():
+                            continue
+                        else:
+                            raise e
+
