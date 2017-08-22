@@ -186,7 +186,7 @@ def decoration(request, decoration_id):
     context['decorationform'] = DecorationForm(instance=decoration)
 
     # Get groups of group type
-    context['decorations'] = DecorationOwnership.objects.filter(decoration__id=decoration_id)
+    context['decorations'] = DecorationOwnership.objects.filter(decoration__id=decoration_id).order_by('-acquired')
     context['adddecorationform'] = DecorationOwnershipForm(
         initial={"decoration": decoration_id, 'acquired': getCurrentDate()})
 
