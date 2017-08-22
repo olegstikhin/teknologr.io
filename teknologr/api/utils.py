@@ -2,7 +2,7 @@ from django.db.models import Q
 from members.models import Member
 
 
-def findMembers(query, count=10):
+def findMembers(query, count=50):
 
     args = []
 

@@ -33,7 +33,7 @@ def set_side_context(context, category, active_obj=None):
     if category == 'members':
         side['sname'] = 'medlem'
         side['newForm'] = MemberForm(initial={'given_names': '', 'surname': ''})
-        objects = Member.objects.order_by('-modified')[:20]
+        objects = Member.objects.order_by('-modified')[:50]
         if active_obj:
             active = Member.objects.get(pk=active_obj)
             if active not in objects:
