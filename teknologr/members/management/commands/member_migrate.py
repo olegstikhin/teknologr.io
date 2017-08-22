@@ -142,10 +142,12 @@ class Command(NoArgsCommand):
                 for group in groups:
                     name, year = group.rsplit(" ", 1)
                     year = int(year)
+
                     if name == "Abikommittén":
                         name = "TF Rekry"
                     elif name == "InfoK / CyberK":
                         name = "CyberK"
+
                     gt, vask = GroupType.objects.get_or_create(name=name)
                     begin = date(year, 1, 1)
                     end = date(year, 12, 31)
@@ -153,9 +155,30 @@ class Command(NoArgsCommand):
                     try:
                         GroupMembership.objects.create(member=member, group=group_model)
                     except IntegrityError as e:
-
                         if 'unique constraint' in e.args[0].lower():
+                            # Duplicates? ignore.
                             continue
                         else:
                             raise e
 
+                # Functionaries
+                funcs = data['poster'].split(",")
+                funcs.remove("")
+                for func in funcs:
+                    name, year = func.rsplit(" ", 1)
+                    year = int(year)
+
+                    if name == "Spexdirecteur":
+                        name = "Spexdirektör"
+
+                    ft, vask = FunctionaryType.objects.get_or_create(name=name)
+                    begin = date(year, 1, 1)
+                    end = date(year, 12, 31)
+                    try:
+                        Functionary.objects.create(member=member, functionarytype=ft, begin_date=begin, end_date=end)
+                    except IntegrityError as e:
+                        if 'unique constraint' in e.args[0].lower():
+                            # Duplicates? ignore.
+                            continue
+                        else:
+                            raise e

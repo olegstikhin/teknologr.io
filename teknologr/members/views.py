@@ -136,7 +136,7 @@ def group(request, grouptype_id, group_id=None):
     form = GroupTypeForm(instance=grouptype)
 
     # Get groups of group type
-    context['groups'] = Group.objects.filter(grouptype__id=grouptype_id)
+    context['groups'] = Group.objects.filter(grouptype__id=grouptype_id).order_by('-begin_date')
     context['groupTypeForm'] = form
 
     context['addgroupform'] = GroupForm(initial={
@@ -165,7 +165,7 @@ def functionary(request, functionarytype_id):
     form = FunctionaryTypeForm(instance=functionarytype)
 
     # Get functionaries of functionary type
-    context['functionaries'] = Functionary.objects.filter(functionarytype__id=functionarytype_id)
+    context['functionaries'] = Functionary.objects.filter(functionarytype__id=functionarytype_id).order_by('-begin_date')
     context['functionaryTypeForm'] = form
     context['addfunctionaryform'] = FunctionaryForm(initial={
         "functionarytype": functionarytype_id,
