@@ -39,7 +39,7 @@ $(document).ready(function() {
 
 	$('#side-search').keyup(function(event) {
 		var active = $(this).data('active');
-		var filter = $(this).val().toUpperCase();
+		var filter = $(this).val().toLowerCase();
 
 		if (active === 'members') {
 			timer && clearTimeout(timer);
@@ -58,7 +58,7 @@ $(document).ready(function() {
 
 		} else {
 			$("#side-objects a").each(function(index){
-				if($(this).text().toUpperCase().indexOf(filter) > -1) {
+				if($(this).text().toLowerCase().indexOf(filter) > -1) {
 					$(this).css('display', '');
 				} else {
 					$(this).css('display', 'none');

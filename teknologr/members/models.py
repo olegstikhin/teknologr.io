@@ -118,6 +118,9 @@ class Functionary(SuperClass):
     str_member = property(_get_str_member)
     str_type = property(_get_str_type)
 
+    class Meta:
+        unique_together = (("member", "functionarytype", "begin_date", "end_date"),)
+
     def __str__(self):
         return "{0}: {1} - {2}, {3}".format(self.functionarytype, self.begin_date, self.end_date, self.member)
 
