@@ -5,6 +5,7 @@ from django.core.management.base import NoArgsCommand
 from members.models import *
 from datetime import date
 from django.db import IntegrityError
+import re
 
 
 def get_date(datestr):
@@ -82,6 +83,46 @@ def get_address_country(country):
     }
     return countries[country] if country in countries else ""
 
+def get_decorations(notes):
+    if not notes:
+        return []
+
+    decorationnames = {
+        "Förtjänsttecken": ["Förtjänsttecken", "TF:s förtjänsttecken", "Förtjänstecken", "Fortjansttecken"],
+        "Hederstecken i silver": ["HTsilver", "HT silver", "HT Silver", "Hederstecken i silver", "Hedersmärke i silver", "TFs hedersmärke i silver", "hederstecken i silver"],
+        "Hederstecken i guld": ["HTguld", "HT guld", "Hedersmärke i guld", "Hedersmärke i Guld"],
+        "Hedersmedlem": ["Hedersmedlem"],
+        "Stavans kamratskapsmärke": ["Stavans kamratskapsmärke"]
+    }
+    regexend = r" (?:(\d{4}|\(\d{2}\)|\(\d{4}\)|\d{1,2}\.\d{1,2}\.\d{4}))"
+    decorations = []
+    for decoration, names in decorationnames.items():
+        for name in names:
+            if name in notes:
+                try:
+                    pattern = name + regexend
+                    m = re.search(pattern, notes)
+                    if m is not None:
+                        year = m.group(1)
+                    else:
+                        year = "None"
+                    if year[0] == '(':
+                        year = year[1:-1] # Remove parentheses
+                    if len(year) == 2:
+                        if year[0] == '0' or year[0] == '1':
+                            # We assume no two digit year entries from 1900s or 1910s
+                            year = "20" + year
+                        else:
+                            year = "19" + year
+                    decorations.append((decoration, year))
+                except Exception as e:
+                    print(m)
+                    print(pattern)
+                    print(notes)
+                    raise e
+
+    return decorations
+
 
 def get_enrol_year(year):
     yr = int(year.split()[0])
@@ -105,6 +146,8 @@ class Command(NoArgsCommand):
                     headers = row
                     continue
                 data = dict(zip(headers, row))
+
+                # Member
                 member = Member()
                 member.given_names = data["givenNames_fld"]
                 member.preferred_name = data["preferredName_fld"]
@@ -182,3 +225,20 @@ class Command(NoArgsCommand):
                             continue
                         else:
                             raise e
+
+                # Decorations
+                decs = get_decorations(data['notes_fld'])
+                for dec in decs:
+                    name, dat = dec
+                    decoration, vask = Decoration.objects.get_or_create(name=name)
+                    if dat == "None":
+                        # TODO: what date? field is NOT NULL
+                        acquired = date(1950, 1, 1)
+                    elif '.' in dat:
+                        day, month, year = [int(nr) for nr in dat.split('.')]
+                        acquired = date(year, month, day)
+                    else:
+                        year = int(dat)
+                        acquired = date(year, 1, 1)
+                    DecorationOwnership.objects.create(member=member, decoration=decoration, acquired=acquired)
+
