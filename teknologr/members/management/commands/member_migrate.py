@@ -3,10 +3,11 @@
 import csv
 from django.core.management.base import NoArgsCommand
 from members.models import *
-from datetime import date
+import datetime
 from django.db import IntegrityError
 import re
 
+dateformat = "%Y-%m-%d %H:%M:%S"
 
 def get_date(datestr):
     return datestr.split()[0] if datestr else None
@@ -149,8 +150,10 @@ class Command(NoArgsCommand):
 
                 # Member
                 member = Member()
-                member.given_names = data["givenNames_fld"]
-                member.preferred_name = data["preferredName_fld"]
+                names = data["givenNames_fld"]
+                prefname = data["preferredName_fld"]
+                member.given_names = names if names != "" else prefname
+                member.preferred_name = prefname
                 member.surname = data["surName_fld"]
                 member.maiden_name = data["maidenName_fld"]
                 member.nickname = data["nickName_fld"]
@@ -181,20 +184,44 @@ class Command(NoArgsCommand):
 
                 # Groups
                 groups = data['grupper'].split(",")
-                groups.remove("")
                 for group in groups:
-                    name, year = group.rsplit(" ", 1)
-                    year = int(year)
-
+                    if not group:
+                        continue
+                    name, startt, endt = group.split(";")
                     if name == "Abikommittén":
                         name = "TF Rekry"
                     elif name == "InfoK / CyberK":
                         name = "CyberK"
 
                     gt, vask = GroupType.objects.get_or_create(name=name)
-                    begin = date(year, 1, 1)
-                    end = date(year, 12, 31)
-                    group_model, vask = Group.objects.get_or_create(grouptype=gt, begin_date=begin, end_date=end)
+                    startt = startt.split(".")[0] if "." in startt else startt
+                    endt = endt.split(".")[0] if "." in endt else endt
+                    begin = datetime.datetime.strptime(startt, dateformat).date() if startt != "None" else None
+                    end = datetime.datetime.strptime(endt, dateformat).date() if endt != "None" else None
+                    
+                    # We need a single group for all overlapping membership times
+                    group_models = Group.objects.filter(
+                        grouptype=gt,
+                        begin_date__lt=end + datetime.timedelta(days=2),
+                        end_date__gt=begin - datetime.timedelta(days=2))
+
+                    c = group_models.count()
+                    if c == 0:
+                        group_model = Group.objects.create(grouptype=gt, begin_date=begin, end_date=end)
+                    elif c > 1:
+                        print("{}: {} - {}".format(gt, begin, end))
+                        for g in group_models:
+                            print(g)
+                        raise Exception()
+                    else:
+                        group_model = group_models[0]
+                    if group_model.begin_date != begin or group_model.end_date != end:
+                        if group_model.begin_date != begin:
+                            group_model.begin_date = begin
+                        if group_model.end_date != end:
+                            group_model.end_date = end
+                        group_model.save()
+
                     try:
                         GroupMembership.objects.create(member=member, group=group_model)
                     except IntegrityError as e:
@@ -206,17 +233,19 @@ class Command(NoArgsCommand):
 
                 # Functionaries
                 funcs = data['poster'].split(",")
-                funcs.remove("")
                 for func in funcs:
-                    name, year = func.rsplit(" ", 1)
-                    year = int(year)
+                    if not func:
+                        continue
+                    name, startt, endt = func.split(";")
 
                     if name == "Spexdirecteur":
                         name = "Spexdirektör"
 
                     ft, vask = FunctionaryType.objects.get_or_create(name=name)
-                    begin = date(year, 1, 1)
-                    end = date(year, 12, 31)
+                    startt = startt.split(".")[0] if "." in startt else startt
+                    endt = endt.split(".")[0] if "." in endt else endt
+                    begin = datetime.datetime.strptime(startt, dateformat).date() if startt != "None" else None
+                    end = datetime.datetime.strptime(endt, dateformat).date() if endt != "None" else None
                     try:
                         Functionary.objects.create(member=member, functionarytype=ft, begin_date=begin, end_date=end)
                     except IntegrityError as e:
@@ -233,12 +262,16 @@ class Command(NoArgsCommand):
                     decoration, vask = Decoration.objects.get_or_create(name=name)
                     if dat == "None":
                         # TODO: what date? field is NOT NULL
-                        acquired = date(1950, 1, 1)
+                        acquired = date(1900, 1, 1)
                     elif '.' in dat:
                         day, month, year = [int(nr) for nr in dat.split('.')]
                         acquired = date(year, month, day)
                     else:
                         year = int(dat)
-                        acquired = date(year, 1, 1)
+                        acquired = date(year, 3, 18)
                     DecorationOwnership.objects.create(member=member, decoration=decoration, acquired=acquired)
+
+                # MemberTypes
+
+
 
