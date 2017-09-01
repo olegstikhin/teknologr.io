@@ -133,6 +133,21 @@ def get_enrol_year(year):
 def get_bool(val):
     return False if val is None or val is "" else bool(int(val))
 
+def get_mandates(begin, end):
+    # NOTE: need to pip install python-dateutil
+    # Did not want to include this in requirements.txt as this is a run-once migration script.
+    from dateutil.relativedelta import relativedelta
+    # TODO: vissa mandattider som går över årsskfitet ska splittas, andra int? (t.ex. arbetsgrupper)
+    length = relativedelta(end, begin)
+    mandates = []
+    while length.years > 1 or (length.years == 1 and (length.months > 0 or length.days > 0)):
+        mandates.append((begin, datetime.date(begin.year, 12, 31)))
+        begin = datetime.date(begin.year + 1, 1, 1)
+        length = relativedelta(end, begin)
+    mandates.append((begin, end))
+    return mandates
+
+
 
 class Command(NoArgsCommand):
 
@@ -199,37 +214,42 @@ class Command(NoArgsCommand):
                     begin = datetime.datetime.strptime(startt, dateformat).date() if startt != "None" else None
                     end = datetime.datetime.strptime(endt, dateformat).date() if endt != "None" else None
                     
-                    # We need a single group for all overlapping membership times
-                    group_models = Group.objects.filter(
-                        grouptype=gt,
-                        begin_date__lt=end + datetime.timedelta(days=2),
-                        end_date__gt=begin - datetime.timedelta(days=2))
+                    # Split multi year mandates to single years
+                    mandates = get_mandates(begin, end)
 
-                    c = group_models.count()
-                    if c == 0:
-                        group_model = Group.objects.create(grouptype=gt, begin_date=begin, end_date=end)
-                    elif c > 1:
-                        print("{}: {} - {}".format(gt, begin, end))
-                        for g in group_models:
-                            print(g)
-                        raise Exception()
-                    else:
-                        group_model = group_models[0]
-                    if group_model.begin_date != begin or group_model.end_date != end:
-                        if group_model.begin_date != begin:
-                            group_model.begin_date = begin
-                        if group_model.end_date != end:
-                            group_model.end_date = end
-                        group_model.save()
+                    for m in mandates:
+                        begin, end = m
+                        # We need a single group for all overlapping membership times
+                        group_models = Group.objects.filter(
+                            grouptype=gt,
+                            begin_date__lt=end,
+                            end_date__gt=begin)
 
-                    try:
-                        GroupMembership.objects.create(member=member, group=group_model)
-                    except IntegrityError as e:
-                        if 'unique constraint' in e.args[0].lower():
-                            # Duplicates? ignore.
-                            continue
+                        c = group_models.count()
+                        if c == 0:
+                            group_model = Group.objects.create(grouptype=gt, begin_date=begin, end_date=end)
+                        elif c > 1:
+                            print("mandate: {}: {} - {}".format(gt, begin, end))
+                            for g in group_models:
+                                print(g)
+                            raise Exception()
                         else:
-                            raise e
+                            group_model = group_models[0]
+                        if group_model.begin_date != begin or group_model.end_date != end:
+                            if group_model.begin_date != begin:
+                                group_model.begin_date = begin
+                            if group_model.end_date != end:
+                                group_model.end_date = end
+                            group_model.save()
+
+                        try:
+                            GroupMembership.objects.create(member=member, group=group_model)
+                        except IntegrityError as e:
+                            if 'unique constraint' in e.args[0].lower():
+                                # Duplicates? ignore.
+                                continue
+                            else:
+                                raise e
 
                 # Functionaries
                 funcs = data['poster'].split(",")
