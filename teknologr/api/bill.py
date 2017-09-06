@@ -61,3 +61,19 @@ class BILLAccountManager:
             # The returned string is not an integer, so presumably we have the json we want
             return json.loads(r.text)
         raise BILLException("BILL returned error code: " + r.text)
+
+    def find_bill_code(self, username):
+        import json
+        try:
+            r = requests.get(self.api_url + "get?type=user&id=%s" % username, auth=(self.user, self.password))
+        except:
+            raise BILLException("Could not connect to BILL server")
+        if r.status_code != 200:
+            raise BILLException("BILL returned status: %d" % r.status_code)
+        # BILL API does not use proper http status codes
+        try:
+            error = int(r.text)
+        except ValueError:
+            # The returned string is not an integer, so presumably we have the json we want
+            return json.loads(r.text)["acc"]
+        raise BILLException("BILL returned error code: " + r.text + " for username: " + username)

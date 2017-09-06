@@ -138,10 +138,16 @@ class MemberType(SuperClass):
         ("OM", "Ordinarie Medlem"),
         ("JS", "JuniorStÄlM"),
         ("ST", "StÄlM"),
-        ("AA", "Aktiv Alumn"),
+        ("FG", "Färdig"),
+        ("EM", "Ej längre medlem"),
+        ("VP", "Viktig person"),
+        ("KA", "Kanslist"),
+        ("IM", "Inte medlem"),
+        ("KE", "Kanslist emerita"),
+
     )
     member = models.ForeignKey("Member")
-    begin_date = models.DateField()
+    begin_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
     type = models.CharField(max_length=2, choices=TYPES, default="PH")
 
