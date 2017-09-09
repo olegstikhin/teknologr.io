@@ -12,7 +12,6 @@ class MemberLookup(LookupChannel):
     def get_query(self, q, request):
 
         members = findMembers(q)
-
         return members
 
     def get_result(self, obj):
@@ -26,8 +25,3 @@ class MemberLookup(LookupChannel):
     def format_item_display(self, obj):
         """ (HTML) formatted item for displaying item in the selected deck area """
         return obj._get_full_name()
-
-    def check_auth(self, request):
-        # TODO: Actual authentication?
-        # The whole request can be denied earlier, this just limits the AJAX lookup channel? Not sure tough
-        return True
