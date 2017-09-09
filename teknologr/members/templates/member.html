@@ -81,12 +81,17 @@
       </div>
     </div>
     <div class="row form-group">
-      <div class="col-md-5">
+      <div class="col-md-3">
         <label for="{{form.mobile_phone.id_for_label}}">Telefonnummer</label>
+        {{form.phone.errors}}
+        {{form.phone}}
+      </div>
+      <div class="col-md-3">
+        <label for="{{form.mobile_phone.id_for_label}}">Mobiltelefonnummer</label>
         {{form.mobile_phone.errors}}
         {{form.mobile_phone}}
       </div>
-      <div class="col-md-7">
+      <div class="col-md-6">
         <label for="{{form.email.id_for_label}}">E-postadress</label>
         {{form.email.errors}}
         {{form.email}}
