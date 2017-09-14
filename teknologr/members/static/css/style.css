@@ -118,3 +118,8 @@ ul.ui-autocomplete {
 #side-search {
   width: 300px;
 }
+
+/* API buttons at top of member view*/
+.apibtn {
+  float: right;
+}
