@@ -213,6 +213,7 @@ class BILLAccountView(APIView):
 
 # JSON API:s
 
+# Used by BILL
 @api_view(['GET'])
 def memberTypesForMember(request, mode, query):
 
@@ -239,5 +240,39 @@ def memberTypesForMember(request, mode, query):
         "membertypes": membertypes
         }
     )
+
+    return Response(data, status=200)
+
+# Data for HTK
+@api_view(['GET'])
+def htkDump(request, member=None):
+    def dumpMember(member):
+        funcs = Functionary.objects.filter(member=member)
+        flist = []
+        for f in funcs:
+            flist.append(",".join([f.functionarytype.name, str(f.begin_date), str(f.end_date)]))
+
+        groups = GroupMembership.objects.filter(member=member)
+        glist = []
+        for g in groups:
+            glist.append(",".join([g.group.grouptype.name, str(g.group.begin_date), str(g.group.end_date)]))
+        
+        types = MemberType.objects.filter(member=member)
+        tlist = []
+        for t in types:
+            tlist.append(",".join([t.get_type_display(), str(t.begin_date), str(t.end_date)]))
+
+        return {
+            "name": member.full_name,
+            "functionaries": flist,
+            "groups": glist,
+            "membertypes": tlist
+        }
+
+    if member:
+        m = get_object_or_404(Member, id=member)
+        data = dumpMember(m)
+    else:
+        data = [dumpMember(m) for m in Member.objects.all()]
 
     return Response(data, status=200)

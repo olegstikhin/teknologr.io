@@ -3,7 +3,7 @@
 
 {% block main %}
 <div class="container-fluid">
-<h1 class="page-header">{{member.full_name}}&nbsp;<a href="/api/members/{{member.id}}/"><font size=5>API länk</font></a></h1>
+<h1 class="page-header">{{member.full_name}}&nbsp;<a href="/api/members/{{member.id}}/" class="btn btn-default apibtn">API länk</a> <a href="/api/htkdump/{{member.id}}" class="btn btn-default apibtn">HTK dump</a></h1>
   {% if result %}
 	<div class="row">
     {% if result == 'success' %}
