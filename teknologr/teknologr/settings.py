@@ -226,4 +226,4 @@ AUTH_LDAP_GLOBAL_OPTIONS = {
 
 # Confs nexsecary for ajax-select
 AJAX_SELECT_INLINES = 'staticfiles'
-STATIC_ROOT= 'PATH/TO/STATIC/ROOT'
+STATIC_ROOT = env("STATIC_ROOT", None)
