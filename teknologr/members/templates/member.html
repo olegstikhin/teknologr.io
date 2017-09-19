@@ -229,7 +229,7 @@
         {% endif %}
       {% else %}
         
-        <button id="addbill" class="btn btn-primary" {% if not LDAP %} disabled title="Skapa LDAP konto först"{% endif %}>Skapa BILL konto</button>
+        <button id="addbill" class="btn btn-primary" {% if not LDAP %} disabled title="Skapa LDAP konto först"{% endif %} data-id="{{ member.id }}">Skapa BILL konto</button>
       {% endif %}
     </div>
   </div>
