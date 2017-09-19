@@ -240,6 +240,7 @@ def memberTypesForMember(request, mode, query):
     return Response(data, status=200)
 
 
+# Used by GeneriKey
 @api_view(['GET'])
 def membersByMemberType(request, membertype, field=None):
     today = datetime.now().date()
