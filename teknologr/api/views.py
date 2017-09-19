@@ -8,7 +8,6 @@ from members.models import GroupMembership, Member, Group
 from api.ldap import LDAPAccountManager
 from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
-import json
 
 # Create your views here.
 
@@ -232,14 +231,13 @@ def memberTypesForMember(request, mode, query):
     for e in MemberType.objects.filter(member=member):
         membertypes.append((e.type, str(e.begin_date), str(e.end_date)))
 
-    data = json.dumps({
+    data = {
         "given_names": member.given_names.split(),
         "surname": member.surname,
         "nickname": member.nickname,
         "preferred_name": member.preferred_name,
         "membertypes": membertypes
-        }
-    )
+    }
 
     return Response(data, status=200)
 
