@@ -8,6 +8,7 @@ from members.models import GroupMembership, Member, Group
 from api.ldap import LDAPAccountManager
 from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
+from datetime import datetime
 
 # Create your views here.
 
@@ -217,19 +218,16 @@ class BILLAccountView(APIView):
 def memberTypesForMember(request, mode, query):
 
     if mode == 'username':
-        member = Member.objects.get(username=query)
+        member = get_object_or_404(Member, username=query)
     elif mode == 'studynumber':
-        member = Member.objects.get(student_id=query)
+        member = get_object_or_404(Member, student_id=query)
     else:
-        return Response(stauts=400)
+        return Response(status=400)
 
-    if not member:
-        return Response(status=404)
-
-    membertypes = []
+    membertypes = {}
 
     for e in MemberType.objects.filter(member=member):
-        membertypes.append((e.type, str(e.begin_date), str(e.end_date)))
+        membertypes[e.type] = (str(e.begin_date), str(e.end_date))
 
     data = {
         "given_names": member.given_names.split(),
@@ -240,6 +238,18 @@ def memberTypesForMember(request, mode, query):
     }
 
     return Response(data, status=200)
+
+
+@api_view(['GET'])
+def membersByMemberType(request, membertype, field=None):
+    today = datetime.now().date()
+    membertypes = MemberType.objects.filter(type=membertype) \
+        .exclude(end_date__lte=today) \
+        .exclude(begin_date__gte=today)
+    members = [t.member.username for t in membertypes if t.member.username] if field == "usernames" \
+        else [t.member.student_id for t in membertypes if t.member.student_id]
+    return Response(members, status=200)
+
 
 # Data for HTK
 @api_view(['GET'])
