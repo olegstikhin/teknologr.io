@@ -151,5 +151,30 @@ class MemberType(SuperClass):
     end_date = models.DateField(null=True)
     type = models.CharField(max_length=2, choices=TYPES, default="PH")
 
+    class Meta:
+        unique_together = (("member", "type"),)
+
     def __str__(self):
         return "{0}: {1} - {2}".format(self.get_type_display(), self.begin_date, self.end_date)
+
+    def save(self, *args, **kwargs):
+        a = ["PH", "OM"]
+        b = ["ST", "FG"]
+
+        if self.type in a: 
+            check = b
+        elif self.type in b:
+            check = a
+        else:
+            # We don't care about others
+            return super(MemberType, self).save(*args, **kwargs)
+
+        membertypes = MemberType.objects.filter(member=self.member, types__in=check)
+
+        for mt in membertypes:
+            # Check if they overlap
+            if (self.begin_date is None or mt.end_date is None or self.begin_date <= self.end_date) \
+            and (self.end_date is None or mt.begin_date is None or self.end_date >= mt.begin_date):
+                raise Exception("Member can't be phux or ordinarie and stälm or färdig at the same time")
+
+        super(MemberType, self).save(*args, **kwargs)
