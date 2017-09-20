@@ -8,7 +8,6 @@ from members.models import GroupMembership, Member, Group
 from api.ldap import LDAPAccountManager
 from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
-from datetime import datetime
 
 # Create your views here.
 
@@ -217,12 +216,15 @@ class BILLAccountView(APIView):
 @api_view(['GET'])
 def memberTypesForMember(request, mode, query):
 
-    if mode == 'username':
-        member = get_object_or_404(Member, username=query)
-    elif mode == 'studynumber':
-        member = get_object_or_404(Member, student_id=query)
-    else:
-        return Response(status=400)
+    try:
+        if mode == 'username':
+            member = Member.objects.get(username=query)
+        elif mode == 'studynumber':
+            member = Member.objects.get(student_id=query)
+        else:
+            return Response(status=400)
+    except Member.DoesNotExist as e:
+        return Response(status=200)
 
     membertypes = {}
 
@@ -243,10 +245,7 @@ def memberTypesForMember(request, mode, query):
 # Used by GeneriKey
 @api_view(['GET'])
 def membersByMemberType(request, membertype, field=None):
-    today = datetime.now().date()
-    membertypes = MemberType.objects.filter(type=membertype) \
-        .exclude(end_date__lte=today) \
-        .exclude(begin_date__gte=today)
+    membertypes = MemberType.objects.filter(type=membertype, end_date=None)
     members = [t.member.username for t in membertypes if t.member.username] if field == "usernames" \
         else [t.member.student_id for t in membertypes if t.member.student_id]
     return Response(members, status=200)
