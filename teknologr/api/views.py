@@ -245,9 +245,9 @@ def memberTypesForMember(request, mode, query):
 # Used by GeneriKey
 @api_view(['GET'])
 def membersByMemberType(request, membertype, field=None):
-    membertypes = MemberType.objects.filter(type=membertype, end_date=None)
-    members = [t.member.username for t in membertypes if t.member.username] if field == "usernames" \
-        else [t.member.student_id for t in membertypes if t.member.student_id]
+    member_pks = MemberType.objects.filter(type=membertype, end_date=None).values_list("member", flat=True)
+    fld = "username" if field == "usernames" else "student_id"
+    members = Member.objects.filter(pk__in=member_pks).values_list(fld, flat=True)
     return Response(members, status=200)
 
 
