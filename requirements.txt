@@ -11,3 +11,4 @@ pep8==1.7.0
 pyldap==2.4.28
 requests==2.13.0
 psycopg2==2.7.3
+djangorestframework-csv==2.0.0
