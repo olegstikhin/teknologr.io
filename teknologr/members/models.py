@@ -62,6 +62,13 @@ class Member(SuperClass):
     def __str__(self):
         return self.full_name
 
+    def save(self, *args, **kwargs):
+        if self.username == '':
+            self.username = None
+        if self.student_id == '':
+            self.student_id = None
+        super(Member, self).save(*args, **kwargs)
+
 
 class DecorationOwnership(SuperClass):
     member = models.ForeignKey("Member")
