@@ -62,6 +62,12 @@ class Member(SuperClass):
     def __str__(self):
         return self.full_name
 
+    def _get_full_address(self):
+        country = 'Finland'
+        if self.country.name:
+            country = self.country.name
+        return "%s, %s, %s, %s" % (self.street_address, self.postal_code, self.city, country)
+
 
 class DecorationOwnership(SuperClass):
     member = models.ForeignKey("Member")
