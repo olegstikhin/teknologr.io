@@ -2,12 +2,13 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from api.serializers import *
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
 from members.models import GroupMembership, Member, Group
 from api.ldap import LDAPAccountManager
 from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
+from rest_framework_csv import renderers as csv_renderer
 
 # Create your views here.
 
@@ -284,3 +285,28 @@ def htkDump(request, member=None):
         data = [dumpMember(m) for m in Member.objects.all()]
 
     return Response(data, status=200)
+
+#CSV-render class
+class ModulenRenderer(csv_renderer.CSVRenderer):
+    header = ['name', 'address']
+
+# List of addresses whom to post modulen to
+@api_view(['GET'])
+@renderer_classes((ModulenRenderer,))
+def modulenDump(request):
+
+    recipients = Member.objects.exclude(
+            postal_code='02150'
+        ).exclude(
+            dead=True
+        ).filter(
+            subscribed_to_modulen=True
+        )
+
+    content = [{
+        'name': recipient._get_full_name(),
+        'address': recipient._get_full_address()}
+        for recipient in recipients]
+
+
+    return Response(content, status=200)

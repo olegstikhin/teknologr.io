@@ -25,5 +25,6 @@ urlpatterns = [
     url(r'^accounts/ldap/change_pw/(\d+)/$', change_ldap_password),
     url(r'^accounts/bill/(\d+)/$', BILLAccountView.as_view()),
     url(r'^htkdump/(\d+)?$', htkDump),
+    url(r'^modulendump/$', modulenDump),
     url(r'^membersByMemberType/([A-Z]{2})/(\w+)?$', membersByMemberType)
 ]
