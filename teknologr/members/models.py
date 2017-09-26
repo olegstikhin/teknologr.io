@@ -21,7 +21,7 @@ class Member(SuperClass):
     maiden_name = models.CharField(max_length=32, blank=True, null=False, default="")
     nickname = models.CharField(max_length=32, blank=True, null=False, default="")
     birth_date = models.DateField(blank=True, null=True)
-    student_id = models.CharField(max_length=10, blank=True, null=False, default="")
+    student_id = models.CharField(max_length=10, blank=True, null=True, default=None)
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default="UN")
     # https://pypi.python.org/pypi/django-countries/1.0.1
     nationality = CountryField(blank_label="Välj land", blank=True, null=False, default="")
@@ -62,11 +62,20 @@ class Member(SuperClass):
     def __str__(self):
         return self.full_name
 
+
     def _get_full_address(self):
         country = 'Finland'
         if self.country.name:
             country = self.country.name
         return "%s, %s, %s, %s" % (self.street_address, self.postal_code, self.city, country)
+
+    def save(self, *args, **kwargs):
+        if self.username == '':
+            self.username = None
+        if self.student_id == '':
+            self.student_id = None
+        super(Member, self).save(*args, **kwargs)
+
 
 
 class DecorationOwnership(SuperClass):
