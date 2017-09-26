@@ -290,14 +290,15 @@ def htkDump(request, member=None):
 class ModulenRenderer(csv_renderer.CSVRenderer):
     header = ['name', 'address']
 
+# List of addresses whom to post modulen to
 @api_view(['GET'])
 @renderer_classes((ModulenRenderer,))
 def modulenDump(request):
 
     recipients = Member.objects.exclude(
             postal_code='02150'
-        ).filter(
-            dead=False
+        ).exclude(
+            dead=True
         ).filter(
             subscribed_to_modulen=True
         )
