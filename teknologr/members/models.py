@@ -21,7 +21,7 @@ class Member(SuperClass):
     maiden_name = models.CharField(max_length=32, blank=True, null=False, default="")
     nickname = models.CharField(max_length=32, blank=True, null=False, default="")
     birth_date = models.DateField(blank=True, null=True)
-    student_id = models.CharField(max_length=10, blank=True, null=True, default=None)
+    student_id = models.CharField(max_length=10, blank=True, null=True, default=None, unique=True)
     gender = models.CharField(max_length=2, choices=GENDER_CHOICES, default="UN")
     # https://pypi.python.org/pypi/django-countries/1.0.1
     nationality = CountryField(blank_label="Välj land", blank=True, null=False, default="")
@@ -43,7 +43,7 @@ class Member(SuperClass):
     subscribed_to_modulen = models.BooleanField(default=False)
     allow_publish_info = models.BooleanField(default=False)
 
-    username = models.CharField(max_length=32, blank=False, null=True, editable=False)
+    username = models.CharField(max_length=32, blank=False, null=True, editable=False, unique=True)
     bill_code = models.CharField(max_length=8, blank=False, null=True, editable=False)
     crm_id = models.CharField(max_length=32, blank=True, null=False, default="")
     comment = models.TextField(blank=True, null=True)
