@@ -9,7 +9,7 @@ from api.ldap import LDAPAccountManager
 from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
 from rest_framework_csv import renderers as csv_renderer
-from api.utils import findMostRecentMemberTypeAndYear
+from api.utils import findMostRecentMemberType
 
 # Create your views here.
 
@@ -333,7 +333,7 @@ def fullDump(request):
         )
 
     content = [{
-        'membertype': findMostRecentMemberTypeAndYear(member),
+        'membertype': str(findMostRecentMemberType(member)),
         'given_names': member.given_names,
         'preferred_name': member.preferred_name,
         'surname': member.surname,
