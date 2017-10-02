@@ -198,6 +198,10 @@
         Kunde inte få svar av LDAP: {{ LDAP.error }}
         {% else %}
           <b>Användarnamn:</b> {{member.username}}
+          {% if not LDAP.account %}
+            Inget användarkonto hittades för denna användare. <br/>
+            <button id="delusername" class="btn btn-danger" data-id="{{ member.id }}">Ta bort användarnamn</button>
+          {% endif %}
           <h4>LDAP Grupper</h4>
           <ul>
           {% for group in LDAP.groups %}

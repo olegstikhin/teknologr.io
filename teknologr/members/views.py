@@ -102,7 +102,9 @@ def member(request, member_id):
     if member.username:
         try:
             with LDAPAccountManager() as lm:
-                context['LDAP'] = {'groups': lm.get_ldap_groups(member.username)}
+                ldapuser = lm.get_ldap_account(member.username)
+                ldapgroups = lm.get_ldap_groups(member.username)
+                context['LDAP'] = {'account': ldapuser, 'groups': ldapgroups}
         except Exception:
             context['LDAP'] = "error"
 

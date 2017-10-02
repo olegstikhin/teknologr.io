@@ -117,3 +117,8 @@ class LDAPAccountManager:
         query = "(&(objectClass=posixGroup)(memberUid=%s))" % username
         output = self.ldap.search_s(dn, ldap.SCOPE_SUBTREE, query, ['cn', ])
         return [group[1]['cn'][0] for group in output]
+
+    def get_ldap_account(self, username):
+        dn = env("LDAP_USERN_DN")
+        query = "(uid=%s)" % username
+        return self.ldap.search_s(dn, ldap.SCOPE_SUBTREE, query)
