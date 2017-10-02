@@ -9,6 +9,7 @@ from api.ldap import LDAPAccountManager
 from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
 from rest_framework_csv import renderers as csv_renderer
+from api.utils import findMostRecentMemberTypeAndYear
 
 # Create your views here.
 
@@ -307,6 +308,60 @@ def modulenDump(request):
         'name': recipient._get_full_name(),
         'address': recipient._get_full_address()}
         for recipient in recipients]
+
+
+    return Response(content, status=200)
+
+
+class FullRenderer(csv_renderer.CSVRenderer):
+    header = [ 'membertype', 'given_names', 'preferred_name', 'surname', 'maiden_name',
+    'nickname', 'birth_date', 'student_id', 'nationality', 'enrolment_year',
+    'graduated', 'graduated_year', 'degree_programme', 'dead', 'mobile_phone',
+    'phone', 'street_address', 'postal_code', 'city', 'country', 'url', 'email',
+    'subscribed_to_modulen', 'allow_publish_info', 'username', 'bill_code', 'crm_id', 'comment']
+
+# "Fulldump". If you need some arbitrary bit of info this with some excel magic might do the trick.
+# Preferably tough for all common needs implement a specific endpoint for it (like modulen or HTK)
+# to save time in the long run.
+@api_view(['GET'])
+@renderer_classes((FullRenderer,))
+def fullDump(request):
+
+
+    members = Member.objects.exclude(
+            dead=True
+        )
+
+    content = [{
+        'membertype': findMostRecentMemberTypeAndYear(member),
+        'given_names': member.given_names,
+        'preferred_name': member.preferred_name,
+        'surname': member.surname,
+        'maiden_name': member.maiden_name,
+        'nickname': member.nickname,
+        'birth_date': member.birth_date,
+        'student_id': member.student_id,
+        'nationality': member.nationality,
+        'enrolment_year': member.enrolment_year,
+        'graduated': member.graduated,
+        'graduated_year': member.graduated_year,
+        'degree_programme': member.degree_programme,
+        'dead': member.dead,
+        'mobile_phone': member.mobile_phone,
+        'phone': member.phone,
+        'street_address': member.street_address,
+        'postal_code': member.postal_code,
+        'city': member.city,
+        'country': member.country,
+        'url': member.url,
+        'email': member.email,
+        'subscribed_to_modulen': member.subscribed_to_modulen,
+        'allow_publish_info': member.allow_publish_info,
+        'username': member.username,
+        'bill_code': member.bill_code,
+        'crm_id': member.crm_id,
+        'comment': member.comment}
+        for member in members]
 
 
     return Response(content, status=200)
