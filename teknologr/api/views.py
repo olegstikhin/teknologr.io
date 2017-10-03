@@ -260,23 +260,29 @@ def htkDump(request, member=None):
         funcs = Functionary.objects.filter(member=member)
         flist = []
         for f in funcs:
-            flist.append(",".join([f.functionarytype.name, str(f.begin_date), str(f.end_date)]))
+            flist.append("%s: %s > %s" % (f.functionarytype.name, f.begin_date, f.end_date))
 
         groups = GroupMembership.objects.filter(member=member)
         glist = []
         for g in groups:
-            glist.append(",".join([g.group.grouptype.name, str(g.group.begin_date), str(g.group.end_date)]))
+            glist.append("%s: %s > %s" % (g.group.grouptype.name, g.group.begin_date, g.group.end_date))
         
         types = MemberType.objects.filter(member=member)
         tlist = []
         for t in types:
-            tlist.append(",".join([t.get_type_display(), str(t.begin_date), str(t.end_date)]))
+            tlist.append("%s: %s > %s" % (t.get_type_display(), t.begin_date, t.end_date))
+        decorations = DecorationOwnership.objects.filter(member=member)
+        dlist = []
+        for d in decorations:
+            dlist.append("%s: %s" % (d.decoration.name, d.acquired))
 
         return {
+            "id": member.id,
             "name": member.full_name,
             "functionaries": flist,
             "groups": glist,
-            "membertypes": tlist
+            "membertypes": tlist,
+            "decorations": dlist
         }
 
     if member:
@@ -310,11 +316,11 @@ def modulenDump(request):
         for recipient in recipients]
 
 
-    return Response(content, status=200)
+    return Response(content, status=200, headers={'Content-Disposition': 'attachment; filename="modulendump.csv"'})
 
 
 class FullRenderer(csv_renderer.CSVRenderer):
-    header = [ 'membertype', 'given_names', 'preferred_name', 'surname', 'maiden_name',
+    header = [ 'id', 'membertype', 'given_names', 'preferred_name', 'surname', 'maiden_name',
     'nickname', 'birth_date', 'student_id', 'nationality', 'enrolment_year',
     'graduated', 'graduated_year', 'degree_programme', 'dead', 'mobile_phone',
     'phone', 'street_address', 'postal_code', 'city', 'country', 'url', 'email',
@@ -333,6 +339,7 @@ def fullDump(request):
         )
 
     content = [{
+        'id': member.id,
         'membertype': str(findMostRecentMemberType(member)),
         'given_names': member.given_names,
         'preferred_name': member.preferred_name,
@@ -364,4 +371,4 @@ def fullDump(request):
         for member in members]
 
 
-    return Response(content, status=200)
+    return Response(content, status=200, headers={'Content-Disposition': 'attachment; filename="fulldump.csv"'})
