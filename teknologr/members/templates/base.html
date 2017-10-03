@@ -40,7 +40,15 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
             <li><a href="/api/">API</a></li>
-            <li><a href="/api/htkdump/">Full HTK dump</a></li>
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Dumpar
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/api/fulldump/">Full dump</a></li>
+                    <li><a href="/api/modulendump/">Modulen dump</a></li>
+                    <li><a href="/api/htkdump/?format=json">Full HTK dump</a></li>
+                </ul>
+            </li>
             <li><a href="https://wiki.teknologforeningen.fi/itwiki/index.php/Medlemsregister" target="_blank">Info</a></li>
             <li><a href="/logout/">Logga ut</a></li>
             </ul>
