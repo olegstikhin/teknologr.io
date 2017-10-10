@@ -12,7 +12,9 @@ def mailNewPassword(member, password, sender="infochef@tf.fi"):
 
 	Vänligen logga in på TF:s hemsida och byt lösenordet så snabbt som möjligt.
 
-	Ifall du har problem eller frågor kontakta %s
+	Vid frågor eller ifall du inte begärt detta, kontakta %s
+
+	Detta är ett automatiskt meddelande, du behöver inte svara på det.
 	''' % (password, sender)
 
 	reciever = member.email

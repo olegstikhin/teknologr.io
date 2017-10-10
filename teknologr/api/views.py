@@ -10,6 +10,7 @@ from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
 from rest_framework_csv import renderers as csv_renderer
 from api.utils import findMostRecentMemberType
+from api.mailutils import mailNewPassword
 
 # Create your views here.
 
@@ -148,12 +149,17 @@ class LDAPAccountView(APIView):
 def change_ldap_password(request, member_id):
     member = get_object_or_404(Member, id=member_id)
     password = request.data.get('password')
+    mailToUser = request.data.get('mail_to_user')
     if not password:
         return Response("password field missing", status=400)
 
     with LDAPAccountManager() as lm:
         try:
             lm.change_password(member.username, password)
+            if mailToUser:
+                status = mailNewPassword(member, password)
+                if not status:
+                    return Response("Password changed, failed to send mail", status=500)
         except LDAPError as e:
             return Response(str(e), status=400)
 
