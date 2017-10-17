@@ -33,3 +33,7 @@ def findMostRecentMemberType(member):
 		return stalm
 
 	return None
+
+def isMember(member):
+	memberType = findMostRecentMemberType(member)
+	return memberType != None and (memberType.type == "OM" or memberType.type == "ST")
