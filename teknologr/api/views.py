@@ -325,7 +325,8 @@ class FullRenderer(csv_renderer.CSVRenderer):
     'nickname', 'birth_date', 'student_id', 'nationality', 'enrolment_year',
     'graduated', 'graduated_year', 'degree_programme', 'dead', 'mobile_phone',
     'phone', 'street_address', 'postal_code', 'city', 'country', 'url', 'email',
-    'subscribed_to_modulen', 'allow_publish_info', 'username', 'bill_code', 'crm_id', 'comment']
+    'subscribed_to_modulen', 'allow_publish_info', 'username', 'bill_code', 'crm_id', 'comment',
+    'should_be_stalmed']
 
 # "Fulldump". If you need some arbitrary bit of info this with some excel magic might do the trick.
 # Preferably tough for all common needs implement a specific endpoint for it (like modulen or HTK)
@@ -368,7 +369,8 @@ def fullDump(request):
         'username': member.username,
         'bill_code': member.bill_code,
         'crm_id': member.crm_id,
-        'comment': member.comment}
+        'comment': member.comment,
+        'should_be_stalmed': member.shouldBeStalm()}
         for member in members]
 
 
