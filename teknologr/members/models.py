@@ -76,7 +76,7 @@ class Member(SuperClass):
             self.student_id = None
         super(Member, self).save(*args, **kwargs)
 
-    def mostRecentMemberType(self):
+    def getMostRecentMemberType(self):
 
         types = MemberType.objects.filter(member=self).order_by()
 
@@ -97,10 +97,10 @@ class Member(SuperClass):
     def shouldBeStalm(self):
         ''' Used to find Juniorstalmar members that should magically become stalmar somehow '''
 
-        return self.isMember() != None and next((x for x in MemberType.objects.filter(member=self) if x.type == "JS"), None) != None
+        return self.isValidMember() != None and next((x for x in MemberType.objects.filter(member=self) if x.type == "JS"), None) != None
 
-    def isMember(self):
-        memberType = self.mostRecentMemberType()
+    def isValidMember(self):
+        memberType = self.getMostRecentMemberType()
         return memberType != None and (memberType.type == "OM" or memberType.type == "ST")
 
 

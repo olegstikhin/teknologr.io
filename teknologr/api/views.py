@@ -309,7 +309,7 @@ def modulenDump(request):
             subscribed_to_modulen=True
         )
 
-    recipients = [x for x in recipients if x.isMember()]
+    recipients = [x for x in recipients if x.isValidMember()]
 
     content = [{
         'name': recipient._get_full_name(),
@@ -342,7 +342,7 @@ def fullDump(request):
 
     content = [{
         'id': member.id,
-        'membertype': str(member.mostRecentMemberType()),
+        'membertype': str(member.getMostRecentMemberType()),
         'given_names': member.given_names,
         'preferred_name': member.preferred_name,
         'surname': member.surname,
