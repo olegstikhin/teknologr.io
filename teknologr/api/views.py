@@ -9,7 +9,6 @@ from api.ldap import LDAPAccountManager
 from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
 from rest_framework_csv import renderers as csv_renderer
-from api.utils import findMostRecentMemberType, isMember
 
 # Create your views here.
 
@@ -310,7 +309,7 @@ def modulenDump(request):
             subscribed_to_modulen=True
         )
 
-    recipients = [x for x in recipients if isMember(x)]
+    recipients = [x for x in recipients if x.isMember()]
 
     content = [{
         'name': recipient._get_full_name(),
@@ -342,7 +341,7 @@ def fullDump(request):
 
     content = [{
         'id': member.id,
-        'membertype': str(findMostRecentMemberType(member)),
+        'membertype': str(member.mostRecentMemberType()),
         'given_names': member.given_names,
         'preferred_name': member.preferred_name,
         'surname': member.surname,
