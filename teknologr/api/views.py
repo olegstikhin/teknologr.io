@@ -9,7 +9,6 @@ from api.ldap import LDAPAccountManager
 from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
 from rest_framework_csv import renderers as csv_renderer
-from api.utils import findMostRecentMemberType
 from api.mailutils import mailNewPassword
 
 # Create your views here.
@@ -272,7 +271,7 @@ def htkDump(request, member=None):
         glist = []
         for g in groups:
             glist.append("%s: %s > %s" % (g.group.grouptype.name, g.group.begin_date, g.group.end_date))
-        
+
         types = MemberType.objects.filter(member=member)
         tlist = []
         for t in types:
@@ -299,9 +298,11 @@ def htkDump(request, member=None):
 
     return Response(data, status=200)
 
-#CSV-render class
+
+# CSV-render class
 class ModulenRenderer(csv_renderer.CSVRenderer):
     header = ['name', 'address']
+
 
 # List of addresses whom to post modulen to
 @api_view(['GET'])
@@ -316,21 +317,24 @@ def modulenDump(request):
             subscribed_to_modulen=True
         )
 
+    recipients = [x for x in recipients if x.isValidMember()]
+
     content = [{
         'name': recipient._get_full_name(),
         'address': recipient._get_full_address()}
         for recipient in recipients]
 
-
     return Response(content, status=200, headers={'Content-Disposition': 'attachment; filename="modulendump.csv"'})
 
 
 class FullRenderer(csv_renderer.CSVRenderer):
-    header = [ 'id', 'membertype', 'given_names', 'preferred_name', 'surname', 'maiden_name',
-    'nickname', 'birth_date', 'student_id', 'nationality', 'enrolment_year',
-    'graduated', 'graduated_year', 'degree_programme', 'dead', 'mobile_phone',
-    'phone', 'street_address', 'postal_code', 'city', 'country', 'url', 'email',
-    'subscribed_to_modulen', 'allow_publish_info', 'username', 'bill_code', 'crm_id', 'comment']
+    header = ['id', 'membertype', 'given_names', 'preferred_name', 'surname', 'maiden_name',
+              'nickname', 'birth_date', 'student_id', 'nationality', 'enrolment_year',
+              'graduated', 'graduated_year', 'degree_programme', 'dead', 'mobile_phone',
+              'phone', 'street_address', 'postal_code', 'city', 'country', 'url', 'email',
+              'subscribed_to_modulen', 'allow_publish_info', 'username', 'bill_code', 'crm_id', 'comment',
+              'should_be_stalmed']
+
 
 # "Fulldump". If you need some arbitrary bit of info this with some excel magic might do the trick.
 # Preferably tough for all common needs implement a specific endpoint for it (like modulen or HTK)
@@ -339,14 +343,13 @@ class FullRenderer(csv_renderer.CSVRenderer):
 @renderer_classes((FullRenderer,))
 def fullDump(request):
 
-
     members = Member.objects.exclude(
             dead=True
         )
 
     content = [{
         'id': member.id,
-        'membertype': str(findMostRecentMemberType(member)),
+        'membertype': str(member.getMostRecentMemberType()),
         'given_names': member.given_names,
         'preferred_name': member.preferred_name,
         'surname': member.surname,
@@ -373,8 +376,8 @@ def fullDump(request):
         'username': member.username,
         'bill_code': member.bill_code,
         'crm_id': member.crm_id,
-        'comment': member.comment}
+        'comment': member.comment,
+        'should_be_stalmed': member.shouldBeStalm()}
         for member in members]
-
 
     return Response(content, status=200, headers={'Content-Disposition': 'attachment; filename="fulldump.csv"'})

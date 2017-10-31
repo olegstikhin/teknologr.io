@@ -17,19 +17,3 @@ def findMembers(query, count=50):
 
     return Member.objects.filter(*args).order_by('surname', 'given_names')[:count]
 
-def findMostRecentMemberType(member):
-
-	types = MemberType.objects.filter(member=member).order_by()
-
-	if (len(types)) == 0:
-		return None
-
-	ordinarie = next((x for x in types if x.type == "OM"), None)
-	if ordinarie and not ordinarie.end_date:
-		return ordinarie
-
-	stalm = next((x for x in types if x.type == "ST"), None)
-	if stalm and not stalm.end_date:
-		return stalm
-
-	return None

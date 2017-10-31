@@ -76,6 +76,33 @@ class Member(SuperClass):
             self.student_id = None
         super(Member, self).save(*args, **kwargs)
 
+    def getMostRecentMemberType(self):
+
+        types = MemberType.objects.filter(member=self).order_by()
+
+        if (len(types)) == 0:
+            return None
+
+        ordinarie = next((x for x in types if x.type == "OM"), None)
+        if ordinarie and not ordinarie.end_date:
+            return ordinarie
+
+        stalm = next((x for x in types if x.type == "ST"), None)
+        if stalm and not stalm.end_date:
+            return stalm
+
+        return None
+
+
+    def shouldBeStalm(self):
+        ''' Used to find Juniorstalmar members that should magically become stalmar somehow '''
+
+        return self.isValidMember() != None and next((x for x in MemberType.objects.filter(member=self) if x.type == "JS"), None) != None
+
+    def isValidMember(self):
+        memberType = self.getMostRecentMemberType()
+        return memberType != None and (memberType.type == "OM" or memberType.type == "ST")
+
 
 
 class DecorationOwnership(SuperClass):
