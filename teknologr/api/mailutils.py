@@ -10,7 +10,8 @@ def mailNewPassword(member, password, sender="infochef@tf.fi"):
 
 	%s
 
-	Vänligen logga in på TF:s hemsida och byt lösenordet så snabbt som möjligt.
+	Vänligen logga in på TF:s hemsida och byt lösenordet så snabbt som möjligt:
+	https://medlem.teknologforeningen.fi/index.php/aendra-loesenord
 
 	Vid frågor eller ifall du inte begärt detta, kontakta %s
 
