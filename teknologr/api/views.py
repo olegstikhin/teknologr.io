@@ -9,6 +9,7 @@ from api.ldap import LDAPAccountManager
 from ldap import LDAPError
 from api.bill import BILLAccountManager, BILLException
 from rest_framework_csv import renderers as csv_renderer
+from api.mailutils import mailNewPassword
 
 # Create your views here.
 
@@ -101,6 +102,7 @@ class LDAPAccountView(APIView):
         member = get_object_or_404(Member, id=member_id)
         username = request.data.get('username')
         password = request.data.get('password')
+        mailToUser = request.data.get('mail_to_user')
         if not username or not password:
             return Response("username or password field missing", status=400)
 
@@ -110,6 +112,10 @@ class LDAPAccountView(APIView):
         with LDAPAccountManager() as lm:
             try:
                 lm.add_account(member, username, password)
+                if mailToUser:
+                    status = mailNewPassword(member, password)
+                    if not status:
+                        return Response("Password changed, failed to send mail", status=500)
             except LDAPError as e:
                 return Response(str(e), status=400)
 
@@ -147,12 +153,17 @@ class LDAPAccountView(APIView):
 def change_ldap_password(request, member_id):
     member = get_object_or_404(Member, id=member_id)
     password = request.data.get('password')
+    mailToUser = request.data.get('mail_to_user')
     if not password:
         return Response("password field missing", status=400)
 
     with LDAPAccountManager() as lm:
         try:
             lm.change_password(member.username, password)
+            if mailToUser:
+                status = mailNewPassword(member, password)
+                if not status:
+                    return Response("Password changed, failed to send mail", status=500)
         except LDAPError as e:
             return Response(str(e), status=400)
 
@@ -265,7 +276,7 @@ def htkDump(request, member=None):
         glist = []
         for g in groups:
             glist.append("%s: %s > %s" % (g.group.grouptype.name, g.group.begin_date, g.group.end_date))
-        
+
         types = MemberType.objects.filter(member=member)
         tlist = []
         for t in types:
@@ -292,9 +303,11 @@ def htkDump(request, member=None):
 
     return Response(data, status=200)
 
-#CSV-render class
+
+# CSV-render class
 class ModulenRenderer(csv_renderer.CSVRenderer):
     header = ['name', 'address']
+
 
 # List of addresses whom to post modulen to
 @api_view(['GET'])
@@ -316,17 +329,17 @@ def modulenDump(request):
         'address': recipient._get_full_address()}
         for recipient in recipients]
 
-
     return Response(content, status=200, headers={'Content-Disposition': 'attachment; filename="modulendump.csv"'})
 
 
 class FullRenderer(csv_renderer.CSVRenderer):
-    header = [ 'id', 'membertype', 'given_names', 'preferred_name', 'surname', 'maiden_name',
-    'nickname', 'birth_date', 'student_id', 'nationality', 'enrolment_year',
-    'graduated', 'graduated_year', 'degree_programme', 'dead', 'mobile_phone',
-    'phone', 'street_address', 'postal_code', 'city', 'country', 'url', 'email',
-    'subscribed_to_modulen', 'allow_publish_info', 'username', 'bill_code', 'crm_id', 'comment',
-    'should_be_stalmed']
+    header = ['id', 'membertype', 'given_names', 'preferred_name', 'surname', 'maiden_name',
+              'nickname', 'birth_date', 'student_id', 'nationality', 'enrolment_year',
+              'graduated', 'graduated_year', 'degree_programme', 'dead', 'mobile_phone',
+              'phone', 'street_address', 'postal_code', 'city', 'country', 'url', 'email',
+              'subscribed_to_modulen', 'allow_publish_info', 'username', 'bill_code', 'crm_id', 'comment',
+              'should_be_stalmed']
+
 
 # "Fulldump". If you need some arbitrary bit of info this with some excel magic might do the trick.
 # Preferably tough for all common needs implement a specific endpoint for it (like modulen or HTK)
@@ -334,7 +347,6 @@ class FullRenderer(csv_renderer.CSVRenderer):
 @api_view(['GET'])
 @renderer_classes((FullRenderer,))
 def fullDump(request):
-
 
     members = Member.objects.exclude(
             dead=True
@@ -372,6 +384,5 @@ def fullDump(request):
         'comment': member.comment,
         'should_be_stalmed': member.shouldBeStalm()}
         for member in members]
-
 
     return Response(content, status=200, headers={'Content-Disposition': 'attachment; filename="fulldump.csv"'})
