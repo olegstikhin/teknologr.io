@@ -102,6 +102,7 @@ class LDAPAccountView(APIView):
         member = get_object_or_404(Member, id=member_id)
         username = request.data.get('username')
         password = request.data.get('password')
+        mailToUser = request.data.get('mail_to_user')
         if not username or not password:
             return Response("username or password field missing", status=400)
 
@@ -111,6 +112,10 @@ class LDAPAccountView(APIView):
         with LDAPAccountManager() as lm:
             try:
                 lm.add_account(member, username, password)
+                if mailToUser:
+                    status = mailNewPassword(member, password)
+                    if not status:
+                        return Response("Password changed, failed to send mail", status=500)
             except LDAPError as e:
                 return Response(str(e), status=400)
 
