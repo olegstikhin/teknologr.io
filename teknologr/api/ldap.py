@@ -104,6 +104,14 @@ class LDAPAccountManager:
         ]
         self.ldap.modify_s(dn, mod_attrs)
 
+    def change_email(self, username, email):
+        # Changes the email address for the given user
+        dn = env("LDAP_USER_DN_TEMPLATE") % {'user': username}
+        mod_attrs = [
+            (ldap.MOD_REPLACE, 'mail', email.encode('utf-8')),
+        ]
+        self.ldap.modify_s(dn, mod_attrs)
+
     def get_samba_password(self, password):
         # The password needs to be stored in a different format for samba
         import codecs
