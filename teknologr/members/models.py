@@ -87,7 +87,7 @@ class Member(SuperClass):
             from ldap import LDAPError
             try:
                 with LDAPAccountManager() as lm:
-                    lm.change_email(member.username, member.email)
+                    lm.change_email(self.username, self.email)
             except LDAPError as e:
                 # Could not update LDAP, save other fields but keep original email
                 self.email = self._original_email
