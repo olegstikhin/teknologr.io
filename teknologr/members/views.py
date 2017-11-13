@@ -72,7 +72,11 @@ def member(request, member_id):
     if request.method == 'POST':
         form = MemberForm(request.POST, instance=member)
         if form.is_valid():
-            form.save()
+            from ldap import LDAPError
+            try:
+                form.save()
+            except LDAPError:
+                form.add_error("email", "Could not sync to LDAP")
             context['result'] = 'success'
         else:
             context['result'] = 'failure'
@@ -98,7 +102,6 @@ def member(request, member_id):
     # Get user account info
     from api.ldap import LDAPAccountManager
     from api.bill import BILLAccountManager, BILLException
-    from ldap import LDAPError
     if member.username:
         try:
             with LDAPAccountManager() as lm:

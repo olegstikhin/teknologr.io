@@ -48,6 +48,11 @@ class Member(SuperClass):
     crm_id = models.CharField(max_length=32, blank=True, null=False, default="")
     comment = models.TextField(blank=True, null=True)
 
+    def __init__(self, *args, **kwargs):
+        super(Member, self).__init__(*args, **kwargs)
+        # Store original email so we can check if it has changed on save
+        self._original_email = self.email
+
     def _get_full_name(self):
         return "%s %s" % (self.given_names, self.surname)
 
@@ -74,7 +79,24 @@ class Member(SuperClass):
             self.username = None
         if self.student_id == '':
             self.student_id = None
+
+        # Sync email to LDAP if changed
+        error = None
+        if self.username and self.email != self._original_email:
+            from api.ldap import LDAPAccountManager
+            from ldap import LDAPError
+            try:
+                with LDAPAccountManager() as lm:
+                    lm.change_email(member.username, member.email)
+            except LDAPError as e:
+                # Could not update LDAP, save other fields but keep original email
+                self.email = self._original_email
+                # Raise an error anyway to notify user
+                error = e
+
         super(Member, self).save(*args, **kwargs)
+        if error:
+            raise error
 
     def getMostRecentMemberType(self):
 
